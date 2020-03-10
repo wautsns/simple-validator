@@ -51,14 +51,22 @@
         <maven-gpg-plugin>1.6</maven-gpg-plugin>
         <nexus-staging-maven-plugin.version>1.6.8</nexus-staging-maven-plugin.version>
         <!-- dependencies -->
+        <spel.version>5.2.0.RELEASE</spel.version>
         <lombok.version>1.18.10</lombok.version>
     </properties>
 
     <modules>
+        <module>simple-validator-core</module>
     </modules>
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-expression</artifactId>
+                <version>${spel.version}</version>
+            </dependency>
+
             <dependency>
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok</artifactId>
