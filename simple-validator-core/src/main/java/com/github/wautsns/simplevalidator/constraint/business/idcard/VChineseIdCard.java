@@ -1,0 +1,59 @@
+package com.github.wautsns.simplevalidator.constraint.business.idcard;
+
+import com.github.wautsns.simplevalidator.constraint.AConstraint;
+import com.github.wautsns.templatemessage.formatter.multival.ArrayFormatter;
+import com.github.wautsns.templatemessage.variable.Variable;
+
+import java.lang.annotation.Documented;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
+
+import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
+import static java.lang.annotation.ElementType.FIELD;
+import static java.lang.annotation.ElementType.METHOD;
+import static java.lang.annotation.ElementType.PARAMETER;
+import static java.lang.annotation.ElementType.TYPE_USE;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+
+/**
+ * @author wautsns
+ * @since Mar 11, 2020
+ */
+@Documented
+@Retention(RUNTIME)
+@Target({ANNOTATION_TYPE, FIELD, METHOD, PARAMETER, TYPE_USE})
+@AConstraint(criterionFactories = {
+        VChineseIdCardTypeExtendsCharSequenceCriterionFactory.class
+})
+public @interface VChineseIdCard {
+
+    String message() default "[`VChineseIdCard`]";
+
+    int order() default 0;
+
+    Generation[] generations() default {};
+
+    String[] cities() default {};
+
+    String[] ages() default {};
+
+    Gender[] genders() default {};
+
+    boolean recordInfo() default false;
+
+    // ------------------------- enum ----------------------------------------------
+
+    enum Generation {FIRST, SECOND}
+
+    enum Gender {MALE, FEMALE}
+
+    // ------------------------- variables -----------------------------------------
+
+    Variable<Generation[]> GENERATIONS = new Variable<>("generations", new ArrayFormatter<>()
+            .setComponentPrefixAndSuffix("[`", "`]"));
+    Variable<String[]> CITIES = new Variable<>("cities", ArrayFormatter.DEFAULT);
+    Variable<String[]> AGES = new Variable<>("ages", ArrayFormatter.DEFAULT);
+    Variable<Gender[]> GENDERS = new Variable<>("genders", new ArrayFormatter<>()
+            .setComponentPrefixAndSuffix("[`", "`]"));
+
+}
