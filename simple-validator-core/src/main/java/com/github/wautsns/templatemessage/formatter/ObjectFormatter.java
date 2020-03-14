@@ -15,20 +15,36 @@
  */
 package com.github.wautsns.templatemessage.formatter;
 
+import com.github.wautsns.templatemessage.formatter.multival.ArrayFormatter;
+import com.github.wautsns.templatemessage.formatter.multival.IterableFormatter;
+import com.github.wautsns.templatemessage.formatter.multival.MapFormatter;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
 import java.util.Locale;
+import java.util.Map;
 
 /**
  * Formatter for {@code Object} value.
  *
+ * <ul>
+ * <li>If value is {@code null}, see {@linkplain #getStringFormatOfNull()}.</li>
+ * <li>If value is array, {@link ArrayFormatter#DEFAULT} will be used.</li>
+ * <li>If value instance of {@code Iterable}, {@link IterableFormatter#DEFAULT} will be used.</li>
+ * <li>If value instance of {@code Map}, {@link MapFormatter#DEFAULT} will be used.</li>
+ * <li>Otherwise {@code value.toString()}.</li>
+ * </ul>
+ *
  * @author wautsns
  * @since Mar 10, 2020
  */
+@Getter
 @Setter
 @Accessors(chain = true)
+@EqualsAndHashCode
 public class ObjectFormatter implements Formatter<Object> {
 
     /** default {@code ObjectFormatter} */
@@ -36,20 +52,26 @@ public class ObjectFormatter implements Formatter<Object> {
 
     private static final long serialVersionUID = -3276250483374591036L;
 
-    /** string format for {@code null} */
-    private @NonNull String stringFormatOfNull = "null";
+    /** string format for {@code null}, default is {@code "null"} */
+    private @NonNull
+    String stringFormatOfNull = "null";
 
     @Override
-    public boolean appliesTo(Class<?> clazz) {
-        return true;
-    }
-
-    @Override
+    @SuppressWarnings("unchecked")
     public String format(Object value, Locale locale) {
         if (value == null) {
             return stringFormatOfNull;
+        } else if (value instanceof CharSequence) {
+            return value.toString();
+        } else if (value.getClass().isArray()) {
+            return ArrayFormatter.DEFAULT.format(value, locale);
+        } else if (value instanceof Iterable) {
+            return IterableFormatter.DEFAULT.format((Iterable<Object>) value, locale);
+        } else if (value instanceof Map) {
+            return MapFormatter.DEFAULT.format((Map<Object, Object>) value, locale);
+        } else {
+            return value.toString();
         }
-        return value.toString();
     }
 
 }

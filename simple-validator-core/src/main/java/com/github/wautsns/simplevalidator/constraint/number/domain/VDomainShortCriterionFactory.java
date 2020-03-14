@@ -12,9 +12,9 @@
  */
 package com.github.wautsns.simplevalidator.constraint.number.domain;
 
+import com.github.wautsns.simplevalidator.model.criterion.basic.ShortCriteria;
+import com.github.wautsns.simplevalidator.model.criterion.basic.ShortCriterion;
 import com.github.wautsns.simplevalidator.model.criterion.factory.primitive.AbstractShortCriterionFactory;
-import com.github.wautsns.simplevalidator.model.criterion.kernel.primitive.ShortCriteria;
-import com.github.wautsns.simplevalidator.model.criterion.kernel.primitive.ShortCriterion;
 import com.github.wautsns.simplevalidator.model.failure.ValidationFailure;
 import com.github.wautsns.simplevalidator.model.node.ConstrainedNode;
 import com.github.wautsns.simplevalidator.util.function.ShortPredicate;
@@ -26,7 +26,7 @@ import com.github.wautsns.simplevalidator.util.function.ShortPredicate;
 public class VDomainShortCriterionFactory extends AbstractShortCriterionFactory<VDomain> {
 
     @Override
-    public void process(ConstrainedNode element, VDomain constraint, ShortCriteria wip) {
+    public void process(ConstrainedNode node, VDomain constraint, ShortCriteria wip) {
         wip.add(produce(constraint));
     }
 

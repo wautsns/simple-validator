@@ -12,10 +12,10 @@
  */
 package com.github.wautsns.simplevalidator.constraint.text.pattern;
 
+import com.github.wautsns.simplevalidator.model.criterion.basic.TCriteria;
+import com.github.wautsns.simplevalidator.model.criterion.basic.TCriterion;
 import com.github.wautsns.simplevalidator.model.criterion.factory.typelike.text.AbstractTextLikeCriterionFactory;
 import com.github.wautsns.simplevalidator.model.criterion.factory.typelike.text.TextLikeUtility;
-import com.github.wautsns.simplevalidator.model.criterion.kernel.TCriteria;
-import com.github.wautsns.simplevalidator.model.criterion.kernel.TCriterion;
 import com.github.wautsns.simplevalidator.model.node.ConstrainedNode;
 
 import java.util.regex.Pattern;
@@ -29,7 +29,7 @@ public class VPatternTextLikeCriterionFactory extends AbstractTextLikeCriterionF
     @Override
     protected <T> void process(
             TextLikeUtility<T> utility,
-            ConstrainedNode element, VPattern constraint, TCriteria<T> wip) {
+            ConstrainedNode node, VPattern constraint, TCriteria<T> wip) {
         wip.add(produce(utility, constraint));
     }
 

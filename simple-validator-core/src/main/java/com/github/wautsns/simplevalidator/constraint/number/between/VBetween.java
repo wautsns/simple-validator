@@ -41,7 +41,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target({FIELD, METHOD, PARAMETER, ANNOTATION_TYPE, TYPE_USE})
 @AConstraint(combines = {
         @ACombine(constraint = VDomain.class, attributes = {
-                @AAttribute(name = "value", spel = "{ '[' + min + ',' + max + ']' }")
+                @AAttribute(name = "value", spel = "'[' + min + ',' + max + ']'")
         })
 })
 public @interface VBetween {

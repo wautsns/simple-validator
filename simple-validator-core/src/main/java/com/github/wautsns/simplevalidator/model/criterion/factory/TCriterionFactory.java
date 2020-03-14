@@ -15,8 +15,8 @@
  */
 package com.github.wautsns.simplevalidator.model.criterion.factory;
 
-import com.github.wautsns.simplevalidator.model.criterion.kernel.TCriteria;
-import com.github.wautsns.simplevalidator.model.criterion.kernel.TCriterion;
+import com.github.wautsns.simplevalidator.model.criterion.basic.TCriteria;
+import com.github.wautsns.simplevalidator.model.criterion.basic.TCriterion;
 
 import java.lang.annotation.Annotation;
 

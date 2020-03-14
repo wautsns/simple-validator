@@ -37,7 +37,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Retention(RUNTIME)
 @Target({FIELD, METHOD, PARAMETER, ANNOTATION_TYPE, TYPE_USE})
 @AConstraint
-@VDomain("[0,~)")
+@VDomain("(0,~)")
 public @interface VPositive {
 
     String message() default "[`VPositive`]";

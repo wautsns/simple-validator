@@ -15,128 +15,165 @@
  */
 package com.github.wautsns.simplevalidator.model.node;
 
-import com.github.wautsns.simplevalidator.util.ConstraintUtils;
+import com.github.wautsns.simplevalidator.model.criterion.basic.Criterion;
+import com.github.wautsns.simplevalidator.util.common.CollectionUtils;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
+import java.io.Serializable;
 import java.lang.annotation.Annotation;
-import java.lang.reflect.AnnotatedElement;
-import java.lang.reflect.AnnotatedType;
-import java.lang.reflect.Parameter;
 import java.lang.reflect.Type;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
- * Node with constraints.
+ * Abstract constrained node.
  *
  * @author wautsns
- * @since Mar 11, 2020
+ * @since Mar 14, 2020
  */
 @Getter
-public class ConstrainedNode {
+@RequiredArgsConstructor
+public abstract class ConstrainedNode {
+
+    /** type */
+    protected final Type type;
+    /** location */
+    protected final Location location;
 
     /**
-     * parent node
+     * Get parent node.
      *
-     * <p>If the node is root, the value is {@code null}.
+     * @return parent node, or {@code null} if the node is root
      */
-    private final ConstrainedNode parent;
-    /** children of the node(nonnull unmodified list) */
-    private final List<ConstrainedNode> children;
-
-    /** category of the node */
-    private final Category category;
-    /**
-     * original element
-     *
-     * <p>If the category is not in [TYPE, FIELD, GETTER, PARAMETER], the value is {@code null}.
-     */
-    private final AnnotatedElement origin;
-    /** type of the node */
-    private final Type type;
-    /** name of the node */
-    private final String name;
-    /** constraints on the node(nonnull unmodified list) on the node */
-    private final List<Annotation> constraints;
+    public abstract ConstrainedNode getParent();
 
     /**
-     * Get location of the node.
+     * Get children nodes.
      *
-     * @return location of the node
+     * @return children nodes
      */
-    public List<String> getLocation() {
-        List<String> location = (parent == null) ? new LinkedList<>() : parent.getLocation();
-        location.add(name);
-        return location;
+    public abstract List<? extends ConstrainedNode> getChildren();
+
+    /**
+     * Get name of the node.
+     *
+     * @return name of the node
+     */
+    public String getName() {
+        return location.getSimpleName();
     }
 
     /**
-     * Get child.
+     * Require child node.
      *
-     * @param name name of child
-     * @return child
+     * @param name name
+     * @return child node, or {@code null} if no child is named the specific name
+     */
+    public ConstrainedNode requireChild(String name) {
+        return Objects.requireNonNull(
+                getChild(name),
+                String.format("There is no child named %s, or the child is not constrained.", name));
+    }
+
+    /**
+     * Get child node.
+     *
+     * @param name name
+     * @return child node, or {@code null} if no child is named the specific name
      */
     public ConstrainedNode getChild(String name) {
-        for (ConstrainedNode child : children) {
-            if (child.name.equals(name)) {
+        for (ConstrainedNode child : getChildren()) {
+            if (child.getName().equals(name)) {
                 return child;
             }
         }
-        throw new IllegalArgumentException();
+        return null;
     }
 
-    public ConstrainedNode(Class<?> clazz) {
-        this.category = Category.TYPE;
-        this.parent = null;
-        this.origin = clazz;
-        this.type = clazz;
-        this.name = InternalUtils.getElementName(category, origin);
-        this.constraints = ConstraintUtils.getConstraints(clazz.getAnnotations());
-        this.children = InternalUtils.resolve(this, Collections.emptyMap(), Collections.emptyList());
-    }
+    /**
+     * Get constraints(nonnull unmodified) on the node.
+     *
+     * @return constraints(nonnull unmodified) on the node
+     */
+    public abstract List<Annotation> getConstraints();
 
-    public ConstrainedNode(Parameter parameter) {
-        this(Category.PARAMETER, null, parameter, parameter.getAnnotatedType());
-    }
+    /**
+     * Get criterion wrapper.
+     *
+     * @return criterion wrapper, or {@code null} if the node is root.
+     */
+    public abstract Criterion.Wrapper getCriterionWrapper();
 
-    public ConstrainedNode(
-            Category category,
-            ConstrainedNode parent, AnnotatedElement origin, AnnotatedType annotatedType) {
-        this(
-                category,
-                parent, origin, annotatedType.getType(),
-                InternalUtils.getIndexesConstraintsMap(annotatedType), Collections.emptyList());
-    }
-
-    ConstrainedNode(
-            Category category,
-            ConstrainedNode parent, AnnotatedElement origin, Type type,
-            Map<List<Short>, List<Annotation>> indexesConstraintsMap, List<Short> indexes) {
-        this.category = category;
-        this.parent = parent;
-        this.origin = origin;
-        this.type = type;
-        this.name = InternalUtils.getElementName(category, origin);
-        this.constraints = indexesConstraintsMap.getOrDefault(indexes, Collections.emptyList());
-        this.children = InternalUtils.resolve(this, indexesConstraintsMap, indexes);
+    @Override
+    public final int hashCode() {
+        return location.hashCode();
     }
 
     @Override
-    public String toString() {
-        return String.join("", getLocation());
+    public final boolean equals(Object obj) {
+        if (this == obj) { return true; }
+        if (obj == null) { return false; }
+        if (this.getClass() != obj.getClass()) { return false; }
+        ConstrainedNode that = (ConstrainedNode) obj;
+        return this.location.equals(that.location);
     }
 
-    /** Category of node. */
-    public enum Category {
+    @Override
+    public final String toString() {
+        return location.toString();
+    }
 
-        TYPE, FIELD, GETTER, PARAMETER,
+    @EqualsAndHashCode
+    public static class Location implements Serializable {
 
-        ARRAY_COMPONENT,
-        ITERABLE_ELEMENT,
-        MAP_KEY, MAP_VALUE
+        private static final long serialVersionUID = 6613571499661573545L;
 
+        /** names of nodes */
+        private final LinkedList<String> names = new LinkedList<>();
+
+        public Location(String name) {
+            names.add(name);
+        }
+
+        public Location(ConstrainedNode parent, String name) {
+            names.addAll(parent.getLocation().names);
+            names.add(name);
+        }
+
+        /**
+         * Get the simple name.
+         *
+         * @return the simple name
+         */
+        public String getSimpleName() {
+            return names.getLast();
+        }
+
+        @Override
+        public String toString() {
+            StringBuilder result = new StringBuilder();
+            names.forEach(result::append);
+            return result.toString();
+        }
+
+    }
+
+    /**
+     * Clear unconstrained node.
+     *
+     * @param nodes nodes
+     * @param <N> type of node
+     * @return new unmodified nodes after clearing
+     */
+    protected static <N extends ConstrainedNode> List<N> clear(List<N> nodes) {
+        nodes = nodes.stream()
+                .filter(node -> !node.getChildren().isEmpty() || !node.getConstraints().isEmpty())
+                .collect(Collectors.toCollection(LinkedList::new));
+        return CollectionUtils.unmodifiableList(nodes);
     }
 
 }

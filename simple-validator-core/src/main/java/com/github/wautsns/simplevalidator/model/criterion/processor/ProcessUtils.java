@@ -12,28 +12,12 @@
  */
 package com.github.wautsns.simplevalidator.model.criterion.processor;
 
-import com.github.wautsns.simplevalidator.model.criterion.kernel.Criteria;
-import com.github.wautsns.simplevalidator.model.criterion.kernel.Criterion;
-import com.github.wautsns.simplevalidator.model.criterion.kernel.TCriteria;
-import com.github.wautsns.simplevalidator.model.criterion.kernel.primitive.BooleanCriteria;
-import com.github.wautsns.simplevalidator.model.criterion.kernel.primitive.ByteCriteria;
-import com.github.wautsns.simplevalidator.model.criterion.kernel.primitive.CharCriteria;
-import com.github.wautsns.simplevalidator.model.criterion.kernel.primitive.DoubleCriteria;
-import com.github.wautsns.simplevalidator.model.criterion.kernel.primitive.FloatCriteria;
-import com.github.wautsns.simplevalidator.model.criterion.kernel.primitive.IntCriteria;
-import com.github.wautsns.simplevalidator.model.criterion.kernel.primitive.LongCriteria;
-import com.github.wautsns.simplevalidator.model.criterion.kernel.primitive.ShortCriteria;
-import com.github.wautsns.simplevalidator.model.node.ConstrainedNode;
-import com.github.wautsns.simplevalidator.util.normal.ReflectionUtils;
-import com.github.wautsns.simplevalidator.util.normal.TypeUtils;
+import com.github.wautsns.simplevalidator.util.common.ReflectionUtils;
 import lombok.experimental.UtilityClass;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Array;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
-import java.lang.reflect.Type;
 import java.util.LinkedHashMap;
 
 /**
@@ -61,64 +45,6 @@ class ProcessUtils {
     }
 
     /**
-     * New criteria for the type.
-     *
-     * @param type type of value
-     * @return criteria for the type.
-     */
-    public static Criteria<? extends Criterion> newCriteriaFor(Type type) {
-        if (!TypeUtils.isPrimitive(type)) {
-            return new TCriteria<>();
-        } else if (type == int.class) {
-            return new IntCriteria();
-        } else if (type == long.class) {
-            return new LongCriteria();
-        } else if (type == boolean.class) {
-            return new BooleanCriteria();
-        } else if (type == char.class) {
-            return new CharCriteria();
-        } else if (type == byte.class) {
-            return new ByteCriteria();
-        } else if (type == double.class) {
-            return new DoubleCriteria();
-        } else if (type == short.class) {
-            return new ShortCriteria();
-        } else if (type == float.class) {
-            return new FloatCriteria();
-        } else {
-            throw new IllegalStateException();
-        }
-    }
-
-    /**
-     * Wrap criterion to suit parent node.
-     *
-     * @param node constrained node
-     * @param criterion criterion
-     * @return criterion applicable to parent node
-     */
-    public static Criterion wrapCriterionToSuitParentNode(ConstrainedNode node, Criterion criterion) {
-        switch (node.getCategory()) {
-            case FIELD:
-                return criterion.wrapFieldIntoType((Field) node.getOrigin());
-            case GETTER:
-                return criterion.wrapGetterIntoType((Method) node.getOrigin());
-            case ITERABLE_ELEMENT:
-                return criterion.wrapElementIntoIterable();
-            case MAP_KEY:
-                return criterion.wrapKeyIntoMap();
-            case MAP_VALUE:
-                return criterion.wrapValueIntoMap();
-            case ARRAY_COMPONENT:
-                return criterion.wrapComponentIntoArray();
-            case TYPE:
-            case PARAMETER:
-            default:
-                throw new IllegalStateException();
-        }
-    }
-
-    /**
      * Parse value string.
      *
      * @param valueClass target class
@@ -142,16 +68,13 @@ class ProcessUtils {
         } else if (valueClass == boolean.class) {
             return Boolean.valueOf(valueStrings[index]);
         } else if (valueClass == Class.class) {
-            return ReflectionUtils.getClass(valueStrings[index]);
+            return ReflectionUtils.requireClass(valueStrings[index]);
         } else if (valueClass == long.class) {
             return Long.valueOf(valueStrings[index]);
         } else if (valueClass == byte.class) {
             return Byte.valueOf(valueStrings[index]);
         } else if (valueClass == char.class) {
-            String valueString = valueStrings[index];
-            if (valueString.length() == 1) {
-                return valueString.charAt(0);
-            }
+            return valueStrings[index].charAt(0);
         } else if (valueClass == short.class) {
             return Short.valueOf(valueStrings[index]);
         } else if (valueClass == double.class) {

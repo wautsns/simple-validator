@@ -15,9 +15,9 @@
  */
 package com.github.wautsns.simplevalidator.constraint.any.notnull;
 
+import com.github.wautsns.simplevalidator.model.criterion.basic.TCriteria;
+import com.github.wautsns.simplevalidator.model.criterion.basic.TCriterion;
 import com.github.wautsns.simplevalidator.model.criterion.factory.special.AbstractNonPrimitiveCriterionFactory;
-import com.github.wautsns.simplevalidator.model.criterion.kernel.TCriteria;
-import com.github.wautsns.simplevalidator.model.criterion.kernel.TCriterion;
 import com.github.wautsns.simplevalidator.model.failure.ValidationFailure;
 import com.github.wautsns.simplevalidator.model.node.ConstrainedNode;
 
@@ -28,7 +28,7 @@ import com.github.wautsns.simplevalidator.model.node.ConstrainedNode;
 public class VNotNullNonPrimitiveCriterionFactory extends AbstractNonPrimitiveCriterionFactory<VNotNull> {
 
     @Override
-    public void process(ConstrainedNode element, VNotNull constraint, TCriteria<Object> wip) {
+    public void process(ConstrainedNode node, VNotNull constraint, TCriteria<Object> wip) {
         wip.add(CRITERION);
     }
 

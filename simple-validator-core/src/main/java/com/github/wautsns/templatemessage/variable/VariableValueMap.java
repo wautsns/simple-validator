@@ -15,6 +15,8 @@
  */
 package com.github.wautsns.templatemessage.variable;
 
+import lombok.EqualsAndHashCode;
+
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.HashMap;
@@ -30,6 +32,7 @@ import java.util.stream.Stream;
  * @author wautsns
  * @since Mar 10, 2020
  */
+@EqualsAndHashCode
 public class VariableValueMap implements Serializable {
 
     /** serialVersionUID */
@@ -61,15 +64,11 @@ public class VariableValueMap implements Serializable {
      */
     public <T> VariableValueMap put(Variable<T> variable, T value) {
         if (value == null || value instanceof Serializable) {
-            if (serializableData.isEmpty()) {
-                serializableData = new HashMap<>(8, 1f);
-            }
+            if (serializableData.isEmpty()) { serializableData = new HashMap<>(8, 1f); }
             unserializableData.remove(variable);
             serializableData.put(variable, (Serializable) value);
         } else {
-            if (unserializableData.isEmpty()) {
-                unserializableData = new HashMap<>(4, 1f);
-            }
+            if (unserializableData.isEmpty()) { unserializableData = new HashMap<>(4, 1f); }
             serializableData.remove(variable);
             unserializableData.put(variable, value);
         }
@@ -158,11 +157,11 @@ public class VariableValueMap implements Serializable {
      *
      * @param name name
      * @param <T> type of value of variable
-     * @return variable associated with the name
+     * @return variable associated with the name, or {@code null} if the map contains no variable with specific name.
      */
     @SuppressWarnings("unchecked")
     public <T> Variable<T> getVariable(String name) {
-        return toEntryStream()
+        return entryStream()
                 .filter(e -> e.getKey().getName().equals(name))
                 .findFirst()
                 .map(Map.Entry::getKey)
@@ -206,7 +205,7 @@ public class VariableValueMap implements Serializable {
      * @return entry stream of the map
      */
     @SuppressWarnings({"rawtypes", "unchecked"})
-    public Stream<Map.Entry<Variable, Object>> toEntryStream() {
+    public Stream<Map.Entry<Variable, Object>> entryStream() {
         if (serializableData.isEmpty()) {
             if (unserializableData.isEmpty()) {
                 return Stream.empty();
@@ -216,7 +215,9 @@ public class VariableValueMap implements Serializable {
         } else if (unserializableData.isEmpty()) {
             return (Stream) serializableData.entrySet().stream();
         } else {
-            return Stream.concat((Stream) serializableData.entrySet().stream(), unserializableData.entrySet().stream());
+            return Stream.concat(
+                    (Stream) serializableData.entrySet().stream(),
+                    unserializableData.entrySet().stream());
         }
     }
 
@@ -241,12 +242,11 @@ public class VariableValueMap implements Serializable {
     public String toString() {
         StringBuilder result = new StringBuilder();
         result.append('{');
-        Locale locale = Locale.getDefault();
-        String inner = toEntryStream()
+        String inner = entryStream()
                 .map(e -> {
                     Variable variable = e.getKey();
                     Object value = e.getValue();
-                    return variable.getName() + '=' + variable.getFormatter().format(value, locale);
+                    return variable.getName() + '=' + variable.getFormatter().format(value, Locale.getDefault());
                 })
                 .collect(Collectors.joining(", "));
         result.append(inner);
@@ -277,7 +277,7 @@ public class VariableValueMap implements Serializable {
 
         @Override
         @SuppressWarnings("rawtypes")
-        public Stream<Map.Entry<Variable, Object>> toEntryStream() {
+        public Stream<Map.Entry<Variable, Object>> entryStream() {
             return Stream.empty();
         }
 

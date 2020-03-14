@@ -15,7 +15,7 @@
  */
 package com.github.wautsns.simplevalidator.exception;
 
-import com.github.wautsns.templatemessage.kernel.TemplateMessage;
+import com.github.wautsns.simplevalidator.model.failure.ValidationFailure;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -32,7 +32,7 @@ public class ValidationException extends RuntimeException {
     /** serialVersionUID */
     private static final long serialVersionUID = -5706334622805333445L;
 
-    /** template message of failure */
-    private final TemplateMessage templateMessage;
+    /** validation failure */
+    private final ValidationFailure failure;
 
 }

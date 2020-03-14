@@ -13,9 +13,9 @@
 package com.github.wautsns.simplevalidator.constraint.business.idcard;
 
 import com.github.wautsns.simplevalidator.constraint.number.domain.DomainUtils;
+import com.github.wautsns.simplevalidator.model.criterion.basic.TCriteria;
+import com.github.wautsns.simplevalidator.model.criterion.basic.TCriterion;
 import com.github.wautsns.simplevalidator.model.criterion.factory.special.AbstractCharSequenceCriterionFactory;
-import com.github.wautsns.simplevalidator.model.criterion.kernel.TCriteria;
-import com.github.wautsns.simplevalidator.model.criterion.kernel.TCriterion;
 import com.github.wautsns.simplevalidator.model.failure.ValidationFailure;
 import com.github.wautsns.simplevalidator.model.node.ConstrainedNode;
 

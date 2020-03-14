@@ -15,7 +15,7 @@
  */
 package com.github.wautsns.simplevalidator.model.criterion.factory.typelike;
 
-import com.github.wautsns.simplevalidator.model.criterion.kernel.TCriterion;
+import com.github.wautsns.simplevalidator.model.criterion.basic.TCriterion;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
@@ -34,9 +34,11 @@ import java.util.function.Function;
 public class TypeLikeUtilityCriterionCache<U extends TypeLikeUtility> {
 
     /** cache */
-    private final @NonNull Map<U, TCriterion> cache = new ConcurrentHashMap<>(8);
+    private final @NonNull
+    Map<U, TCriterion> cache = new ConcurrentHashMap<>(8);
     /** criterion initializer */
-    private final @NonNull Function<U, TCriterion> initializer;
+    private final @NonNull
+    Function<U, TCriterion> initializer;
 
     /**
      * Get criterion associated with the utility.

@@ -15,7 +15,7 @@
  */
 package com.github.wautsns.simplevalidator.model.criterion.factory.typelike.text;
 
-import com.github.wautsns.simplevalidator.util.normal.TypeUtils;
+import com.github.wautsns.simplevalidator.util.common.TypeUtils;
 import com.github.wautsns.templatemessage.formatter.Formatter;
 
 import java.lang.reflect.Type;

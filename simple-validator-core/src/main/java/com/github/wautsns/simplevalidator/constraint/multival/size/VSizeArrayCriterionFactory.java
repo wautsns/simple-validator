@@ -12,8 +12,8 @@
  */
 package com.github.wautsns.simplevalidator.constraint.multival.size;
 
+import com.github.wautsns.simplevalidator.model.criterion.basic.TCriteria;
 import com.github.wautsns.simplevalidator.model.criterion.factory.special.AbstractArrayTypeCriterionFactory;
-import com.github.wautsns.simplevalidator.model.criterion.kernel.TCriteria;
 import com.github.wautsns.simplevalidator.model.failure.ValidationFailure;
 import com.github.wautsns.simplevalidator.model.node.ConstrainedNode;
 
@@ -24,7 +24,7 @@ import com.github.wautsns.simplevalidator.model.node.ConstrainedNode;
 public class VSizeArrayCriterionFactory extends AbstractArrayTypeCriterionFactory<VSize> {
 
     @Override
-    protected <T> void processTArray(ConstrainedNode element, VSize constraint, TCriteria<T[]> wip) {
+    protected <T> void processTArray(ConstrainedNode node, VSize constraint, TCriteria<T[]> wip) {
         int min = constraint.min();
         int max = constraint.max();
         wip.add(value -> {
@@ -37,7 +37,7 @@ public class VSizeArrayCriterionFactory extends AbstractArrayTypeCriterionFactor
     }
 
     @Override
-    protected void processIntArray(ConstrainedNode element, VSize constraint, TCriteria<int[]> wip) {
+    protected void processIntArray(ConstrainedNode node, VSize constraint, TCriteria<int[]> wip) {
         int min = constraint.min();
         int max = constraint.max();
         wip.add(value -> {
@@ -50,8 +50,7 @@ public class VSizeArrayCriterionFactory extends AbstractArrayTypeCriterionFactor
     }
 
     @Override
-    protected void processLongArray(
-            ConstrainedNode element, VSize constraint, TCriteria<long[]> wip) {
+    protected void processLongArray(ConstrainedNode node, VSize constraint, TCriteria<long[]> wip) {
         int min = constraint.min();
         int max = constraint.max();
         wip.add(value -> {
@@ -64,8 +63,7 @@ public class VSizeArrayCriterionFactory extends AbstractArrayTypeCriterionFactor
     }
 
     @Override
-    protected void processBooleanArray(
-            ConstrainedNode element, VSize constraint, TCriteria<boolean[]> wip) {
+    protected void processBooleanArray(ConstrainedNode node, VSize constraint, TCriteria<boolean[]> wip) {
         int min = constraint.min();
         int max = constraint.max();
         wip.add(value -> {
@@ -78,8 +76,7 @@ public class VSizeArrayCriterionFactory extends AbstractArrayTypeCriterionFactor
     }
 
     @Override
-    protected void processCharArray(
-            ConstrainedNode element, VSize constraint, TCriteria<char[]> wip) {
+    protected void processCharArray(ConstrainedNode node, VSize constraint, TCriteria<char[]> wip) {
         int min = constraint.min();
         int max = constraint.max();
         wip.add(value -> {
@@ -92,8 +89,7 @@ public class VSizeArrayCriterionFactory extends AbstractArrayTypeCriterionFactor
     }
 
     @Override
-    protected void processByteArray(
-            ConstrainedNode element, VSize constraint, TCriteria<byte[]> wip) {
+    protected void processByteArray(ConstrainedNode node, VSize constraint, TCriteria<byte[]> wip) {
         int min = constraint.min();
         int max = constraint.max();
         wip.add(value -> {
@@ -106,8 +102,7 @@ public class VSizeArrayCriterionFactory extends AbstractArrayTypeCriterionFactor
     }
 
     @Override
-    protected void processDoubleArray(
-            ConstrainedNode element, VSize constraint, TCriteria<double[]> wip) {
+    protected void processDoubleArray(ConstrainedNode node, VSize constraint, TCriteria<double[]> wip) {
         int min = constraint.min();
         int max = constraint.max();
         wip.add(value -> {
@@ -120,8 +115,7 @@ public class VSizeArrayCriterionFactory extends AbstractArrayTypeCriterionFactor
     }
 
     @Override
-    protected void processShortArray(
-            ConstrainedNode element, VSize constraint, TCriteria<short[]> wip) {
+    protected void processShortArray(ConstrainedNode node, VSize constraint, TCriteria<short[]> wip) {
         int min = constraint.min();
         int max = constraint.max();
         wip.add(value -> {
@@ -134,8 +128,7 @@ public class VSizeArrayCriterionFactory extends AbstractArrayTypeCriterionFactor
     }
 
     @Override
-    protected void processFloatArray(
-            ConstrainedNode element, VSize constraint, TCriteria<float[]> wip) {
+    protected void processFloatArray(ConstrainedNode node, VSize constraint, TCriteria<float[]> wip) {
         int min = constraint.min();
         int max = constraint.max();
         wip.add(value -> {

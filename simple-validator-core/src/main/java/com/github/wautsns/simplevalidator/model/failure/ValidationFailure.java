@@ -15,7 +15,7 @@
  */
 package com.github.wautsns.simplevalidator.model.failure;
 
-import com.github.wautsns.templatemessage.formatter.multival.IterableFormatter;
+import com.github.wautsns.simplevalidator.model.node.ConstrainedNode;
 import com.github.wautsns.templatemessage.kernel.TemplateMessage;
 import com.github.wautsns.templatemessage.variable.Variable;
 import com.github.wautsns.templatemessage.variable.VariableValueMap;
@@ -84,9 +84,9 @@ public class ValidationFailure extends TemplateMessage {
         /** variable: value */
         public static final Variable<Object> VALUE = new Variable<>("value");
         /** variable: target */
-        public static final Variable<List<String>> TARGET = new Variable<>("target");
+        public static final Variable<ConstrainedNode.Location> TARGET = new Variable<>("target");
         /** variable: indicators */
-        public static final Variable<List<Object>> INDICATORS = new Variable<>("indicators", IterableFormatter.DEFAULT);
+        public static final Variable<List<Object>> INDICATORS = new Variable<>("indicators");
 
         private Variables() {}
 

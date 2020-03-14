@@ -18,23 +18,30 @@ package com.github.wautsns.simplevalidator.util;
 import com.github.wautsns.simplevalidator.constraint.AConstraint;
 import com.github.wautsns.simplevalidator.constraint.AVariableAlias;
 import com.github.wautsns.simplevalidator.exception.analysis.ConstraintAnalysisException;
-import com.github.wautsns.simplevalidator.util.normal.CollectionUtils;
-import com.github.wautsns.simplevalidator.util.normal.ReflectionUtils;
+import com.github.wautsns.simplevalidator.util.common.CollectionUtils;
+import com.github.wautsns.simplevalidator.util.common.ReflectionUtils;
 import com.github.wautsns.templatemessage.variable.Variable;
 import com.github.wautsns.templatemessage.variable.VariableValueMap;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import lombok.experimental.UtilityClass;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.AnnotatedType;
+import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -42,22 +49,12 @@ import java.util.stream.Collectors;
  * Constraint utils.
  *
  * @author wautsns
- * @since Mar 11, 2020
+ * @since Mar 12, 2020
  */
 @UtilityClass
 public class ConstraintUtils {
 
-    /** constraint attributes */
-    public static class Attributes {
-
-        /** attribute: message */
-        public static final String MESSAGE = "message";
-        /** attribute: order */
-        public static final String ORDER = "order";
-
-        private Attributes() {}
-
-    }
+    // -------------------- constraint --------------------------------------------------
 
     /**
      * Return {@code true} if the annotation is constraint. otherwise {@code false}.
@@ -77,11 +74,9 @@ public class ConstraintUtils {
      * @throws ConstraintAnalysisException if there is no {@code AConstraint} annotation on the constraint class.
      */
     public static AConstraint requireAConstraint(Class<? extends Annotation> constraintClass) {
-        AConstraint aconstraint = getAConstraint(constraintClass);
-        if (aconstraint != null) { return aconstraint; }
-        throw new ConstraintAnalysisException(
-                "@%s is not a constraint.(missing @%s)",
-                constraintClass.getSimpleName(), AConstraint.class.getSimpleName());
+        AConstraint aConstraint = getAConstraint(constraintClass);
+        if (aConstraint != null) { return aConstraint; }
+        throw new ConstraintAnalysisException("%s is missing %s", constraintClass, AConstraint.class);
     }
 
     /**
@@ -91,12 +86,132 @@ public class ConstraintUtils {
      * @return {@code AConstraint} value on the constraint annotation class, or {@code null} if there is no {@code
      * AConstraint} annotation on the constraint class
      */
-    private static AConstraint getAConstraint(Class<? extends Annotation> constraintClass) {
+    public static AConstraint getAConstraint(Class<? extends Annotation> constraintClass) {
         return constraintClass.getAnnotation(AConstraint.class);
     }
 
     /**
-     * Require constraint attribute.
+     * Filter out constraints.
+     *
+     * @param annotations annotations
+     * @return constraints
+     */
+    public static List<Annotation> filterOutConstraints(Annotation[] annotations) {
+        return filterOutConstraints(Arrays.asList(annotations));
+    }
+
+    /**
+     * Filter out constraints.
+     *
+     * @param annotations annotations
+     * @return constraints
+     */
+    public static List<Annotation> filterOutConstraints(List<Annotation> annotations) {
+        return CollectionUtils.unmodifiableList(annotations.stream()
+                .filter(ConstraintUtils::isConstraint)
+                .collect(Collectors.toCollection(LinkedList::new)));
+    }
+
+    /**
+     * Get indexes constraints.
+     *
+     * @param annotatedType annotated type
+     * @return indexes constraints
+     */
+    public static Map<List<Short>, List<Annotation>> getIndexesConstraints(AnnotatedType annotatedType) {
+        Map<List<Short>, List<Annotation>> indexesAnnotations = IndexesAnnotationsUtils.resolve(annotatedType);
+        HashMap<List<Short>, List<Annotation>> indexesConstraints = new HashMap<>(8);
+        indexesAnnotations.forEach((indexes, annotations) -> {
+            List<Annotation> constraints = filterOutConstraints(annotations);
+            if (!constraints.isEmpty()) { indexesConstraints.put(indexes, constraints); }
+        });
+        return indexesConstraints;
+    }
+
+    /** Indexes annotations utils. */
+    @UtilityClass
+    private static class IndexesAnnotationsUtils {
+
+        /** class: AnnotatedTypeBaseImpl */
+        private static final Class<?> ANNOTATED_TYPE_BASE_IMPL = ReflectionUtils.requireClass(
+                "sun.reflect.annotation.AnnotatedTypeFactory$AnnotatedTypeBaseImpl");
+        /** field: AnnotatedTypeFactory$AnnotatedTypeBaseImpl#allOnSameTargetTypeAnnotations */
+        private static final Field ALL_ON_SAME_TARGET_TYPE_ANNOTATIONS = ReflectionUtils.requireDeclaredField(
+                ReflectionUtils.requireClass("sun.reflect.annotation.AnnotatedTypeFactory$AnnotatedTypeBaseImpl"),
+                "allOnSameTargetTypeAnnotations");
+        /** field: TypeAnnotation#annotation */
+        private static final Field ANNOTATION_OF_TYPE_ANNOTATION = ReflectionUtils.requireDeclaredField(
+                ReflectionUtils.requireClass("sun.reflect.annotation.TypeAnnotation"), "annotation");
+        /** field: TypeAnnotation#loc */
+        private static final Field LOC_OF_TYPE_ANNOTATION = ReflectionUtils.requireDeclaredField(
+                ReflectionUtils.requireClass("sun.reflect.annotation.TypeAnnotation"), "loc");
+        /** field: TypeAnnotation$LocationInfo#locations */
+        private static final Field LOCATIONS_OF_LOCATION_INFO = ReflectionUtils.requireDeclaredField(
+                ReflectionUtils.requireClass("sun.reflect.annotation.TypeAnnotation$LocationInfo"), "locations");
+        /** field: TypeAnnotation$LocationInfo$Location#index */
+        private static final Field INDEX_OF_LOCATION = ReflectionUtils.requireDeclaredField(
+                ReflectionUtils.requireClass("sun.reflect.annotation.TypeAnnotation$LocationInfo$Location"), "index");
+
+        /**
+         * Resolve annotatedType and return indexes annotation map.
+         *
+         * @param annotatedType an annotated type
+         * @return indexes annotation map
+         */
+        public static Map<List<Short>, List<Annotation>> resolve(AnnotatedType annotatedType) {
+            if (annotatedType.getClass() == ANNOTATED_TYPE_BASE_IMPL) {
+                List<Short> indexes = Collections.emptyList();
+                List<Annotation> annotations = Arrays.asList(annotatedType.getAnnotations());
+                return Collections.singletonMap(indexes, annotations);
+            }
+            Map<List<Short>, List<Annotation>> indexesConstraints = new LinkedHashMap<>();
+            Object allOnSameTargetTypeAnnotations = ReflectionUtils.getValue(
+                    annotatedType, ALL_ON_SAME_TARGET_TYPE_ANNOTATIONS);
+            for (int i = 0, l = Array.getLength(allOnSameTargetTypeAnnotations); i < l; i++) {
+                Object typeAnnotation = Array.get(allOnSameTargetTypeAnnotations, i);
+                resolve(indexesConstraints, typeAnnotation);
+            }
+            indexesConstraints.entrySet().forEach(e -> e.setValue(CollectionUtils.unmodifiableList(e.getValue())));
+            return indexesConstraints;
+        }
+
+        /**
+         * Resolve type annotation.
+         *
+         * @param indexesAnnotations an indexes constraints map
+         * @param typeAnnotation type annotation
+         */
+        private static void resolve(Map<List<Short>, List<Annotation>> indexesAnnotations, Object typeAnnotation) {
+            Annotation annotation = ReflectionUtils.getValue(typeAnnotation, ANNOTATION_OF_TYPE_ANNOTATION);
+            Object loc = ReflectionUtils.getValue(typeAnnotation, LOC_OF_TYPE_ANNOTATION);
+            Object locations = ReflectionUtils.getValue(loc, LOCATIONS_OF_LOCATION_INFO);
+            int locationsLength = Array.getLength(locations);
+            List<Short> indexes = new ArrayList<>(locationsLength);
+            for (int j = 0; j < locationsLength; j++) {
+                Object location = Array.get(locations, j);
+                short index = ReflectionUtils.getShort(location, INDEX_OF_LOCATION);
+                indexes.add(index);
+            }
+            indexesAnnotations.computeIfAbsent(indexes, i -> new LinkedList<>()).add(annotation);
+        }
+
+    }
+
+    // -------------------- attributes --------------------------------------------------
+
+    /** constraint attributes */
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
+    public static class Attributes {
+
+        /** attribute: message */
+        public static final String MESSAGE = "message";
+        /** attribute: order */
+        public static final String ORDER = "order";
+
+    }
+
+    /**
+     * Require the attribute named the specific name.
      *
      * @param constraintClass constraint class.
      * @param name attribute name
@@ -106,9 +221,7 @@ public class ConstraintUtils {
     public static Method requireAttribute(Class<? extends Annotation> constraintClass, String name) {
         Method attribute = getAttribute(constraintClass, name);
         if (attribute != null) { return attribute; }
-        throw new ConstraintAnalysisException(
-                "Constraint @%s is missing attribute[%s].",
-                constraintClass.getSimpleName(), name);
+        throw new ConstraintAnalysisException("%s is missing attribute[%s].", constraintClass, name);
     }
 
     /**
@@ -119,12 +232,12 @@ public class ConstraintUtils {
      * @return constraint attribute, or {@code null} if the attribute does not exist
      */
     public static Method getAttribute(Class<? extends Annotation> constraintClass, String name) {
-        return ReflectionUtils.accessMethod(constraintClass, name);
+        return ReflectionUtils.getDeclaredMethod(constraintClass, name);
     }
 
     /** not attribute method names */
-    private static final Set<String> NOT_ATTRIBUTE_NAMES = new HashSet<>(
-            Arrays.asList("annotationType", "hashCode", "equals", "toString"));
+    private static final Set<String> NOT_ATTRIBUTE_NAMES = new HashSet<>(Arrays.asList(
+            "annotationType", "hashCode", "equals", "toString"));
 
     /**
      * Get all attributes of the constraint class.
@@ -136,19 +249,6 @@ public class ConstraintUtils {
         return Arrays.stream(constraintClass.getMethods())
                 .filter(method -> !NOT_ATTRIBUTE_NAMES.contains(method.getName()))
                 .collect(Collectors.toCollection(LinkedList::new));
-    }
-
-    /**
-     * Get constraints int annotations.
-     *
-     * @param annotations annotations
-     * @return constraints
-     */
-    public static List<Annotation> getConstraints(Annotation[] annotations) {
-        List<Annotation> tmp = Arrays.stream(annotations)
-                .filter(ConstraintUtils::isConstraint)
-                .collect(Collectors.toCollection(LinkedList::new));
-        return CollectionUtils.unmodifiableList(tmp);
     }
 
     /**
@@ -169,25 +269,6 @@ public class ConstraintUtils {
      */
     public static Integer getOrder(Annotation constraint) {
         return getValue(constraint, Attributes.ORDER);
-    }
-
-    /**
-     * Compare orderA and orderB.
-     *
-     * <p>{@code null} is equal to {@code null}, less than any others.
-     *
-     * @param orderA order A(maybe {@code null})
-     * @param orderB order B(maybe {@code null})
-     * @return {@code 1} if orderA is greater than orderB, {@code -1} if orderA is less than orderB, otherwise {@code 0}
-     */
-    public static int compareOrder(Integer orderA, Integer orderB) {
-        if (orderA == null) {
-            return (orderB == null) ? 0 : 1;
-        } else if (orderB == null) {
-            return 1;
-        } else {
-            return orderA.compareTo(orderB);
-        }
     }
 
     /**
@@ -215,19 +296,21 @@ public class ConstraintUtils {
     }
 
     /**
-     * Get attribute-value map.
+     * Get attribute value map.
      *
      * @param constraint constraint
      * @return attribute-value map
      */
     public static Map<String, Object> getAttributeValueMap(Annotation constraint) {
         InvocationHandler h = Proxy.getInvocationHandler(constraint);
-        Field field = ReflectionUtils.accessField(h.getClass(), "memberValues");
-        return ReflectionUtils.getFieldValue(h, Objects.requireNonNull(field));
+        Field field = ReflectionUtils.requireDeclaredField(h.getClass(), "memberValues");
+        return ReflectionUtils.getValue(h, field);
     }
 
+    // -------------------- variables ---------------------------------------------------
+
     /**
-     * Get variable-value map in the constraint.
+     * Get variable value map in the constraint.
      *
      * @param constraint constraint
      * @return variable-value map
@@ -239,14 +322,10 @@ public class ConstraintUtils {
         Arrays.stream(constraintClass.getFields())
                 .filter(field -> Variable.class.isAssignableFrom(field.getType()))
                 .forEach(variableField -> {
-                    Variable variable = ReflectionUtils.getFieldValue(null, variableField);
+                    Variable variable = ReflectionUtils.getValue(null, variableField);
                     AVariableAlias variableAlias = variableField.getAnnotation(AVariableAlias.class);
                     String name = (variableAlias == null) ? variable.getName() : variableAlias.value();
-                    if (name.isEmpty()) { return; }
-                    Method attribute = ReflectionUtils.accessMethod(constraintClass, name);
-                    if (attribute == null) { return; }
-                    Object value = ReflectionUtils.invoke(constraint, attribute);
-                    variableValueMap.put(variable, value);
+                    variableValueMap.put(variable, getValue(constraint, name));
                 });
         return variableValueMap;
     }

@@ -13,12 +13,12 @@
 package com.github.wautsns.simplevalidator.constraint.enumeration.nameofenum;
 
 import com.github.wautsns.simplevalidator.constraint.enumeration.codeofenum.VCodeOfEnum;
+import com.github.wautsns.simplevalidator.model.criterion.basic.TCriteria;
+import com.github.wautsns.simplevalidator.model.criterion.basic.TCriterion;
 import com.github.wautsns.simplevalidator.model.criterion.factory.TCriterionFactory;
-import com.github.wautsns.simplevalidator.model.criterion.kernel.TCriteria;
-import com.github.wautsns.simplevalidator.model.criterion.kernel.TCriterion;
 import com.github.wautsns.simplevalidator.model.failure.ValidationFailure;
 import com.github.wautsns.simplevalidator.model.node.ConstrainedNode;
-import com.github.wautsns.simplevalidator.util.normal.TypeUtils;
+import com.github.wautsns.simplevalidator.util.common.TypeUtils;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -62,8 +62,7 @@ public class VNameOfEnumTypeExtendsCharSequenceCriterionFactory
         return init(Arrays.stream(enums).map(Enum::name).toArray(String[]::new));
     }
 
-    private static TCriterion<CharSequence> initSpecific(
-            Class<?> enumClass, String[] include, String[] exclude) {
+    private static TCriterion<CharSequence> initSpecific(Class<?> enumClass, String[] include, String[] exclude) {
         Enum<?>[] enums = (Enum<?>[]) enumClass.getEnumConstants();
         Stream<String> optionalValuesStream = Arrays.stream(enums).map(Enum::name);
         if (include.length > 0) {

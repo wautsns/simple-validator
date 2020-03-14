@@ -12,12 +12,12 @@
  */
 package com.github.wautsns.simplevalidator.constraint.business.id;
 
+import com.github.wautsns.simplevalidator.model.criterion.basic.TCriteria;
+import com.github.wautsns.simplevalidator.model.criterion.basic.TCriterion;
 import com.github.wautsns.simplevalidator.model.criterion.factory.special.AbstractComparableNumberCriterionFactory;
-import com.github.wautsns.simplevalidator.model.criterion.kernel.TCriteria;
-import com.github.wautsns.simplevalidator.model.criterion.kernel.TCriterion;
 import com.github.wautsns.simplevalidator.model.failure.ValidationFailure;
 import com.github.wautsns.simplevalidator.model.node.ConstrainedNode;
-import com.github.wautsns.simplevalidator.util.normal.TypeUtils;
+import com.github.wautsns.simplevalidator.util.common.TypeUtils;
 
 import java.lang.reflect.Type;
 import java.math.BigInteger;
@@ -60,14 +60,12 @@ public class VIdTypeIntegerLongBigIntegerCriterionFactory extends AbstractCompar
         addUnsignedMaxValue(Long.class, 4294967295L);
     }
 
-    public static <T extends Number & Comparable<T>> void addUnsignedMaxValue(
-            Class<T> valueClass, T unsignedMaxValue) {
+    public static <T extends Number & Comparable<T>> void addUnsignedMaxValue(Class<T> valueClass, T unsignedMaxValue) {
         UNSIGNED_MAX_VALUES.put(valueClass, unsignedMaxValue);
     }
 
     @SuppressWarnings("unchecked")
-    public static <T extends Number & Comparable<T>> T getUnsignedMaxValue(
-            Class<?> clazz) {
+    public static <T extends Number & Comparable<T>> T getUnsignedMaxValue(Class<?> clazz) {
         T unsignedMaxValue = (T) UNSIGNED_MAX_VALUES.get(clazz);
         if (unsignedMaxValue != null) {
             return unsignedMaxValue;

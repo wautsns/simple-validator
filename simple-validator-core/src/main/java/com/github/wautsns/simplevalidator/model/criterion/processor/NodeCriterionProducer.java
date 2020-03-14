@@ -15,8 +15,8 @@
  */
 package com.github.wautsns.simplevalidator.model.criterion.processor;
 
-import com.github.wautsns.simplevalidator.model.criterion.kernel.Criteria;
-import com.github.wautsns.simplevalidator.model.criterion.kernel.Criterion;
+import com.github.wautsns.simplevalidator.model.criterion.basic.Criteria;
+import com.github.wautsns.simplevalidator.model.criterion.basic.Criterion;
 import com.github.wautsns.simplevalidator.model.node.ConstrainedNode;
 import com.github.wautsns.simplevalidator.util.ConstraintUtils;
 
@@ -33,8 +33,6 @@ import java.util.TreeMap;
 /**
  * Node criterion producer.
  *
- * TODO doc
- *
  * @author wautsns
  * @since Mar 11, 2020
  */
@@ -42,11 +40,17 @@ public class NodeCriterionProducer {
 
     private final ConstrainedNode root;
     private final LinkedHashMap<ConstrainedNode, List<ConstraintCriterionProcessor<?>>>
-            noOrderNodeConstraintCriterionProcessorsMap
-            = new LinkedHashMap<>();
+            noOrderNodeConstraintCriterionProcessorsMap = new LinkedHashMap<>();
     private final Map<Integer, LinkedHashMap<ConstrainedNode, List<ConstraintCriterionProcessor<?>>>>
-            orderedNodeConstraintCriterionProcessors = new TreeMap<>(
-            ConstraintUtils::compareOrder);
+            orderedNodeConstraintCriterionProcessors = new TreeMap<>((orderA, orderB) -> {
+        if (orderA == null) {
+            return (orderB == null) ? 0 : 1;
+        } else if (orderB == null) {
+            return 1;
+        } else {
+            return orderA.compareTo(orderB);
+        }
+    });
 
     public NodeCriterionProducer(ConstrainedNode root) {
         this.root = root;
@@ -55,8 +59,8 @@ public class NodeCriterionProducer {
     }
 
     @SuppressWarnings({"rawtypes", "unchecked"})
-    public <C extends Criterion> C produce() {
-        Criteria criteria = ProcessUtils.newCriteriaFor(root.getType());
+    public Criterion produce() {
+        Criteria criteria = Criteria.newInstance(root.getType());
         orderedNodeConstraintCriterionProcessors
                 .forEach((order, orderedConstrainedNodeProcessorsMap) -> {
                     Map<ConstrainedNode, Criteria> tmp = new LinkedHashMap<>();
@@ -69,14 +73,14 @@ public class NodeCriterionProducer {
                             Criterion criterion = wip.simplify();
                             if (criterion == null) { return; }
                             Criteria superiorWip = tmp.computeIfAbsent(
-                                    el.getParent(), node -> ProcessUtils.newCriteriaFor(node.getType()));
-                            superiorWip.add(ProcessUtils.wrapCriterionToSuitParentNode(el, criterion));
+                                    el.getParent(), node -> Criteria.newInstance(node.getType()));
+                            superiorWip.add(el.getCriterionWrapper().wrap(criterion));
                             tmp.remove(el);
                         });
                     }
                     criteria.add(tmp.values().iterator().next().simplify());
                 });
-        return (C) criteria.simplify();
+        return criteria.simplify();
     }
 
     @SuppressWarnings("rawtypes")
@@ -85,8 +89,7 @@ public class NodeCriterionProducer {
             Map<ConstrainedNode, List<ConstraintCriterionProcessor<?>>> nodeProcessorsMap) {
         nodeProcessorsMap.forEach((node, processors) -> {
             if (node.getConstraints().isEmpty()) { return; }
-            Criteria wip = nodeCriteriaMap.computeIfAbsent(
-                    node, n -> ProcessUtils.newCriteriaFor(n.getType()));
+            Criteria wip = nodeCriteriaMap.computeIfAbsent(node, n -> Criteria.newInstance(n.getType()));
             processors.forEach(processor -> processor.process(node, wip));
         });
     }

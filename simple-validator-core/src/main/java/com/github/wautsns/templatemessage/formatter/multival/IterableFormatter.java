@@ -17,6 +17,8 @@ package com.github.wautsns.templatemessage.formatter.multival;
 
 import com.github.wautsns.templatemessage.formatter.Formatter;
 import com.github.wautsns.templatemessage.formatter.ObjectFormatter;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -31,36 +33,41 @@ import java.util.Locale;
  * @author wautsns
  * @since Mar 10, 2020
  */
+@Getter
 @Setter
 @Accessors(chain = true)
+@EqualsAndHashCode
 public class IterableFormatter<E> implements Formatter<Iterable<E>> {
 
-    /** the default {@code IterableFormatter} */
+    /** the default {@code IterableFormatter}, eg. [1, 2, 3] */
     public static final Formatter<Iterable<Object>> DEFAULT = new IterableFormatter<>();
 
     private static final long serialVersionUID = 9215356454938186580L;
 
     /** string format of {@code null}, default is {@code "null"} */
-    private @NonNull String stringFormatOfNull = "null";
+    private @NonNull
+    String stringFormatOfNull = "null";
     /** string format of empty array, default is {@code "[]"} */
-    private @NonNull String stringFormatOfEmptyIterable = "[]";
+    private @NonNull
+    String stringFormatOfEmptyIterable = "[]";
     /** prefix of string format, default is {@code "["} */
-    private @NonNull String prefix = "[";
+    private @NonNull
+    String prefix = "[";
     /** suffix of string format, default is {@code "]"} */
-    private @NonNull String suffix = "]";
+    private @NonNull
+    String suffix = "]";
     /** prefix of string format of element, default is {@code ""} */
-    private @NonNull String elementPrefix = "";
+    private @NonNull
+    String elementPrefix = "";
     /** suffix of string format of element, default is {@code ""} */
-    private @NonNull String elementSuffix = "";
+    private @NonNull
+    String elementSuffix = "";
     /** delimiter between string format of element, default is {@code ", "} */
-    private @NonNull String elementDelimiter = ", ";
+    private @NonNull
+    String elementDelimiter = ", ";
     /** formatter for iterable element, default is {@link ObjectFormatter#DEFAULT} */
-    private @NonNull Formatter<? super E> elementFormatter = ObjectFormatter.DEFAULT;
-
-    @Override
-    public boolean appliesTo(Class<?> clazz) {
-        return Iterable.class.isAssignableFrom(clazz);
-    }
+    private @NonNull
+    Formatter<? super E> elementFormatter = ObjectFormatter.DEFAULT;
 
     @Override
     public String format(Iterable<E> value, Locale locale) {
@@ -77,6 +84,32 @@ public class IterableFormatter<E> implements Formatter<Iterable<E>> {
         result.delete(result.length() - elementDelimiter.length(), result.length());
         result.append(suffix);
         return result.toString();
+    }
+
+    /**
+     * Set prefix and suffix.
+     *
+     * @param prefix prefix of string formatter
+     * @param suffix suffix of string formatter
+     * @return self reference
+     */
+    public IterableFormatter<E> setPrefixAndSuffix(String prefix, String suffix) {
+        setPrefix(prefix);
+        setSuffix(suffix);
+        return this;
+    }
+
+    /**
+     * Set prefix of string format of element and suffix of string format of element.
+     *
+     * @param prefix prefix of string format of element
+     * @param suffix suffix of string format of element
+     * @return self reference
+     */
+    public IterableFormatter<E> setElementPrefixAndSuffix(String prefix, String suffix) {
+        setElementPrefix(prefix);
+        setElementSuffix(suffix);
+        return this;
     }
 
 }

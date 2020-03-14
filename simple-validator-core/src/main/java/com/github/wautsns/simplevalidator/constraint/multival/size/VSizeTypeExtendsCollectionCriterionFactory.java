@@ -12,12 +12,12 @@
  */
 package com.github.wautsns.simplevalidator.constraint.multival.size;
 
+import com.github.wautsns.simplevalidator.model.criterion.basic.TCriteria;
+import com.github.wautsns.simplevalidator.model.criterion.basic.TCriterion;
 import com.github.wautsns.simplevalidator.model.criterion.factory.TCriterionFactory;
-import com.github.wautsns.simplevalidator.model.criterion.kernel.TCriteria;
-import com.github.wautsns.simplevalidator.model.criterion.kernel.TCriterion;
 import com.github.wautsns.simplevalidator.model.failure.ValidationFailure;
 import com.github.wautsns.simplevalidator.model.node.ConstrainedNode;
-import com.github.wautsns.simplevalidator.util.normal.TypeUtils;
+import com.github.wautsns.simplevalidator.util.common.TypeUtils;
 
 import java.util.Collection;
 

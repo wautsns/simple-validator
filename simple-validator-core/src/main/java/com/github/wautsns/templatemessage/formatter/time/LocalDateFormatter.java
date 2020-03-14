@@ -16,17 +16,15 @@
 package com.github.wautsns.templatemessage.formatter.time;
 
 import com.github.wautsns.templatemessage.formatter.Formatter;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
-import java.util.EnumMap;
 import java.util.Locale;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Formatter for {@code LocalDateFormatter} value.
@@ -34,8 +32,10 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author wautsns
  * @since Mar 10, 2020
  */
+@Getter
 @Setter
 @Accessors(chain = true)
+@EqualsAndHashCode
 public class LocalDateFormatter implements Formatter<LocalDate> {
 
     /** default {@code LocalDateFormatter} */
@@ -44,37 +44,23 @@ public class LocalDateFormatter implements Formatter<LocalDate> {
     private static final long serialVersionUID = -7202909023391923980L;
 
     /** string format of {@code null}, default is {@code "null"} */
-    private @NonNull String stringWhenNull = "null";
+    private @NonNull
+    String stringWhenNull = "null";
     /**
      * locale of string format, default is {@code null}
      *
-     * <p>Set a {@code Locale}, if you need to fix the locale of string format.
+     * <p>Set specified {@code Locale}, if you need to fix the locale of string format.
      */
     private Locale localeOfStringFormat = null;
-    /**
-     * date format style, default is {@link FormatStyle#MEDIUM}
-     *
-     * <p>Set to {@code null}, if you do not need to display the date.
-     */
-    private @NonNull FormatStyle formatStyle = FormatStyle.MEDIUM;
-
-    @Override
-    public boolean appliesTo(Class<?> clazz) {
-        return LocalDate.class.isAssignableFrom(clazz);
-    }
+    /** date format style, default is {@link FormatStyle#MEDIUM} */
+    private @NonNull
+    FormatStyle formatStyle = FormatStyle.MEDIUM;
 
     @Override
     public String format(LocalDate value, Locale locale) {
         if (value == null) { return stringWhenNull; }
         if (localeOfStringFormat != null) { locale = localeOfStringFormat; }
-        return DATE_TIME_FORMAT_CACHE
-                .computeIfAbsent(formatStyle, i -> new ConcurrentHashMap<>(8))
-                .computeIfAbsent(locale, loc -> DateTimeFormatter.ofLocalizedDate(formatStyle).withLocale(loc))
-                .format(value);
+        return TimeFormatterUtils.DateTimeFormatters.forDate(formatStyle, locale).format(value);
     }
-
-    /** cache of {@code DateTimeFormatter} */
-    private static final EnumMap<FormatStyle, Map<Locale, DateTimeFormatter>> DATE_TIME_FORMAT_CACHE
-            = new EnumMap<>(FormatStyle.class);
 
 }

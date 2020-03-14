@@ -15,12 +15,14 @@
  */
 package com.github.wautsns.simplevalidator.constraint.any.superclass;
 
+import com.github.wautsns.simplevalidator.model.criterion.basic.TCriteria;
+import com.github.wautsns.simplevalidator.model.criterion.basic.TCriterion;
 import com.github.wautsns.simplevalidator.model.criterion.factory.special.AbstractNonPrimitiveCriterionFactory;
-import com.github.wautsns.simplevalidator.model.criterion.kernel.TCriteria;
-import com.github.wautsns.simplevalidator.model.criterion.kernel.TCriterion;
 import com.github.wautsns.simplevalidator.model.node.ConstrainedNode;
 import com.github.wautsns.simplevalidator.util.CriterionUtils;
-import com.github.wautsns.simplevalidator.util.normal.TypeUtils;
+import com.github.wautsns.simplevalidator.util.common.TypeUtils;
+
+import java.util.Objects;
 
 /**
  * @author wautsns
@@ -29,16 +31,15 @@ import com.github.wautsns.simplevalidator.util.normal.TypeUtils;
 public class VSuperclassNonPrimitiveCriterionFactory extends AbstractNonPrimitiveCriterionFactory<VSuperclass> {
 
     @Override
-    public void process(ConstrainedNode element, VSuperclass constraint, TCriteria<Object> wip) {
-        wip.add(produce(element));
+    public void process(ConstrainedNode node, VSuperclass constraint, TCriteria<Object> wip) {
+        wip.add(produce(node));
     }
 
     // ------------------------- criterion -----------------------------------------
 
-    protected TCriterion<Object> produce(ConstrainedNode element) {
-        Class<?> superclass = TypeUtils.getClass(element.getType()).getSuperclass();
-        if (superclass == null) { return null; }
-        return CriterionUtils.forClass(superclass);
+    protected TCriterion<Object> produce(ConstrainedNode node) {
+        Class<?> superclass = TypeUtils.getClass(node.getType()).getSuperclass();
+        return CriterionUtils.forClass(Objects.requireNonNull(superclass));
     }
 
 }

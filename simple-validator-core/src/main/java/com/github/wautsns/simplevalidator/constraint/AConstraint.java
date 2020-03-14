@@ -15,8 +15,6 @@
  */
 package com.github.wautsns.simplevalidator.constraint;
 
-import com.github.wautsns.simplevalidator.model.criterion.factory.CriterionFactory;
-
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
@@ -40,7 +38,7 @@ public @interface AConstraint {
      *
      * @return criterion factories of the constraint
      */
-    Class<? extends CriterionFactory>[] criterionFactories() default {};
+    Class<?>[] criterionFactories() default {};
 
     /**
      * Get combined constraints.

@@ -19,29 +19,31 @@ import com.github.wautsns.templatemessage.formatter.Formatter;
 import com.github.wautsns.templatemessage.formatter.ObjectFormatter;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * Variable.
+ *
+ * <p>A variable has a name and formatter for value.
  *
  * @param <T> type of value of variable
  * @author wautsns
  * @since Mar 10, 2020
  */
 @Getter
-@RequiredArgsConstructor
+@ToString(of = "name")
 @EqualsAndHashCode(of = "name")
 public class Variable<T> implements Serializable {
 
     private static final long serialVersionUID = 2161734187241083633L;
 
     /** name of variable */
-    private final @NonNull String name;
+    private final String name;
     /** formatter of value of variable */
-    private final @NonNull Formatter<? super T> formatter;
+    private final Formatter<? super T> formatter;
 
     /**
      * Construct variable with {@linkplain ObjectFormatter#DEFAULT default formatter}.
@@ -50,6 +52,11 @@ public class Variable<T> implements Serializable {
      */
     public Variable(String name) {
         this(name, ObjectFormatter.DEFAULT);
+    }
+
+    public Variable(String name, Formatter<? super T> formatter) {
+        this.name = Objects.requireNonNull(name);
+        this.formatter = Objects.requireNonNull(formatter);
     }
 
 }

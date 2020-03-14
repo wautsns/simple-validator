@@ -15,8 +15,8 @@
  */
 package com.github.wautsns.simplevalidator.model.criterion.factory.typelike.text;
 
+import com.github.wautsns.simplevalidator.model.criterion.basic.TCriteria;
 import com.github.wautsns.simplevalidator.model.criterion.factory.typelike.TypeLikeCriterionFactory;
-import com.github.wautsns.simplevalidator.model.criterion.kernel.TCriteria;
 import com.github.wautsns.simplevalidator.model.node.ConstrainedNode;
 
 import java.lang.annotation.Annotation;

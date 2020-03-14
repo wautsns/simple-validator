@@ -17,13 +17,14 @@ package com.github.wautsns.templatemessage.kernel;
 
 import com.github.wautsns.templatemessage.formatter.Formatter;
 import com.github.wautsns.templatemessage.variable.VariableValueMap;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import java.io.Serializable;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Locale;
+import java.util.Set;
 import java.util.TreeMap;
 
 /**
@@ -32,36 +33,93 @@ import java.util.TreeMap;
  * @author wautsns
  * @since Mar 10, 2020
  */
+@EqualsAndHashCode
 public class TemplateMessageFormatter implements Formatter<TemplateMessage> {
 
     private static final long serialVersionUID = -316723311454568554L;
 
-    private final TreeMap<Integer, List<Processor>> processors = new TreeMap<>();
+    /** processors */
+    private final TreeMap<Integer, Set<Processor>> processors = new TreeMap<>();
 
     @Override
-    public boolean appliesTo(Class<?> clazz) {
-        return TemplateMessage.class.isAssignableFrom(clazz);
-    }
-
-    @Override
-    public String format(TemplateMessage value, Locale locale) {
-        return null;
+    public String format(TemplateMessage templateMessage, Locale locale) {
+        return process(templateMessage.getMessageTemplate(), templateMessage, locale);
     }
 
     /**
      * Add a processor.
      *
-     * @param order order
+     * <p>Processors of the same order will coexist.
+     *
+     * @param order the order of the processor
      * @param processor processor
      * @return self reference
      */
     public TemplateMessageFormatter addProcessor(int order, Processor processor) {
-        processors.computeIfAbsent(order, i -> new LinkedList<>()).add(processor);
+        processors.computeIfAbsent(order, i -> new HashSet<>(2, 1F)).add(processor);
         return this;
     }
 
-    /** Processor variable when formatting. */
+    /**
+     * Process the wip of the message.
+     *
+     * @param wip wip of the message
+     * @param variableValueMap variable value map
+     * @param locale locale
+     * @return message after processing
+     */
+    private String process(CharSequence wip, VariableValueMap variableValueMap, Locale locale) {
+        StringBuilder temp = new StringBuilder(wip);
+        processors.forEach((order, ps) -> ps.forEach(p -> process(temp, p, variableValueMap, locale)));
+        if (temp.length() != wip.length()) {
+            return process(temp, variableValueMap, locale);
+        } else {
+            for (int i = 0; i < temp.length(); i++) {
+                if (temp.charAt(i) != wip.charAt(i)) {
+                    return process(temp, variableValueMap, locale);
+                }
+            }
+            return temp.toString();
+        }
+    }
+
+    /**
+     * Process the wip of the message with the specific processor.
+     *
+     * @param wip wip of the message
+     * @param processor processor
+     * @param variableValueMap variable value map
+     * @param locale locale
+     */
+    private void process(StringBuilder wip, Processor processor, VariableValueMap variableValueMap, Locale locale) {
+        int si;
+        int ei = 0;
+        String ld = processor.getLeftDelimiter();
+        String rd = processor.getRightDelimiter();
+        while (true) {
+            si = wip.indexOf(ld, ei);
+            if (si == -1) { return; }
+            ei = wip.indexOf(rd, si + ld.length());
+            if (ei == -1) { return; }
+            int tmpEi = ei;
+            while (tmpEi != -1) {
+                String name = wip.substring(si + ld.length(), tmpEi).trim();
+                String value = processor.process(name, variableValueMap, locale);
+                if (value == null) {
+                    ei = si + 1;
+                    tmpEi = wip.indexOf(rd, tmpEi + 1);
+                } else {
+                    wip.replace(si, tmpEi + rd.length(), value);
+                    ei = si + value.length();
+                    break;
+                }
+            }
+        }
+    }
+
+    /** Processor when formatting variable values. */
     @Getter
+    @EqualsAndHashCode
     @RequiredArgsConstructor
     public abstract static class Processor implements Serializable {
 
@@ -75,12 +133,12 @@ public class TemplateMessageFormatter implements Formatter<TemplateMessage> {
         /**
          * Process variable.
          *
-         * @param name a name of the variable
+         * @param text text between delimiter
          * @param variableValueMap variable value map
          * @param locale locale
-         * @return string format of the value, or {@code null} if the processor cannot process the value
+         * @return string associated with the text, or {@code null} if the processor cannot process the text
          */
-        public abstract String process(String name, VariableValueMap variableValueMap, Locale locale);
+        public abstract String process(String text, VariableValueMap variableValueMap, Locale locale);
 
     }
 

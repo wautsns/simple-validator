@@ -25,22 +25,14 @@ import java.util.Locale;
  * @author wautsns
  * @since Mar 10, 2020
  */
+@FunctionalInterface
 public interface Formatter<T> extends Serializable {
-
-    /**
-     * Return {@code true} if the formatter applies to the type.
-     *
-     * @param clazz class
-     * @return {@code true} if the formatter applies to the type
-     */
-    boolean appliesTo(Class<?> clazz);
 
     /**
      * Format the value with {@linkplain Locale#getDefault() default locale}.
      *
      * @param value value
      * @return value in string format
-     * @see #format(Object, Locale)
      */
     default String format(T value) {
         return format(value, Locale.getDefault());
@@ -51,7 +43,6 @@ public interface Formatter<T> extends Serializable {
      *
      * @param value value
      * @param locale locale
-     * @return value in string format
      */
     String format(T value, Locale locale);
 

@@ -44,7 +44,7 @@ public @interface VRef {
 
     Class<?> value();
 
-    String attr() default "";
+    String property() default "";
 
     boolean useRefTarget() default true;
 

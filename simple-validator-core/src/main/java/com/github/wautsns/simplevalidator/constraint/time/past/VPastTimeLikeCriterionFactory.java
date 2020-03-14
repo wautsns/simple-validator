@@ -12,12 +12,11 @@
  */
 package com.github.wautsns.simplevalidator.constraint.time.past;
 
+import com.github.wautsns.simplevalidator.model.criterion.basic.TCriteria;
+import com.github.wautsns.simplevalidator.model.criterion.basic.TCriterion;
 import com.github.wautsns.simplevalidator.model.criterion.factory.typelike.TypeLikeUtilityCriterionCache;
-import com.github.wautsns.simplevalidator.model.criterion.factory.typelike.TypeLikeUtilityVariableCache;
 import com.github.wautsns.simplevalidator.model.criterion.factory.typelike.time.AbstractTimeLikeCriterionFactory;
 import com.github.wautsns.simplevalidator.model.criterion.factory.typelike.time.TimeLikeUtility;
-import com.github.wautsns.simplevalidator.model.criterion.kernel.TCriteria;
-import com.github.wautsns.simplevalidator.model.criterion.kernel.TCriterion;
 import com.github.wautsns.simplevalidator.model.failure.ValidationFailure;
 import com.github.wautsns.simplevalidator.model.node.ConstrainedNode;
 
@@ -39,7 +38,7 @@ public class VPastTimeLikeCriterionFactory extends AbstractTimeLikeCriterionFact
     protected static <T> TCriterion<T> initCriterion(TimeLikeUtility<T> utility, VPast constraint) {
         long year = constraint.years();
         long month = constraint.months();
-        long milliseconds = TimeLikeUtility.toMilliseconds(
+        long milliseconds = constraint.milliseconds() + TimeLikeUtility.toMilliseconds(
                 constraint.days(), constraint.hours(), constraint.minutes(), constraint.seconds());
         if ((year | month) != 0) {
             return initWithYearMonthMillisecondsOffset(utility, year, month, milliseconds);
@@ -78,11 +77,8 @@ public class VPastTimeLikeCriterionFactory extends AbstractTimeLikeCriterionFact
 
     // ------------------------- wrong ---------------------------------------------
 
-    private static final TypeLikeUtilityVariableCache<TimeLikeUtility<?>> VARIABLE_REF =
-            new TypeLikeUtilityVariableCache<>("ref");
-
     protected static <T> ValidationFailure wrong(TimeLikeUtility<T> utility, T value, T ref) {
-        return utility.fail(value).put(VARIABLE_REF.get(utility), ref);
+        return utility.fail(value).put(VPast.REF.get(utility), ref);
     }
 
 }

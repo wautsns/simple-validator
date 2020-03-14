@@ -1,7 +1,7 @@
 package com.github.wautsns.simplevalidator.constraint.business.idcard;
 
 import com.github.wautsns.simplevalidator.constraint.AConstraint;
-import com.github.wautsns.templatemessage.formatter.multival.ArrayFormatter;
+import com.github.wautsns.simplevalidator.model.failure.Formatters;
 import com.github.wautsns.templatemessage.variable.Variable;
 
 import java.lang.annotation.Documented;
@@ -49,11 +49,9 @@ public @interface VChineseIdCard {
 
     // ------------------------- variables -----------------------------------------
 
-    Variable<Generation[]> GENERATIONS = new Variable<>("generations", new ArrayFormatter<>()
-            .setComponentPrefixAndSuffix("[`", "`]"));
-    Variable<String[]> CITIES = new Variable<>("cities", ArrayFormatter.DEFAULT);
-    Variable<String[]> AGES = new Variable<>("ages", ArrayFormatter.DEFAULT);
-    Variable<Gender[]> GENDERS = new Variable<>("genders", new ArrayFormatter<>()
-            .setComponentPrefixAndSuffix("[`", "`]"));
+    Variable<Generation[]> GENERATIONS = new Variable<>("generations", Formatters.ENUMS_PROPERTIES_NO_RESTRICTIONS);
+    Variable<String[]> CITIES = new Variable<>("cities", Formatters.VALUES_NO_RESTRICTIONS);
+    Variable<String[]> AGES = new Variable<>("ages", Formatters.VALUES_NO_RESTRICTIONS);
+    Variable<Gender[]> GENDERS = new Variable<>("genders", Formatters.ENUMS_PROPERTIES_NO_RESTRICTIONS);
 
 }

@@ -15,11 +15,11 @@
  */
 package com.github.wautsns.simplevalidator.constraint.text.notblank;
 
+import com.github.wautsns.simplevalidator.model.criterion.basic.TCriteria;
+import com.github.wautsns.simplevalidator.model.criterion.basic.TCriterion;
 import com.github.wautsns.simplevalidator.model.criterion.factory.typelike.TypeLikeUtilityCriterionCache;
 import com.github.wautsns.simplevalidator.model.criterion.factory.typelike.text.AbstractTextLikeCriterionFactory;
 import com.github.wautsns.simplevalidator.model.criterion.factory.typelike.text.TextLikeUtility;
-import com.github.wautsns.simplevalidator.model.criterion.kernel.TCriteria;
-import com.github.wautsns.simplevalidator.model.criterion.kernel.TCriterion;
 import com.github.wautsns.simplevalidator.model.node.ConstrainedNode;
 
 /**
@@ -31,7 +31,7 @@ public class VNotBlankTextLikeCriterionFactory extends AbstractTextLikeCriterion
     @Override
     protected <T> void process(
             TextLikeUtility<T> utility,
-            ConstrainedNode element, VNotBlank constraint, TCriteria<T> wip) {
+            ConstrainedNode node, VNotBlank constraint, TCriteria<T> wip) {
         wip.add(produce(utility));
     }
 

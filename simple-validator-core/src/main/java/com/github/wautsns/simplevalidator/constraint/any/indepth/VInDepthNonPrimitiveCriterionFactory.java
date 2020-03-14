@@ -15,12 +15,12 @@
  */
 package com.github.wautsns.simplevalidator.constraint.any.indepth;
 
+import com.github.wautsns.simplevalidator.model.criterion.basic.TCriteria;
+import com.github.wautsns.simplevalidator.model.criterion.basic.TCriterion;
 import com.github.wautsns.simplevalidator.model.criterion.factory.special.AbstractNonPrimitiveCriterionFactory;
-import com.github.wautsns.simplevalidator.model.criterion.kernel.TCriteria;
-import com.github.wautsns.simplevalidator.model.criterion.kernel.TCriterion;
 import com.github.wautsns.simplevalidator.model.node.ConstrainedNode;
 import com.github.wautsns.simplevalidator.util.CriterionUtils;
-import com.github.wautsns.simplevalidator.util.normal.TypeUtils;
+import com.github.wautsns.simplevalidator.util.common.TypeUtils;
 
 /**
  * @author wautsns
@@ -29,15 +29,16 @@ import com.github.wautsns.simplevalidator.util.normal.TypeUtils;
 public class VInDepthNonPrimitiveCriterionFactory extends AbstractNonPrimitiveCriterionFactory<VInDepth> {
 
     @Override
-    public void process(ConstrainedNode element, VInDepth constraint, TCriteria<Object> wip) {
-        wip.add(produce(element));
+    @SuppressWarnings("unchecked")
+    public void process(ConstrainedNode node, VInDepth constraint, TCriteria<Object> wip) {
+        wip.add((TCriterion<? super Object>) produce(node));
     }
 
     // ------------------------- criterion -----------------------------------------
 
-    protected TCriterion<Object> produce(ConstrainedNode element) {
-        Class<?> clazz = TypeUtils.getClass(element.getType());
-        return CriterionUtils.forClass(clazz);
+    protected TCriterion<?> produce(ConstrainedNode node) {
+        TCriterion<?> criterion = CriterionUtils.forClass(TypeUtils.getClass(node.getType()));
+        return (criterion == TCriterion.TRUTH) ? null : criterion;
     }
 
 }

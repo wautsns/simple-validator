@@ -15,18 +15,16 @@
  */
 package com.github.wautsns.simplevalidator.constraint.any.ref;
 
-import com.github.wautsns.simplevalidator.exception.analysis.ConstraintAnalysisException;
+import com.github.wautsns.simplevalidator.model.criterion.basic.Criteria;
+import com.github.wautsns.simplevalidator.model.criterion.basic.Criterion;
 import com.github.wautsns.simplevalidator.model.criterion.factory.special.AbstractAnyTypeCriterionFactory;
-import com.github.wautsns.simplevalidator.model.criterion.kernel.Criteria;
-import com.github.wautsns.simplevalidator.model.criterion.kernel.Criterion;
 import com.github.wautsns.simplevalidator.model.criterion.processor.NodeCriterionProducer;
+import com.github.wautsns.simplevalidator.model.node.ConstrainedClass;
 import com.github.wautsns.simplevalidator.model.node.ConstrainedNode;
-import com.github.wautsns.simplevalidator.util.ConstrainedNodeUtils;
 import com.github.wautsns.simplevalidator.util.CriterionUtils;
 
-import java.lang.reflect.AnnotatedType;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
+import java.lang.annotation.Annotation;
+import java.util.List;
 
 /**
  * @author wautsns
@@ -35,44 +33,43 @@ import java.lang.reflect.Method;
 public class VRefAnyTypeCriterionFactory extends AbstractAnyTypeCriterionFactory<VRef> {
 
     @Override
-    public void process(ConstrainedNode element, VRef constraint, Criteria<Criterion> wip) {
-        wip.add(produce(element, constraint));
+    public void process(ConstrainedNode node, VRef constraint, Criteria<Criterion> wip) {
+        wip.add(produce(node, constraint));
     }
 
     // ------------------------- criterion -----------------------------------------
 
-    protected static Criterion produce(ConstrainedNode element, VRef constraint) {
-        ConstrainedNode refClass = ConstrainedNodeUtils.forClass(constraint.value());
-        String refAttrName = getRefAttrName(element, constraint);
-        ConstrainedNode ref = refClass.getChild(refAttrName);
-        if (constraint.useRefTarget()) { return CriterionUtils.forElement(ref); }
-        ConstrainedNode tmp = initTmpConstrainedNode(element, ref);
-        return new NodeCriterionProducer(tmp).produce();
+    protected static Criterion produce(ConstrainedNode node, VRef constraint) {
+        ConstrainedClass refClass = ConstrainedClass.getInstance(constraint.value());
+        String property = constraint.property();
+        if (property.isEmpty()) { property = node.getName(); }
+        ConstrainedNode ref = refClass.requireChild(property);
+        if (constraint.useRefTarget()) { return CriterionUtils.forNode(ref); }
+        return new NodeCriterionProducer(initTmpConstrainedNode(node, ref)).produce();
     }
 
-    private static String getRefAttrName(ConstrainedNode element, VRef constraint) {
-        String attr = constraint.attr();
-        if (!attr.isEmpty()) { return '#' + attr; }
-        switch (element.getCategory()) {
-            case FIELD:
-            case GETTER:
-                return element.getName();
-            default:
-        }
-        // TODO message
-        throw new ConstraintAnalysisException("");
-    }
+    private static ConstrainedNode initTmpConstrainedNode(ConstrainedNode node, ConstrainedNode ref) {
+        return new ConstrainedNode(node.getType(), node.getLocation()) {
+            @Override
+            public ConstrainedNode getParent() {
+                return node.getParent();
+            }
 
-    private static ConstrainedNode initTmpConstrainedNode(
-            ConstrainedNode element, ConstrainedNode ref) {
-        // TODO check inferiors of element and ref
-        AnnotatedType annotatedType;
-        if (ref.getCategory() == ConstrainedNode.Category.FIELD) {
-            annotatedType = ((Field) ref.getOrigin()).getAnnotatedType();
-        } else {
-            annotatedType = ((Method) ref.getOrigin()).getAnnotatedReturnType();
-        }
-        return new ConstrainedNode(element.getCategory(), element.getParent(), element.getOrigin(), annotatedType);
+            @Override
+            public List<? extends ConstrainedNode> getChildren() {
+                return ref.getChildren();
+            }
+
+            @Override
+            public List<Annotation> getConstraints() {
+                return ref.getConstraints();
+            }
+
+            @Override
+            public Criterion.Wrapper getCriterionWrapper() {
+                return node.getCriterionWrapper();
+            }
+        };
     }
 
 }

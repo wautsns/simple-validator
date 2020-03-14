@@ -20,14 +20,13 @@ import com.github.wautsns.simplevalidator.constraint.ACombine;
 import com.github.wautsns.simplevalidator.constraint.AConstraint;
 import com.github.wautsns.simplevalidator.exception.analysis.ConstraintAnalysisException;
 import com.github.wautsns.simplevalidator.exception.analysis.IllegalConstrainedNodeException;
+import com.github.wautsns.simplevalidator.model.criterion.basic.Criteria;
+import com.github.wautsns.simplevalidator.model.criterion.basic.Criterion;
 import com.github.wautsns.simplevalidator.model.criterion.factory.CriterionFactory;
-import com.github.wautsns.simplevalidator.model.criterion.kernel.Criteria;
-import com.github.wautsns.simplevalidator.model.criterion.kernel.Criterion;
-import com.github.wautsns.simplevalidator.model.failure.ValidationFailure.Variables;
+import com.github.wautsns.simplevalidator.model.failure.ValidationFailure;
 import com.github.wautsns.simplevalidator.model.node.ConstrainedNode;
 import com.github.wautsns.simplevalidator.util.ConstraintUtils;
-import com.github.wautsns.simplevalidator.util.ConstraintUtils.Attributes;
-import com.github.wautsns.simplevalidator.util.normal.ReflectionUtils;
+import com.github.wautsns.simplevalidator.util.common.ReflectionUtils;
 import com.github.wautsns.templatemessage.variable.VariableValueMap;
 import org.springframework.expression.EvaluationContext;
 import org.springframework.expression.Expression;
@@ -118,14 +117,13 @@ public class ConstraintCriterionProcessor<A extends Annotation> {
         if (message == null) {
             processWithoutVariables(node, wip);
         } else {
-            Criteria tmp = ProcessUtils.newCriteriaFor(node.getType());
+            Criteria tmp = Criteria.newInstance(node.getType());
             processWithoutVariables(node, tmp);
-            VariableValueMap variableValueMap = ConstraintUtils.getVariableValueMap(constraint);
-            variableValueMap.put(Variables.TARGET, node.getLocation());
             Criterion criterion = tmp.simplify();
             if (criterion == null) { return; }
-            criterion = criterion.enhanceResultProcessing(
-                    result -> (result == null) ? null : result.put(variableValueMap));
+            VariableValueMap variableValueMap = ConstraintUtils.getVariableValueMap(constraint);
+            variableValueMap.put(ValidationFailure.Variables.TARGET, node.getLocation());
+            criterion = criterion.enhanceFailure(failure -> failure.setMessageTemplate(message).put(variableValueMap));
             wip.add(criterion);
         }
     }
@@ -211,7 +209,7 @@ public class ConstraintCriterionProcessor<A extends Annotation> {
                         value = ConstraintUtils.requireValue(constraint, ref);
                     }
                 }
-            } else if (Attributes.MESSAGE.equals(name)) {
+            } else if (ConstraintUtils.Attributes.MESSAGE.equals(name)) {
                 String message = acombine.message();
                 if (message.isEmpty()) { message = ConstraintUtils.getMessage(constraint); }
                 value = message;

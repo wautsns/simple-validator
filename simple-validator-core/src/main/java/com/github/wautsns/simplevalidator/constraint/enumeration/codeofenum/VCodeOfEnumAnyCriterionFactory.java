@@ -12,9 +12,9 @@
  */
 package com.github.wautsns.simplevalidator.constraint.enumeration.codeofenum;
 
+import com.github.wautsns.simplevalidator.model.criterion.basic.TCriteria;
+import com.github.wautsns.simplevalidator.model.criterion.basic.TCriterion;
 import com.github.wautsns.simplevalidator.model.criterion.factory.special.AbstractNonPrimitiveCriterionFactory;
-import com.github.wautsns.simplevalidator.model.criterion.kernel.TCriteria;
-import com.github.wautsns.simplevalidator.model.criterion.kernel.TCriterion;
 import com.github.wautsns.simplevalidator.model.failure.ValidationFailure;
 import com.github.wautsns.simplevalidator.model.node.ConstrainedNode;
 
@@ -74,8 +74,7 @@ public class VCodeOfEnumAnyCriterionFactory extends AbstractNonPrimitiveCriterio
         return init(stream.collect(Collectors.toCollection(LinkedList::new)));
     }
 
-    private static <T extends Enum<T> & CodableEnum<E>, E> TCriterion<Object> init(
-            List<T> codableEnums) {
+    private static <T extends Enum<T> & CodableEnum<E>, E> TCriterion<Object> init(List<T> codableEnums) {
         Object[] optionalValues = codableEnums.stream()
                 // Don't convert to method reference!! (will cause LambdaConversionException)
                 .map(codableEnum -> codableEnum.getCode())

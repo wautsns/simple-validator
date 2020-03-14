@@ -18,8 +18,8 @@ package com.github.wautsns.templatemessage.kernel.processor;
 import com.github.wautsns.templatemessage.kernel.TemplateMessageFormatter;
 import com.github.wautsns.templatemessage.variable.VariableValueMap;
 import org.springframework.expression.EvaluationContext;
+import org.springframework.expression.Expression;
 import org.springframework.expression.ExpressionParser;
-import org.springframework.expression.ParseException;
 import org.springframework.expression.PropertyAccessor;
 import org.springframework.expression.TypedValue;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
@@ -47,20 +47,21 @@ public class SpelFormattingProcessor extends TemplateMessageFormatter.Processor 
     }
 
     @Override
-    public String process(String name, VariableValueMap variableValueMap, Locale locale) {
+    public String process(String text, VariableValueMap variableValueMap, Locale locale) {
         try {
+            Expression expr = parser.parseExpression(text);
             SimpleEvaluationContext ctx = SimpleEvaluationContext
-                    .forPropertyAccessors(TEMPLATE_MESSAGE_PROPERTY_ACCESSORS)
+                    .forPropertyAccessors(PROPERTY_ACCESSORS)
                     .withRootObject(variableValueMap)
                     .build();
-            return parser.parseExpression(name).getValue(ctx, String.class);
-        } catch (ParseException e) {
+            return expr.getValue(ctx, String.class);
+        } catch (Exception e) {
             return null;
         }
     }
 
     /** property accessors */
-    private static final PropertyAccessor[] TEMPLATE_MESSAGE_PROPERTY_ACCESSORS = new PropertyAccessor[]{
+    private static final PropertyAccessor[] PROPERTY_ACCESSORS = new PropertyAccessor[]{
             new VariableValueMapAccessor(), DataBindingPropertyAccessor.forReadOnlyAccess()
     };
 

@@ -12,10 +12,10 @@
  */
 package com.github.wautsns.simplevalidator.constraint.number.domain;
 
+import com.github.wautsns.simplevalidator.util.common.NumericTextUtils;
 import com.github.wautsns.simplevalidator.util.function.BytePredicate;
 import com.github.wautsns.simplevalidator.util.function.FloatPredicate;
 import com.github.wautsns.simplevalidator.util.function.ShortPredicate;
-import com.github.wautsns.simplevalidator.util.normal.NumericTextUtils;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -291,7 +291,7 @@ public class DomainUtils {
                     bigDecimal = new BigDecimal(chars);
                 }
                 int rst = ref.compareTo(bigDecimal);
-                return (rst == 0) ? inclusive : ((rst < 0) ^ left);
+                return (rst == 0) ? inclusive : ((rst > 0) ^ left);
             };
         }
 
@@ -303,7 +303,7 @@ public class DomainUtils {
             boolean left = this.left;
             return value -> {
                 int rst = ref.compareTo(value);
-                return (rst == 0) ? inclusive : ((rst < 0) ^ left);
+                return (rst == 0) ? inclusive : ((rst > 0) ^ left);
             };
         }
 
@@ -369,15 +369,13 @@ public class DomainUtils {
 
         @Override
         public Predicate<CharSequence> forNumericText() {
-            return min.forNumericText()
-                    .and(max.forNumericText());
+            return min.forNumericText().and(max.forNumericText());
         }
 
         @Override
         public <T extends Number & Comparable<T>> Predicate<T> forComparableNumber(
                 Class<T> clazz) {
-            return min.forComparableNumber(clazz)
-                    .and(max.forComparableNumber(clazz));
+            return min.forComparableNumber(clazz).and(max.forComparableNumber(clazz));
         }
 
         @Override

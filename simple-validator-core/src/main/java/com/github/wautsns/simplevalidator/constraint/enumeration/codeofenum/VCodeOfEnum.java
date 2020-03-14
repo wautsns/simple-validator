@@ -16,6 +16,7 @@
 package com.github.wautsns.simplevalidator.constraint.enumeration.codeofenum;
 
 import com.github.wautsns.simplevalidator.constraint.AConstraint;
+import com.github.wautsns.simplevalidator.model.failure.Formatters;
 import com.github.wautsns.templatemessage.variable.Variable;
 
 import java.lang.annotation.Documented;
@@ -53,6 +54,6 @@ public @interface VCodeOfEnum {
 
     // ------------------------- variables -----------------------------------------
 
-    Variable<Object[]> OPTIONAL_VALUES = new Variable<>("optionalValues");
+    Variable<Object[]> OPTIONAL_VALUES = new Variable<>("optionalValues", Formatters.VALUES_NO_OPTIONAL_VALUE);
 
 }

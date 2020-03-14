@@ -16,11 +16,12 @@
 package com.github.wautsns.templatemessage.formatter.time;
 
 import com.github.wautsns.templatemessage.formatter.Formatter;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
-import java.text.DateFormat;
 import java.time.format.FormatStyle;
 import java.util.Date;
 import java.util.Locale;
@@ -31,8 +32,10 @@ import java.util.Locale;
  * @author wautsns
  * @since Mar 10, 2020
  */
+@Getter
 @Setter
 @Accessors(chain = true)
+@EqualsAndHashCode
 public class DateFormatter implements Formatter<Date> {
 
     /** default {@code DateFormatter} */
@@ -41,11 +44,12 @@ public class DateFormatter implements Formatter<Date> {
     private static final long serialVersionUID = 3675512503772257828L;
 
     /** string format of {@code null}, default is {@code "null"} */
-    private @NonNull String stringWhenNull = "null";
+    private @NonNull
+    String stringWhenNull = "null";
     /**
      * locale of string format, default is {@code null}
      *
-     * <p>Set a {@code Locale}, if you need to fix the locale of string format.
+     * <p>Set specified {@code Locale}, if you need to fix the locale of string format.
      */
     private Locale localeOfStringFormat = null;
     /**
@@ -62,48 +66,10 @@ public class DateFormatter implements Formatter<Date> {
     private FormatStyle timeFormatStyle = FormatStyle.MEDIUM;
 
     @Override
-    public boolean appliesTo(Class<?> clazz) {
-        return Date.class.isAssignableFrom(clazz);
-    }
-
-    @Override
     public String format(Date value, Locale locale) {
         if (value == null) { return stringWhenNull; }
         if (localeOfStringFormat != null) { locale = localeOfStringFormat; }
-        DateFormat dateFormat;
-        if (timeFormatStyle == null) {
-            int dateStyleCode = getDateFormatStyleCode(dateFormatStyle);
-            dateFormat = DateFormat.getDateInstance(dateStyleCode, locale);
-        } else if (dateFormatStyle == null) {
-            int timeStyleCode = getDateFormatStyleCode(timeFormatStyle);
-            dateFormat = DateFormat.getTimeInstance(timeStyleCode, locale);
-        } else {
-            int dateStyleCode = getDateFormatStyleCode(dateFormatStyle);
-            int timeStyleCode = getDateFormatStyleCode(timeFormatStyle);
-            dateFormat = DateFormat.getDateTimeInstance(dateStyleCode, timeStyleCode, locale);
-        }
-        return dateFormat.format(value);
-    }
-
-    /**
-     * Get the code of {@code DateFormat} from {@code FormatStyle}.
-     *
-     * @param formatStyle a format style
-     * @return the code of {@code DateFormat} associated with the format style
-     */
-    private static int getDateFormatStyleCode(FormatStyle formatStyle) {
-        switch (formatStyle) {
-            case LONG:
-                return DateFormat.LONG;
-            case MEDIUM:
-                return DateFormat.MEDIUM;
-            case FULL:
-                return DateFormat.FULL;
-            case SHORT:
-                return DateFormat.SHORT;
-            default:
-                throw new IllegalArgumentException();
-        }
+        return TimeFormatterUtils.DateFormats.forDateAndTime(dateFormatStyle, timeFormatStyle, locale).format(value);
     }
 
 }

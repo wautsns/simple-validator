@@ -15,9 +15,9 @@
  */
 package com.github.wautsns.simplevalidator.constraint.number.domain;
 
+import com.github.wautsns.simplevalidator.model.criterion.basic.IntCriteria;
+import com.github.wautsns.simplevalidator.model.criterion.basic.IntCriterion;
 import com.github.wautsns.simplevalidator.model.criterion.factory.primitive.AbstractIntCriterionFactory;
-import com.github.wautsns.simplevalidator.model.criterion.kernel.primitive.IntCriteria;
-import com.github.wautsns.simplevalidator.model.criterion.kernel.primitive.IntCriterion;
 import com.github.wautsns.simplevalidator.model.failure.ValidationFailure;
 import com.github.wautsns.simplevalidator.model.node.ConstrainedNode;
 
@@ -30,7 +30,7 @@ import java.util.function.IntPredicate;
 public class VDomainIntCriterionFactory extends AbstractIntCriterionFactory<VDomain> {
 
     @Override
-    public void process(ConstrainedNode element, VDomain constraint, IntCriteria wip) {
+    public void process(ConstrainedNode node, VDomain constraint, IntCriteria wip) {
         wip.add(produce(constraint));
     }
 

@@ -15,9 +15,9 @@
  */
 package com.github.wautsns.simplevalidator.model.criterion.factory.primitive;
 
+import com.github.wautsns.simplevalidator.model.criterion.basic.BooleanCriteria;
+import com.github.wautsns.simplevalidator.model.criterion.basic.BooleanCriterion;
 import com.github.wautsns.simplevalidator.model.criterion.factory.CriterionFactory;
-import com.github.wautsns.simplevalidator.model.criterion.kernel.primitive.BooleanCriteria;
-import com.github.wautsns.simplevalidator.model.criterion.kernel.primitive.BooleanCriterion;
 import com.github.wautsns.simplevalidator.model.node.ConstrainedNode;
 
 import java.lang.annotation.Annotation;

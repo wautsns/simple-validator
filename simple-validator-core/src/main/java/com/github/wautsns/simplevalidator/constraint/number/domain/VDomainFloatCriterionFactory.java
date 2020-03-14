@@ -15,9 +15,9 @@
  */
 package com.github.wautsns.simplevalidator.constraint.number.domain;
 
+import com.github.wautsns.simplevalidator.model.criterion.basic.FloatCriteria;
+import com.github.wautsns.simplevalidator.model.criterion.basic.FloatCriterion;
 import com.github.wautsns.simplevalidator.model.criterion.factory.primitive.AbstractFloatCriterionFactory;
-import com.github.wautsns.simplevalidator.model.criterion.kernel.primitive.FloatCriteria;
-import com.github.wautsns.simplevalidator.model.criterion.kernel.primitive.FloatCriterion;
 import com.github.wautsns.simplevalidator.model.failure.ValidationFailure;
 import com.github.wautsns.simplevalidator.model.node.ConstrainedNode;
 import com.github.wautsns.simplevalidator.util.function.FloatPredicate;
@@ -29,7 +29,7 @@ import com.github.wautsns.simplevalidator.util.function.FloatPredicate;
 public class VDomainFloatCriterionFactory extends AbstractFloatCriterionFactory<VDomain> {
 
     @Override
-    public void process(ConstrainedNode element, VDomain constraint, FloatCriteria wip) {
+    public void process(ConstrainedNode node, VDomain constraint, FloatCriteria wip) {
         wip.add(produce(constraint));
     }
 

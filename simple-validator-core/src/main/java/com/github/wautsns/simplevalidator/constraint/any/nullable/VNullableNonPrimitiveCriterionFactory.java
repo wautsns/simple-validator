@@ -15,8 +15,8 @@
  */
 package com.github.wautsns.simplevalidator.constraint.any.nullable;
 
+import com.github.wautsns.simplevalidator.model.criterion.basic.TCriteria;
 import com.github.wautsns.simplevalidator.model.criterion.factory.special.AbstractNonPrimitiveCriterionFactory;
-import com.github.wautsns.simplevalidator.model.criterion.kernel.TCriteria;
 import com.github.wautsns.simplevalidator.model.node.ConstrainedNode;
 
 /**
@@ -26,7 +26,7 @@ import com.github.wautsns.simplevalidator.model.node.ConstrainedNode;
 public class VNullableNonPrimitiveCriterionFactory extends AbstractNonPrimitiveCriterionFactory<VNullable> {
 
     @Override
-    public void process(ConstrainedNode element, VNullable constraint, TCriteria<Object> wip) {
+    public void process(ConstrainedNode node, VNullable constraint, TCriteria<Object> wip) {
         wip.nullable();
     }
 

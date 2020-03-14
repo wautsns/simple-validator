@@ -36,8 +36,8 @@ public class VariableFormattingProcessor extends TemplateMessageFormatter.Proces
     }
 
     @Override
-    public String process(String name, VariableValueMap variableValueMap, Locale locale) {
-        Variable<Object> variable = variableValueMap.getVariable(name);
+    public String process(String text, VariableValueMap variableValueMap, Locale locale) {
+        Variable<Object> variable = variableValueMap.getVariable(text);
         if (variable == null) { return null; }
         Object value = variableValueMap.getValue(variable);
         return variable.getFormatter().format(value, locale);

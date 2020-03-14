@@ -15,57 +15,91 @@
  */
 package com.github.wautsns.simplevalidator.util;
 
-import com.github.wautsns.simplevalidator.model.criterion.kernel.Criterion;
-import com.github.wautsns.simplevalidator.model.criterion.kernel.TCriterion;
+import com.github.wautsns.simplevalidator.model.criterion.basic.BooleanCriterion;
+import com.github.wautsns.simplevalidator.model.criterion.basic.ByteCriterion;
+import com.github.wautsns.simplevalidator.model.criterion.basic.CharCriterion;
+import com.github.wautsns.simplevalidator.model.criterion.basic.Criterion;
+import com.github.wautsns.simplevalidator.model.criterion.basic.DoubleCriterion;
+import com.github.wautsns.simplevalidator.model.criterion.basic.FloatCriterion;
+import com.github.wautsns.simplevalidator.model.criterion.basic.IntCriterion;
+import com.github.wautsns.simplevalidator.model.criterion.basic.LongCriterion;
+import com.github.wautsns.simplevalidator.model.criterion.basic.PrimitiveCriterion;
+import com.github.wautsns.simplevalidator.model.criterion.basic.ShortCriterion;
+import com.github.wautsns.simplevalidator.model.criterion.basic.TCriterion;
 import com.github.wautsns.simplevalidator.model.criterion.processor.NodeCriterionProducer;
+import com.github.wautsns.simplevalidator.model.failure.ValidationFailure;
+import com.github.wautsns.simplevalidator.model.node.ConstrainedClass;
 import com.github.wautsns.simplevalidator.model.node.ConstrainedNode;
+import com.github.wautsns.simplevalidator.model.node.ConstrainedParameter;
+import com.github.wautsns.simplevalidator.util.common.TypeUtils;
+import lombok.experimental.UtilityClass;
 
 import java.lang.reflect.Parameter;
+import java.lang.reflect.Type;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
+ * Criterion utils.
+ *
  * @author wautsns
- * @since Mar 11, 2020
+ * @since Mar 14, 2020
  */
-@SuppressWarnings({"rawtypes", "unchecked"})
+@UtilityClass
 public class CriterionUtils {
 
-    /** ConcurrentHashMap can't put null value. */
-    private static final TCriterion<?> NULL = tmp -> null;
-    private static final Map<Class, Criterion> CACHE_FOR_CLASS = new ConcurrentHashMap<>(64);
-    private static final Map<ConstrainedNode, Criterion> CACHE_FOR_CLASS_ELEMENTS = new ConcurrentHashMap<>(128);
+    private static final Map<ConstrainedNode, Criterion> CACHE = new ConcurrentHashMap<>(128);
 
-    public static <C extends Criterion> C forClass(Class<?> clazz) {
-        C criterion = (C) CACHE_FOR_CLASS.computeIfAbsent(clazz, CriterionUtils::resolveClass);
-        return (criterion == NULL) ? null : criterion;
-    }
-
-    public static <C extends Criterion> C forParameter(Parameter parameter) {
-        C criterion = resolveElement(ConstrainedNodeUtils.forParameter(parameter));
-        return (criterion == NULL) ? null : criterion;
-    }
-
-    public static <C extends Criterion> C forElement(ConstrainedNode element) {
-        switch (element.getCategory()) {
-            case TYPE:
-                return forClass((Class<?>) element.getOrigin());
-            case PARAMETER:
-                return forParameter((Parameter) element.getOrigin());
-            default:
-                return (C) CACHE_FOR_CLASS_ELEMENTS.computeIfAbsent(element, CriterionUtils::resolveElement);
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    public static ValidationFailure execute(Criterion criterion, Object value) {
+        if (criterion instanceof TCriterion) {
+            return ((TCriterion) criterion).test(value);
+        } else if (criterion instanceof PrimitiveCriterion) {
+            return ((PrimitiveCriterion) criterion).testWrappedValue(value);
+        } else {
+            throw new IllegalStateException();
         }
     }
 
-    private static <C extends Criterion> C resolveClass(Class<?> clazz) {
-        return resolveElement(ConstrainedNodeUtils.forClass(clazz));
+    public static <C extends Criterion> C forClass(Class<?> clazz) {
+        return forNode(ConstrainedClass.getInstance(clazz));
     }
 
-    private static <C extends Criterion> C resolveElement(ConstrainedNode element) {
-        C criterion = new NodeCriterionProducer(element).produce();
-        return (criterion == null) ? (C) NULL : criterion;
+    @SuppressWarnings("unchecked")
+    public static <C extends Criterion> C forParameter(Parameter parameter) {
+        return (C) resolveNode(new ConstrainedParameter(parameter));
     }
 
-    private CriterionUtils() {}
+    @SuppressWarnings("unchecked")
+    public static <C extends Criterion> C forNode(ConstrainedNode node) {
+        return (C) CACHE.computeIfAbsent(node, CriterionUtils::resolveNode);
+    }
+
+    private static Criterion resolveNode(ConstrainedNode node) {
+        Criterion criterion = new NodeCriterionProducer(node).produce();
+        if (criterion != null) { return criterion; }
+        Type type = node.getType();
+        if (!TypeUtils.isPrimitive(type)) {
+            return TCriterion.TRUTH;
+        } else if (type == int.class) {
+            return IntCriterion.TRUTH;
+        } else if (type == boolean.class) {
+            return BooleanCriterion.TRUTH;
+        } else if (type == long.class) {
+            return LongCriterion.TRUTH;
+        } else if (type == char.class) {
+            return CharCriterion.TRUTH;
+        } else if (type == double.class) {
+            return DoubleCriterion.TRUTH;
+        } else if (type == byte.class) {
+            return ByteCriterion.TRUTH;
+        } else if (type == short.class) {
+            return ShortCriterion.TRUTH;
+        } else if (type == float.class) {
+            return FloatCriterion.TRUTH;
+        } else {
+            throw new IllegalStateException();
+        }
+    }
 
 }

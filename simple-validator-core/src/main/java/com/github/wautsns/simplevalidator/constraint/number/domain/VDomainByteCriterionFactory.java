@@ -15,9 +15,9 @@
  */
 package com.github.wautsns.simplevalidator.constraint.number.domain;
 
+import com.github.wautsns.simplevalidator.model.criterion.basic.ByteCriteria;
+import com.github.wautsns.simplevalidator.model.criterion.basic.ByteCriterion;
 import com.github.wautsns.simplevalidator.model.criterion.factory.primitive.AbstractByteCriterionFactory;
-import com.github.wautsns.simplevalidator.model.criterion.kernel.primitive.ByteCriteria;
-import com.github.wautsns.simplevalidator.model.criterion.kernel.primitive.ByteCriterion;
 import com.github.wautsns.simplevalidator.model.failure.ValidationFailure;
 import com.github.wautsns.simplevalidator.model.node.ConstrainedNode;
 import com.github.wautsns.simplevalidator.util.function.BytePredicate;
@@ -29,7 +29,7 @@ import com.github.wautsns.simplevalidator.util.function.BytePredicate;
 public class VDomainByteCriterionFactory extends AbstractByteCriterionFactory<VDomain> {
 
     @Override
-    public void process(ConstrainedNode element, VDomain constraint, ByteCriteria wip) {
+    public void process(ConstrainedNode node, VDomain constraint, ByteCriteria wip) {
         wip.add(produce(constraint));
     }
 

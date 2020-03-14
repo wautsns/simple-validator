@@ -17,6 +17,8 @@ package com.github.wautsns.templatemessage.formatter.multival;
 
 import com.github.wautsns.templatemessage.formatter.Formatter;
 import com.github.wautsns.templatemessage.formatter.ObjectFormatter;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -32,53 +34,46 @@ import java.util.Locale;
  * @author wautsns
  * @since Mar 10, 2020
  */
+@Getter
 @Setter
 @Accessors(chain = true)
+@EqualsAndHashCode
 public class ArrayFormatter<A, C> implements Formatter<A> {
 
-    /** default {@code ArrayFormatter} */
+    /** default {@code ArrayFormatter}, eg. [1, 2, 3] */
     public static final ArrayFormatter<Object, Object> DEFAULT = new ArrayFormatter<>();
 
     private static final long serialVersionUID = 1580600679331585336L;
 
     /** string format of {@code null}, default is {@code "null"} */
-    private @NonNull String stingFormatOfNull = "null";
+    private @NonNull
+    String stringFormatOfNull = "null";
     /** string format of empty array, default is {@code "[]"} */
-    private @NonNull String stringFormatOfEmptyArray = "[]";
+    private @NonNull
+    String stringFormatOfEmptyArray = "[]";
     /** prefix of string format, default is {@code "["} */
-    private @NonNull String prefix = "[";
+    private @NonNull
+    String prefix = "[";
     /** suffix of string format, default is {@code "]"} */
-    private @NonNull String suffix = "]";
+    private @NonNull
+    String suffix = "]";
     /** prefix of string format of component, default is {@code ""} */
-    private @NonNull String componentPrefix = "";
+    private @NonNull
+    String componentPrefix = "";
     /** suffix of string format of component, default is {@code ""} */
-    private @NonNull String componentSuffix = "";
+    private @NonNull
+    String componentSuffix = "";
     /** delimiter between string format of component, default is {@code ", "} */
-    private @NonNull String delimiter = ", ";
+    private @NonNull
+    String delimiter = ", ";
     /** formatter for component, default is {@link ObjectFormatter#DEFAULT} */
-    private @NonNull Formatter<? super C> componentFormatter = ObjectFormatter.DEFAULT;
-
-    @Override
-    public boolean appliesTo(Class<?> clazz) {
-        return clazz.isArray();
-    }
-
-    public ArrayFormatter<A, C> setPrefixAndSuffix(String prefix, String suffix) {
-        this.prefix = prefix;
-        this.suffix = suffix;
-        return this;
-    }
-
-    public ArrayFormatter<A, C> setComponentPrefixAndSuffix(String prefix, String suffix) {
-        this.componentPrefix = prefix;
-        this.componentSuffix = suffix;
-        return this;
-    }
+    private @NonNull
+    Formatter<? super C> componentFormatter = ObjectFormatter.DEFAULT;
 
     @Override
     @SuppressWarnings("unchecked")
     public String format(A value, Locale locale) {
-        if (value == null) { return stingFormatOfNull; }
+        if (value == null) { return stringFormatOfNull; }
         int length = Array.getLength(value);
         if (length == 0) { return stringFormatOfEmptyArray; }
         StringBuilder result = new StringBuilder();
@@ -91,6 +86,32 @@ public class ArrayFormatter<A, C> implements Formatter<A> {
         result.delete(result.length() - delimiter.length(), result.length());
         result.append(suffix);
         return result.toString();
+    }
+
+    /**
+     * Set prefix and suffix.
+     *
+     * @param prefix prefix of string formatter
+     * @param suffix suffix of string formatter
+     * @return self reference
+     */
+    public ArrayFormatter<A, C> setPrefixAndSuffix(String prefix, String suffix) {
+        setPrefix(prefix);
+        setSuffix(suffix);
+        return this;
+    }
+
+    /**
+     * Set prefix of string format of component and suffix of string format of component.
+     *
+     * @param prefix prefix of string format of component
+     * @param suffix suffix of string format of component
+     * @return self reference
+     */
+    public ArrayFormatter<A, C> setComponentPrefixAndSuffix(String prefix, String suffix) {
+        setComponentPrefix(prefix);
+        setComponentSuffix(suffix);
+        return this;
     }
 
 }

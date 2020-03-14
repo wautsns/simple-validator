@@ -12,12 +12,12 @@
  */
 package com.github.wautsns.simplevalidator.constraint.number.domain;
 
+import com.github.wautsns.simplevalidator.model.criterion.basic.TCriteria;
+import com.github.wautsns.simplevalidator.model.criterion.basic.TCriterion;
 import com.github.wautsns.simplevalidator.model.criterion.factory.special.AbstractComparableNumberCriterionFactory;
-import com.github.wautsns.simplevalidator.model.criterion.kernel.TCriteria;
-import com.github.wautsns.simplevalidator.model.criterion.kernel.TCriterion;
 import com.github.wautsns.simplevalidator.model.failure.ValidationFailure;
 import com.github.wautsns.simplevalidator.model.node.ConstrainedNode;
-import com.github.wautsns.simplevalidator.util.normal.TypeUtils;
+import com.github.wautsns.simplevalidator.util.common.TypeUtils;
 
 import java.util.function.Predicate;
 
@@ -28,17 +28,17 @@ import java.util.function.Predicate;
 public class VDomainComparableNumberCriterionFactory extends AbstractComparableNumberCriterionFactory<VDomain> {
 
     @Override
-    public void process(ConstrainedNode element, VDomain constraint, TCriteria<Comparable<Number>> wip) {
-        wip.add(produce(element, constraint));
+    public void process(ConstrainedNode node, VDomain constraint, TCriteria<Comparable<Number>> wip) {
+        wip.add(produce(node, constraint));
     }
 
     // ------------------------- criterion -----------------------------------------
 
     @SuppressWarnings({"rawtypes", "unchecked"})
     protected static TCriterion<Comparable<Number>> produce(
-            ConstrainedNode element, VDomain constraint) {
+            ConstrainedNode node, VDomain constraint) {
         Predicate predicate = DomainUtils.init(constraint.value())
-                .forComparableNumber((Class) TypeUtils.getClass(element.getType()));
+                .forComparableNumber((Class) TypeUtils.getClass(node.getType()));
         if (predicate == null) { return null; }
         return value -> predicate.test(value) ? null : new ValidationFailure(value);
     }

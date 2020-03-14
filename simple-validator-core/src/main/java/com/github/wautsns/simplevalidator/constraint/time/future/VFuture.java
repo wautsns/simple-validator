@@ -1,6 +1,8 @@
 package com.github.wautsns.simplevalidator.constraint.time.future;
 
 import com.github.wautsns.simplevalidator.constraint.AConstraint;
+import com.github.wautsns.simplevalidator.model.criterion.factory.typelike.TypeLikeUtilityVariableCache;
+import com.github.wautsns.simplevalidator.model.criterion.factory.typelike.time.TimeLikeUtility;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
@@ -40,5 +42,9 @@ public @interface VFuture {
     long minutes() default 0;
 
     long seconds() default 0;
+
+    long milliseconds() default 0;
+
+    TypeLikeUtilityVariableCache<TimeLikeUtility<?>> REF = new TypeLikeUtilityVariableCache<>("ref");
 
 }
