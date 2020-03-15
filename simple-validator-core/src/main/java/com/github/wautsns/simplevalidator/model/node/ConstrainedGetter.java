@@ -15,15 +15,8 @@
  */
 package com.github.wautsns.simplevalidator.model.node;
 
-import com.github.wautsns.simplevalidator.model.criterion.basic.BooleanCriterion;
-import com.github.wautsns.simplevalidator.model.criterion.basic.ByteCriterion;
-import com.github.wautsns.simplevalidator.model.criterion.basic.CharCriterion;
 import com.github.wautsns.simplevalidator.model.criterion.basic.Criterion;
-import com.github.wautsns.simplevalidator.model.criterion.basic.DoubleCriterion;
-import com.github.wautsns.simplevalidator.model.criterion.basic.FloatCriterion;
-import com.github.wautsns.simplevalidator.model.criterion.basic.IntCriterion;
-import com.github.wautsns.simplevalidator.model.criterion.basic.LongCriterion;
-import com.github.wautsns.simplevalidator.model.criterion.basic.ShortCriterion;
+import com.github.wautsns.simplevalidator.model.criterion.basic.PrimitiveCriterion;
 import com.github.wautsns.simplevalidator.model.criterion.basic.TCriterion;
 import com.github.wautsns.simplevalidator.util.common.ReflectionUtils;
 import lombok.Getter;
@@ -78,52 +71,17 @@ public class ConstrainedGetter extends ConstrainedType {
     }
 
     @RequiredArgsConstructor
-    private static class CriterionWrapper implements Criterion.Wrapper {
+    private static class CriterionWrapper extends Criterion.Wrapper {
 
         private final @NonNull Method getter;
 
         @Override
-        public <T> TCriterion<?> wrapTCriterion(TCriterion<T> criterion) {
+        public <T> TCriterion<?> wrap(TCriterion<T> criterion) {
             return source -> criterion.test(ReflectionUtils.invoke(source, getter));
         }
 
         @Override
-        public TCriterion<?> wrapBooleanCriterion(BooleanCriterion criterion) {
-            return source -> criterion.testWrappedValue(ReflectionUtils.invoke(source, getter));
-        }
-
-        @Override
-        public TCriterion<?> wrapCharCriterion(CharCriterion criterion) {
-            return source -> criterion.testWrappedValue(ReflectionUtils.invoke(source, getter));
-        }
-
-        @Override
-        public TCriterion<?> wrapByteCriterion(ByteCriterion criterion) {
-            return source -> criterion.testWrappedValue(ReflectionUtils.invoke(source, getter));
-        }
-
-        @Override
-        public TCriterion<?> wrapShortCriterion(ShortCriterion criterion) {
-            return source -> criterion.testWrappedValue(ReflectionUtils.invoke(source, getter));
-        }
-
-        @Override
-        public TCriterion<?> wrapIntCriterion(IntCriterion criterion) {
-            return source -> criterion.testWrappedValue(ReflectionUtils.invoke(source, getter));
-        }
-
-        @Override
-        public TCriterion<?> wrapLongCriterion(LongCriterion criterion) {
-            return source -> criterion.testWrappedValue(ReflectionUtils.invoke(source, getter));
-        }
-
-        @Override
-        public TCriterion<?> wrapFloatCriterion(FloatCriterion criterion) {
-            return source -> criterion.testWrappedValue(ReflectionUtils.invoke(source, getter));
-        }
-
-        @Override
-        public TCriterion<?> wrapDoubleCriterion(DoubleCriterion criterion) {
+        protected <W> TCriterion<?> wrap(PrimitiveCriterion<W> criterion) {
             return source -> criterion.testWrappedValue(ReflectionUtils.invoke(source, getter));
         }
 

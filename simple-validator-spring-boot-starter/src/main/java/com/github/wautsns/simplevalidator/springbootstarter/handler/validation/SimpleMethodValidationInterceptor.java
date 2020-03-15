@@ -13,7 +13,6 @@
 package com.github.wautsns.simplevalidator.springbootstarter.handler.validation;
 
 import com.github.wautsns.simplevalidator.exception.ValidationException;
-import com.github.wautsns.simplevalidator.model.criterion.basic.Criterion;
 import com.github.wautsns.simplevalidator.model.criterion.processor.NodeCriterionProducer;
 import com.github.wautsns.simplevalidator.model.failure.ValidationFailure;
 import com.github.wautsns.simplevalidator.model.node.ConstrainedParameter;

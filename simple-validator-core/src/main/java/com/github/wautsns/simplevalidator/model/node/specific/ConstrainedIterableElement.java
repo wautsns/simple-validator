@@ -15,15 +15,7 @@
  */
 package com.github.wautsns.simplevalidator.model.node.specific;
 
-import com.github.wautsns.simplevalidator.model.criterion.basic.BooleanCriterion;
-import com.github.wautsns.simplevalidator.model.criterion.basic.ByteCriterion;
-import com.github.wautsns.simplevalidator.model.criterion.basic.CharCriterion;
 import com.github.wautsns.simplevalidator.model.criterion.basic.Criterion;
-import com.github.wautsns.simplevalidator.model.criterion.basic.DoubleCriterion;
-import com.github.wautsns.simplevalidator.model.criterion.basic.FloatCriterion;
-import com.github.wautsns.simplevalidator.model.criterion.basic.IntCriterion;
-import com.github.wautsns.simplevalidator.model.criterion.basic.LongCriterion;
-import com.github.wautsns.simplevalidator.model.criterion.basic.ShortCriterion;
 import com.github.wautsns.simplevalidator.model.criterion.basic.TCriterion;
 import com.github.wautsns.simplevalidator.model.failure.ValidationFailure;
 import com.github.wautsns.simplevalidator.model.node.ConstrainedType;
@@ -80,120 +72,16 @@ public class ConstrainedIterableElement extends ConstrainedTypeArg {
     }
 
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
-    private static class CriterionWrapper implements Criterion.Wrapper {
+    private static class CriterionWrapper extends Criterion.Wrapper {
 
         public static final CriterionWrapper INSTANCE = new CriterionWrapper();
 
         @Override
-        public <T> TCriterion<Iterable<T>> wrapTCriterion(TCriterion<T> criterion) {
+        protected <T> TCriterion<Iterable<T>> wrap(TCriterion<T> criterion) {
             return iterable -> {
                 int index = 0;
                 for (T value : iterable) {
                     ValidationFailure failure = criterion.test(value);
-                    if (failure != null) { return failure.addIndicator(index); }
-                    index++;
-                }
-                return null;
-            };
-        }
-
-        @Override
-        public TCriterion<Iterable<Boolean>> wrapBooleanCriterion(BooleanCriterion criterion) {
-            return iterable -> {
-                int index = 0;
-                for (Boolean value : iterable) {
-                    ValidationFailure failure = criterion.testWrappedValue(value);
-                    if (failure != null) { return failure.addIndicator(index); }
-                    index++;
-                }
-                return null;
-            };
-        }
-
-        @Override
-        public TCriterion<Iterable<Character>> wrapCharCriterion(CharCriterion criterion) {
-            return iterable -> {
-                int index = 0;
-                for (Character value : iterable) {
-                    ValidationFailure failure = criterion.testWrappedValue(value);
-                    if (failure != null) { return failure.addIndicator(index); }
-                    index++;
-                }
-                return null;
-            };
-        }
-
-        @Override
-        public TCriterion<Iterable<Byte>> wrapByteCriterion(ByteCriterion criterion) {
-            return iterable -> {
-                int index = 0;
-                for (Byte value : iterable) {
-                    ValidationFailure failure = criterion.testWrappedValue(value);
-                    if (failure != null) { return failure.addIndicator(index); }
-                    index++;
-                }
-                return null;
-            };
-        }
-
-        @Override
-        public TCriterion<Iterable<Short>> wrapShortCriterion(ShortCriterion criterion) {
-            return iterable -> {
-                int index = 0;
-                for (Short value : iterable) {
-                    ValidationFailure failure = criterion.testWrappedValue(value);
-                    if (failure != null) { return failure.addIndicator(index); }
-                    index++;
-                }
-                return null;
-            };
-        }
-
-        @Override
-        public TCriterion<Iterable<Integer>> wrapIntCriterion(IntCriterion criterion) {
-            return iterable -> {
-                int index = 0;
-                for (Integer value : iterable) {
-                    ValidationFailure failure = criterion.testWrappedValue(value);
-                    if (failure != null) { return failure.addIndicator(index); }
-                    index++;
-                }
-                return null;
-            };
-        }
-
-        @Override
-        public TCriterion<Iterable<Long>> wrapLongCriterion(LongCriterion criterion) {
-            return iterable -> {
-                int index = 0;
-                for (Long value : iterable) {
-                    ValidationFailure failure = criterion.testWrappedValue(value);
-                    if (failure != null) { return failure.addIndicator(index); }
-                    index++;
-                }
-                return null;
-            };
-        }
-
-        @Override
-        public TCriterion<Iterable<Float>> wrapFloatCriterion(FloatCriterion criterion) {
-            return iterable -> {
-                int index = 0;
-                for (Float value : iterable) {
-                    ValidationFailure failure = criterion.testWrappedValue(value);
-                    if (failure != null) { return failure.addIndicator(index); }
-                    index++;
-                }
-                return null;
-            };
-        }
-
-        @Override
-        public TCriterion<Iterable<Double>> wrapDoubleCriterion(DoubleCriterion criterion) {
-            return iterable -> {
-                int index = 0;
-                for (Double value : iterable) {
-                    ValidationFailure failure = criterion.testWrappedValue(value);
                     if (failure != null) { return failure.addIndicator(index); }
                     index++;
                 }

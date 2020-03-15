@@ -59,12 +59,12 @@ public class ConstrainedArrayComponent extends ConstrainedTypeArg {
     }
 
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
-    private static class CriterionWrapper implements Criterion.Wrapper {
+    private static class CriterionWrapper extends Criterion.Wrapper {
 
         public static final CriterionWrapper INSTANCE = new CriterionWrapper();
 
         @Override
-        public <T> TCriterion<T[]> wrapTCriterion(TCriterion<T> criterion) {
+        protected <T> TCriterion<T[]> wrap(TCriterion<T> criterion) {
             return array -> {
                 for (int i = 0; i < array.length; i++) {
                     ValidationFailure failure = criterion.test(array[i]);
@@ -77,7 +77,7 @@ public class ConstrainedArrayComponent extends ConstrainedTypeArg {
         }
 
         @Override
-        public TCriterion<boolean[]> wrapBooleanCriterion(BooleanCriterion criterion) {
+        protected TCriterion<boolean[]> wrap(BooleanCriterion criterion) {
             return array -> {
                 for (int i = 0; i < array.length; i++) {
                     ValidationFailure failure = criterion.test(array[i]);
@@ -90,7 +90,7 @@ public class ConstrainedArrayComponent extends ConstrainedTypeArg {
         }
 
         @Override
-        public TCriterion<char[]> wrapCharCriterion(CharCriterion criterion) {
+        protected TCriterion<char[]> wrap(CharCriterion criterion) {
             return array -> {
                 for (int i = 0; i < array.length; i++) {
                     ValidationFailure failure = criterion.test(array[i]);
@@ -103,7 +103,7 @@ public class ConstrainedArrayComponent extends ConstrainedTypeArg {
         }
 
         @Override
-        public TCriterion<byte[]> wrapByteCriterion(ByteCriterion criterion) {
+        protected TCriterion<byte[]> wrap(ByteCriterion criterion) {
             return array -> {
                 for (int i = 0; i < array.length; i++) {
                     ValidationFailure failure = criterion.test(array[i]);
@@ -116,7 +116,7 @@ public class ConstrainedArrayComponent extends ConstrainedTypeArg {
         }
 
         @Override
-        public TCriterion<short[]> wrapShortCriterion(ShortCriterion criterion) {
+        protected TCriterion<short[]> wrap(ShortCriterion criterion) {
             return array -> {
                 for (int i = 0; i < array.length; i++) {
                     ValidationFailure failure = criterion.test(array[i]);
@@ -129,7 +129,7 @@ public class ConstrainedArrayComponent extends ConstrainedTypeArg {
         }
 
         @Override
-        public TCriterion<int[]> wrapIntCriterion(IntCriterion criterion) {
+        protected TCriterion<int[]> wrap(IntCriterion criterion) {
             return array -> {
                 for (int i = 0; i < array.length; i++) {
                     ValidationFailure failure = criterion.test(array[i]);
@@ -142,7 +142,7 @@ public class ConstrainedArrayComponent extends ConstrainedTypeArg {
         }
 
         @Override
-        public TCriterion<long[]> wrapLongCriterion(LongCriterion criterion) {
+        protected TCriterion<long[]> wrap(LongCriterion criterion) {
             return array -> {
                 for (int i = 0; i < array.length; i++) {
                     ValidationFailure failure = criterion.test(array[i]);
@@ -155,7 +155,7 @@ public class ConstrainedArrayComponent extends ConstrainedTypeArg {
         }
 
         @Override
-        public TCriterion<float[]> wrapFloatCriterion(FloatCriterion criterion) {
+        protected TCriterion<float[]> wrap(FloatCriterion criterion) {
             return array -> {
                 for (int i = 0; i < array.length; i++) {
                     ValidationFailure failure = criterion.test(array[i]);
@@ -168,7 +168,7 @@ public class ConstrainedArrayComponent extends ConstrainedTypeArg {
         }
 
         @Override
-        public TCriterion<double[]> wrapDoubleCriterion(DoubleCriterion criterion) {
+        protected TCriterion<double[]> wrap(DoubleCriterion criterion) {
             return array -> {
                 for (int i = 0; i < array.length; i++) {
                     ValidationFailure failure = criterion.test(array[i]);

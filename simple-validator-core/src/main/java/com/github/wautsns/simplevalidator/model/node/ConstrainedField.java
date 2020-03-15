@@ -76,52 +76,52 @@ public class ConstrainedField extends ConstrainedType {
     }
 
     @RequiredArgsConstructor
-    private static class CriterionWrapper implements Criterion.Wrapper {
+    private static class CriterionWrapper extends Criterion.Wrapper {
 
         private final @NonNull Field field;
 
         @Override
-        public <T> TCriterion<?> wrapTCriterion(TCriterion<T> criterion) {
+        public <T> TCriterion<?> wrap(TCriterion<T> criterion) {
             return source -> criterion.test(ReflectionUtils.getValue(source, field));
         }
 
         @Override
-        public TCriterion<?> wrapBooleanCriterion(BooleanCriterion criterion) {
+        public TCriterion<?> wrap(BooleanCriterion criterion) {
             return source -> criterion.test(ReflectionUtils.getBoolean(source, field));
         }
 
         @Override
-        public TCriterion<?> wrapCharCriterion(CharCriterion criterion) {
+        public TCriterion<?> wrap(CharCriterion criterion) {
             return source -> criterion.test(ReflectionUtils.getChar(source, field));
         }
 
         @Override
-        public TCriterion<?> wrapByteCriterion(ByteCriterion criterion) {
+        public TCriterion<?> wrap(ByteCriterion criterion) {
             return source -> criterion.test(ReflectionUtils.getByte(source, field));
         }
 
         @Override
-        public TCriterion<?> wrapShortCriterion(ShortCriterion criterion) {
+        public TCriterion<?> wrap(ShortCriterion criterion) {
             return source -> criterion.test(ReflectionUtils.getShort(source, field));
         }
 
         @Override
-        public TCriterion<?> wrapIntCriterion(IntCriterion criterion) {
+        public TCriterion<?> wrap(IntCriterion criterion) {
             return source -> criterion.test(ReflectionUtils.getInt(source, field));
         }
 
         @Override
-        public TCriterion<?> wrapLongCriterion(LongCriterion criterion) {
+        public TCriterion<?> wrap(LongCriterion criterion) {
             return source -> criterion.test(ReflectionUtils.getLong(source, field));
         }
 
         @Override
-        public TCriterion<?> wrapFloatCriterion(FloatCriterion criterion) {
+        public TCriterion<?> wrap(FloatCriterion criterion) {
             return source -> criterion.test(ReflectionUtils.getFloat(source, field));
         }
 
         @Override
-        public TCriterion<?> wrapDoubleCriterion(DoubleCriterion criterion) {
+        public TCriterion<?> wrap(DoubleCriterion criterion) {
             return source -> criterion.test(ReflectionUtils.getDouble(source, field));
         }
 

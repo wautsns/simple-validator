@@ -15,15 +15,7 @@
  */
 package com.github.wautsns.simplevalidator.model.node.specific;
 
-import com.github.wautsns.simplevalidator.model.criterion.basic.BooleanCriterion;
-import com.github.wautsns.simplevalidator.model.criterion.basic.ByteCriterion;
-import com.github.wautsns.simplevalidator.model.criterion.basic.CharCriterion;
 import com.github.wautsns.simplevalidator.model.criterion.basic.Criterion;
-import com.github.wautsns.simplevalidator.model.criterion.basic.DoubleCriterion;
-import com.github.wautsns.simplevalidator.model.criterion.basic.FloatCriterion;
-import com.github.wautsns.simplevalidator.model.criterion.basic.IntCriterion;
-import com.github.wautsns.simplevalidator.model.criterion.basic.LongCriterion;
-import com.github.wautsns.simplevalidator.model.criterion.basic.ShortCriterion;
 import com.github.wautsns.simplevalidator.model.criterion.basic.TCriterion;
 import com.github.wautsns.simplevalidator.model.failure.ValidationFailure;
 import com.github.wautsns.simplevalidator.model.node.ConstrainedType;
@@ -80,104 +72,16 @@ public class ConstrainedMapValue extends ConstrainedTypeArg {
     }
 
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
-    private static class CriterionWrapper implements Criterion.Wrapper {
+    private static class CriterionWrapper extends Criterion.Wrapper {
 
         public static final CriterionWrapper INSTANCE = new CriterionWrapper();
 
         @Override
-        public <T> TCriterion<Map<?, T>> wrapTCriterion(TCriterion<T> criterion) {
+        protected <T> TCriterion<Map<?, T>> wrap(TCriterion<T> criterion) {
             return map -> {
                 for (Map.Entry<?, T> entry : map.entrySet()) {
                     ValidationFailure failure = criterion.test(entry.getValue());
-                    if (failure != null) { return failure.addIndicator(entry.getKey());}
-                }
-                return null;
-            };
-        }
-
-        @Override
-        public TCriterion<Map<?, Boolean>> wrapBooleanCriterion(BooleanCriterion criterion) {
-            return map -> {
-                for (Map.Entry<?, Boolean> entry : map.entrySet()) {
-                    ValidationFailure failure = criterion.test(entry.getValue());
-                    if (failure != null) { return failure.addIndicator(entry.getKey());}
-                }
-                return null;
-            };
-        }
-
-        @Override
-        public TCriterion<Map<?, Character>> wrapCharCriterion(CharCriterion criterion) {
-            return map -> {
-                for (Map.Entry<?, Character> entry : map.entrySet()) {
-                    ValidationFailure failure = criterion.test(entry.getValue());
-                    if (failure != null) { return failure.addIndicator(entry.getKey());}
-                }
-                return null;
-            };
-        }
-
-        @Override
-        public TCriterion<Map<?, Byte>> wrapByteCriterion(ByteCriterion criterion) {
-            return map -> {
-                for (Map.Entry<?, Byte> entry : map.entrySet()) {
-                    ValidationFailure failure = criterion.test(entry.getValue());
-                    if (failure != null) { return failure.addIndicator(entry.getKey());}
-                }
-                return null;
-            };
-        }
-
-        @Override
-        public TCriterion<Map<?, Short>> wrapShortCriterion(ShortCriterion criterion) {
-            return map -> {
-                for (Map.Entry<?, Short> entry : map.entrySet()) {
-                    ValidationFailure failure = criterion.test(entry.getValue());
-                    if (failure != null) { return failure.addIndicator(entry.getKey());}
-                }
-                return null;
-            };
-        }
-
-        @Override
-        public TCriterion<Map<?, Integer>> wrapIntCriterion(IntCriterion criterion) {
-            return map -> {
-                for (Map.Entry<?, Integer> entry : map.entrySet()) {
-                    ValidationFailure failure = criterion.test(entry.getValue());
-                    if (failure != null) { return failure.addIndicator(entry.getKey());}
-                }
-                return null;
-            };
-        }
-
-        @Override
-        public TCriterion<Map<?, Long>> wrapLongCriterion(LongCriterion criterion) {
-            return map -> {
-                for (Map.Entry<?, Long> entry : map.entrySet()) {
-                    ValidationFailure failure = criterion.test(entry.getValue());
-                    if (failure != null) { return failure.addIndicator(entry.getKey());}
-                }
-                return null;
-            };
-        }
-
-        @Override
-        public TCriterion<Map<?, Float>> wrapFloatCriterion(FloatCriterion criterion) {
-            return map -> {
-                for (Map.Entry<?, Float> entry : map.entrySet()) {
-                    ValidationFailure failure = criterion.test(entry.getValue());
-                    if (failure != null) { return failure.addIndicator(entry.getKey());}
-                }
-                return null;
-            };
-        }
-
-        @Override
-        public TCriterion<Map<?, Double>> wrapDoubleCriterion(DoubleCriterion criterion) {
-            return map -> {
-                for (Map.Entry<?, Double> entry : map.entrySet()) {
-                    ValidationFailure failure = criterion.test(entry.getValue());
-                    if (failure != null) { return failure.addIndicator(entry.getKey());}
+                    if (failure != null) { return failure.addIndicator(entry.getKey()); }
                 }
                 return null;
             };

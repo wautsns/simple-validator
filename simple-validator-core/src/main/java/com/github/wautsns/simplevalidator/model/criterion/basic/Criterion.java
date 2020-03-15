@@ -36,109 +36,130 @@ public interface Criterion {
     Criterion enhanceFailure(UnaryOperator<ValidationFailure> enhancer);
 
     /** criterion wrapper */
-    interface Wrapper {
+    class Wrapper {
 
         /**
-         * Wrap the criterion to new criterion.
+         * Wrap the criterion.
+         *
+         * @param criterion criterion
+         * @return new criterion
+         */
+        public final Criterion wrap(Criterion criterion) {
+            if (criterion instanceof TCriterion) { return wrap((TCriterion<?>) criterion); }
+            if (!(criterion instanceof PrimitiveCriterion)) { throw new IllegalStateException(); }
+            TCriterion<?> wrappedCriterion = wrap((PrimitiveCriterion<?>) criterion);
+            if (wrappedCriterion != null) { return wrappedCriterion; }
+            if (criterion instanceof IntCriterion) { return wrap((IntCriterion) criterion); }
+            if (criterion instanceof BooleanCriterion) { return wrap((BooleanCriterion) criterion); }
+            if (criterion instanceof LongCriterion) { return wrap((LongCriterion) criterion); }
+            if (criterion instanceof ByteCriterion) { return wrap((ByteCriterion) criterion); }
+            if (criterion instanceof CharCriterion) { return wrap((CharCriterion) criterion); }
+            if (criterion instanceof DoubleCriterion) { return wrap((DoubleCriterion) criterion); }
+            if (criterion instanceof FloatCriterion) { return wrap((FloatCriterion) criterion); }
+            if (criterion instanceof ShortCriterion) { return wrap((ShortCriterion) criterion); }
+            throw new IllegalStateException();
+        }
+
+        /**
+         * Wrap the criterion.
          *
          * @param criterion criterion
          * @param <T> type of value to be validated of criterion
          * @return new criterion
          */
-        <T> Criterion wrapTCriterion(TCriterion<T> criterion);
+        protected <T> TCriterion<?> wrap(TCriterion<T> criterion) {
+            throw new UnsupportedOperationException();
+        }
 
         /**
-         * Wrap the criterion to new criterion.
+         * Wrap the criterion.
+         *
+         * @param criterion primitive criterion
+         * @param <W> type of wrapped value
+         * @return new TCriterion, or {@code null} if not supported
+         */
+        protected <W> TCriterion<?> wrap(PrimitiveCriterion<W> criterion) {
+            return null;
+        }
+
+        /**
+         * Wrap the criterion.
          *
          * @param criterion criterion
          * @return new criterion
          */
-        Criterion wrapBooleanCriterion(BooleanCriterion criterion);
+        protected Criterion wrap(BooleanCriterion criterion) {
+            throw new UnsupportedOperationException();
+        }
 
         /**
-         * Wrap the criterion to new criterion.
+         * Wrap the criterion.
          *
          * @param criterion criterion
          * @return new criterion
          */
-        Criterion wrapCharCriterion(CharCriterion criterion);
+        protected Criterion wrap(CharCriterion criterion) {
+            throw new UnsupportedOperationException();
+        }
 
         /**
-         * Wrap the criterion to new criterion.
+         * Wrap the criterion.
          *
          * @param criterion criterion
          * @return new criterion
          */
-        Criterion wrapByteCriterion(ByteCriterion criterion);
+        protected Criterion wrap(ByteCriterion criterion) {
+            throw new UnsupportedOperationException();
+        }
 
         /**
-         * Wrap the criterion to new criterion.
+         * Wrap the criterion.
          *
          * @param criterion criterion
          * @return new criterion
          */
-        Criterion wrapShortCriterion(ShortCriterion criterion);
+        protected Criterion wrap(ShortCriterion criterion) {
+            throw new UnsupportedOperationException();
+        }
 
         /**
-         * Wrap the criterion to new criterion.
+         * Wrap the criterion.
          *
          * @param criterion criterion
          * @return new criterion
          */
-        Criterion wrapIntCriterion(IntCriterion criterion);
+        protected Criterion wrap(IntCriterion criterion) {
+            throw new UnsupportedOperationException();
+        }
 
         /**
-         * Wrap the criterion to new criterion.
+         * Wrap the criterion.
          *
          * @param criterion criterion
          * @return new criterion
          */
-        Criterion wrapLongCriterion(LongCriterion criterion);
+        protected Criterion wrap(LongCriterion criterion) {
+            throw new UnsupportedOperationException();
+        }
 
         /**
-         * Wrap the criterion to new criterion.
+         * Wrap the criterion.
          *
          * @param criterion criterion
          * @return new criterion
          */
-        Criterion wrapFloatCriterion(FloatCriterion criterion);
+        protected Criterion wrap(FloatCriterion criterion) {
+            throw new UnsupportedOperationException();
+        }
 
         /**
-         * Wrap the criterion to new criterion.
+         * Wrap the criterion.
          *
          * @param criterion criterion
          * @return new criterion
          */
-        Criterion wrapDoubleCriterion(DoubleCriterion criterion);
-
-        /**
-         * Wrap the criterion to new criterion.
-         *
-         * @param criterion criterion
-         * @return new criterion
-         */
-        default Criterion wrap(Criterion criterion) {
-            if (criterion instanceof TCriterion) {
-                return wrapTCriterion((TCriterion<?>) criterion);
-            } else if (criterion instanceof BooleanCriterion) {
-                return wrapBooleanCriterion((BooleanCriterion) criterion);
-            } else if (criterion instanceof CharCriterion) {
-                return wrapCharCriterion((CharCriterion) criterion);
-            } else if (criterion instanceof ByteCriterion) {
-                return wrapByteCriterion((ByteCriterion) criterion);
-            } else if (criterion instanceof ShortCriterion) {
-                return wrapShortCriterion((ShortCriterion) criterion);
-            } else if (criterion instanceof IntCriterion) {
-                return wrapIntCriterion((IntCriterion) criterion);
-            } else if (criterion instanceof LongCriterion) {
-                return wrapLongCriterion((LongCriterion) criterion);
-            } else if (criterion instanceof FloatCriterion) {
-                return wrapFloatCriterion((FloatCriterion) criterion);
-            } else if (criterion instanceof DoubleCriterion) {
-                return wrapDoubleCriterion((DoubleCriterion) criterion);
-            } else {
-                throw new IllegalStateException();
-            }
+        protected Criterion wrap(DoubleCriterion criterion) {
+            throw new UnsupportedOperationException();
         }
 
     }
