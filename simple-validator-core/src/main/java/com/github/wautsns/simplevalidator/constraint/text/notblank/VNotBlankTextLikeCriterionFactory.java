@@ -17,42 +17,30 @@ package com.github.wautsns.simplevalidator.constraint.text.notblank;
 
 import com.github.wautsns.simplevalidator.model.criterion.basic.TCriteria;
 import com.github.wautsns.simplevalidator.model.criterion.basic.TCriterion;
-import com.github.wautsns.simplevalidator.model.criterion.factory.typelike.TypeLikeUtilityCriterionCache;
-import com.github.wautsns.simplevalidator.model.criterion.factory.typelike.text.AbstractTextLikeCriterionFactory;
-import com.github.wautsns.simplevalidator.model.criterion.factory.typelike.text.TextLikeUtility;
+import com.github.wautsns.simplevalidator.model.criterion.factory.special.AbstractCharSequenceCriterionFactory;
+import com.github.wautsns.simplevalidator.model.failure.ValidationFailure;
 import com.github.wautsns.simplevalidator.model.node.ConstrainedNode;
 
 /**
  * @author wautsns
  * @since Mar 11, 2020
  */
-public class VNotBlankTextLikeCriterionFactory extends AbstractTextLikeCriterionFactory<VNotBlank> {
+public class VNotBlankTextLikeCriterionFactory extends AbstractCharSequenceCriterionFactory<VNotBlank> {
 
     @Override
-    protected <T> void process(
-            TextLikeUtility<T> utility,
-            ConstrainedNode node, VNotBlank constraint, TCriteria<T> wip) {
-        wip.add(produce(utility));
+    public void process(ConstrainedNode node, VNotBlank constraint, TCriteria<CharSequence> wip) {
+        wip.add(CRITERION);
     }
 
     // ------------------------- criterion -----------------------------------------
 
-    protected static <T> TCriterion<T> produce(TextLikeUtility<T> utility) {
-        return CACHE.get(utility);
-    }
-
-    private static final TypeLikeUtilityCriterionCache<TextLikeUtility<?>> CACHE =
-            new TypeLikeUtilityCriterionCache<>(VNotBlankTextLikeCriterionFactory::init);
-
-    private static <T> TCriterion<T> init(TextLikeUtility<T> utility) {
-        return text -> {
-            for (int i = 0, l = utility.length(text); i < l; i++) {
-                if (!Character.isWhitespace(utility.charAt(text, i))) {
-                    return null;
-                }
+    private static final TCriterion<CharSequence> CRITERION = text -> {
+        for (int i = 0; i < text.length(); i++) {
+            if (!Character.isWhitespace(text.charAt(i))) {
+                return null;
             }
-            return utility.fail(text);
-        };
-    }
+        }
+        return new ValidationFailure(text);
+    };
 
 }

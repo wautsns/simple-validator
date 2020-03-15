@@ -25,7 +25,7 @@ import java.util.Map;
  * @author wautsns
  * @since Mar 11, 2020
  */
-public class VSizeTypeExtendsMapCriterionFactory implements TCriterionFactory<VSize, Map<?, ?>> {
+public class VSizeMapCriterionFactory implements TCriterionFactory<VSize, Map<?, ?>> {
 
     @Override
     public boolean appliesTo(ConstrainedNode node, VSize constraint) {

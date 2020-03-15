@@ -28,26 +28,25 @@ import java.util.Map;
  * @author wautsns
  * @since Mar 11, 2020
  */
-public class VIdTypeIntegerLongBigIntegerCriterionFactory extends AbstractComparableNumberCriterionFactory<VId> {
+public class VIdIntegerLongBigIntegerCriterionFactory extends AbstractComparableNumberCriterionFactory<VId> {
 
     @Override
     public boolean appliesTo(ConstrainedNode node, VId constraint) {
         Type type = node.getType();
-        return Long.class == type
-                || BigInteger.class == type
-                || (Integer.class == type && !constraint.unsigned());
+        return TypeUtils.isAssignableToAny(type, Long.class, BigInteger.class)
+                || (!constraint.unsigned() && TypeUtils.isAssignableTo(type, Integer.class));
     }
 
     @Override
     public void process(ConstrainedNode node, VId constraint, TCriteria<Comparable<Number>> wip) {
-        if (constraint.unsigned()) { wip.add(produce(node)); }
+        if (constraint.unsigned()) { wip.add(produceUnsigned(node)); }
     }
 
-    // ------------------------- criterion -----------------------------------------
+    // -------------------- criterion ---------------------------------------------------
 
-    protected static TCriterion<Comparable<Number>> produce(ConstrainedNode node) {
+    protected static TCriterion<Comparable<Number>> produceUnsigned(ConstrainedNode node) {
         Number max = getUnsignedMaxValue(TypeUtils.getClass(node.getType()));
-        return value -> lessThanOrEqualTo(value, max) ? null : new ValidationFailure(value);
+        return value -> le(value, max) ? null : new ValidationFailure(value);
     }
 
     // ------------------------- utils ---------------------------------------------
@@ -56,21 +55,17 @@ public class VIdTypeIntegerLongBigIntegerCriterionFactory extends AbstractCompar
 
     static {
         UNSIGNED_MAX_VALUES = new HashMap<>(4);
-        addUnsignedMaxValue(BigInteger.class, new BigInteger("18446744073709551615"));
-        addUnsignedMaxValue(Long.class, 4294967295L);
-    }
-
-    public static <T extends Number & Comparable<T>> void addUnsignedMaxValue(Class<T> valueClass, T unsignedMaxValue) {
-        UNSIGNED_MAX_VALUES.put(valueClass, unsignedMaxValue);
+        UNSIGNED_MAX_VALUES.put(Long.class, 4294967295L);
+        UNSIGNED_MAX_VALUES.put(BigInteger.class, new BigInteger("18446744073709551615"));
     }
 
     @SuppressWarnings("unchecked")
-    public static <T extends Number & Comparable<T>> T getUnsignedMaxValue(Class<?> clazz) {
+    private static <T extends Number & Comparable<T>> T getUnsignedMaxValue(Class<?> clazz) {
         T unsignedMaxValue = (T) UNSIGNED_MAX_VALUES.get(clazz);
         if (unsignedMaxValue != null) {
             return unsignedMaxValue;
         } else {
-            throw new IllegalArgumentException();
+            throw new IllegalStateException();
         }
     }
 

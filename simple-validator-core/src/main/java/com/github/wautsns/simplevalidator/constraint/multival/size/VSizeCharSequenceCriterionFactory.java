@@ -23,7 +23,7 @@ import com.github.wautsns.simplevalidator.util.common.TypeUtils;
  * @author wautsns
  * @since Mar 11, 2020
  */
-public class VSizeTypeExtendsCharSequenceCriterionFactory implements TCriterionFactory<VSize, CharSequence> {
+public class VSizeCharSequenceCriterionFactory implements TCriterionFactory<VSize, CharSequence> {
 
     @Override
     public boolean appliesTo(ConstrainedNode node, VSize constraint) {

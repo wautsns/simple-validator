@@ -31,7 +31,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 public @interface VId {
 
     List<CriterionFactory<VId, ?, ?>> CRITERION_FACTORIES = new LinkedList<>(Collections.singletonList(
-            new VIdTypeIntegerLongBigIntegerCriterionFactory()
+            new VIdIntegerLongBigIntegerCriterionFactory()
     ));
 
     String message() default "[`VId`]";

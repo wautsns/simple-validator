@@ -14,10 +14,9 @@ package com.github.wautsns.simplevalidator.constraint.number.domain;
 
 import com.github.wautsns.simplevalidator.model.criterion.basic.TCriteria;
 import com.github.wautsns.simplevalidator.model.criterion.basic.TCriterion;
-import com.github.wautsns.simplevalidator.model.criterion.factory.TCriterionFactory;
+import com.github.wautsns.simplevalidator.model.criterion.factory.special.AbstractCharSequenceCriterionFactory;
 import com.github.wautsns.simplevalidator.model.failure.ValidationFailure;
 import com.github.wautsns.simplevalidator.model.node.ConstrainedNode;
-import com.github.wautsns.simplevalidator.util.common.TypeUtils;
 
 import java.util.function.Predicate;
 
@@ -25,12 +24,7 @@ import java.util.function.Predicate;
  * @author wautsns
  * @since Mar 11, 2020
  */
-public class VDomainNumericTextCriterionFactory implements TCriterionFactory<VDomain, CharSequence> {
-
-    @Override
-    public boolean appliesTo(ConstrainedNode node, VDomain constraint) {
-        return TypeUtils.isAssignableTo(node.getType(), CharSequence.class);
-    }
+public class VDomainNumericTextCriterionFactory extends AbstractCharSequenceCriterionFactory<VDomain> {
 
     @Override
     public void process(ConstrainedNode node, VDomain constraint, TCriteria<CharSequence> wip) {

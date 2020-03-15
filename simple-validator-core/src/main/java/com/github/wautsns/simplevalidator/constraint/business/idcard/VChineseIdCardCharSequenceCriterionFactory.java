@@ -29,7 +29,7 @@ import java.util.function.IntPredicate;
  * @author wautsns
  * @since Mar 11, 2020
  */
-public class VChineseIdCardTypeExtendsCharSequenceCriterionFactory
+public class VChineseIdCardCharSequenceCriterionFactory
         extends AbstractCharSequenceCriterionFactory<VChineseIdCard> {
 
     @Override
@@ -82,8 +82,7 @@ public class VChineseIdCardTypeExtendsCharSequenceCriterionFactory
             VChineseIdCard.Gender gender = ChineseIdCardUtils.getGender(toNaturalNumber(id, 14, 3));
             if (!genderSet.contains(gender)) { return wrong(id); }
             correct = ChineseIdCardUtils.checkSecondGenerationCheckCode(id);
-            if (!correct) { return wrong(id); }
-            return null;
+            return correct ? null : wrong(id);
         };
     }
 

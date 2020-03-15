@@ -30,7 +30,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 public @interface VChineseIdCard {
 
     List<CriterionFactory<VChineseIdCard, ?, ?>> CRITERION_FACTORIES = new LinkedList<>(Collections.singletonList(
-            new VChineseIdCardTypeExtendsCharSequenceCriterionFactory()
+            new VChineseIdCardCharSequenceCriterionFactory()
     ));
 
     String message() default "[`VChineseIdCard`]";

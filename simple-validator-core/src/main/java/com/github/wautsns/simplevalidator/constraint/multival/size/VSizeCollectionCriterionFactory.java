@@ -25,7 +25,7 @@ import java.util.Collection;
  * @author wautsns
  * @since Mar 11, 2020
  */
-public class VSizeTypeExtendsCollectionCriterionFactory implements TCriterionFactory<VSize, Collection<?>> {
+public class VSizeCollectionCriterionFactory implements TCriterionFactory<VSize, Collection<?>> {
 
     @Override
     public boolean appliesTo(ConstrainedNode node, VSize constraint) {

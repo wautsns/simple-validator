@@ -44,9 +44,9 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 public @interface VSize {
 
     List<CriterionFactory<VSize, ?, ?>> CRITERION_FACTORIES = new LinkedList<>(Arrays.asList(
-            new VSizeTypeExtendsCollectionCriterionFactory(),
-            new VSizeTypeExtendsCharSequenceCriterionFactory(),
-            new VSizeTypeExtendsMapCriterionFactory(),
+            new VSizeCollectionCriterionFactory(),
+            new VSizeCharSequenceCriterionFactory(),
+            new VSizeMapCriterionFactory(),
             new VSizeArrayCriterionFactory()
     ));
 

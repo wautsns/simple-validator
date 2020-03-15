@@ -14,8 +14,8 @@ package com.github.wautsns.simplevalidator.constraint.text.pattern;
 
 import com.github.wautsns.simplevalidator.model.criterion.basic.TCriteria;
 import com.github.wautsns.simplevalidator.model.criterion.basic.TCriterion;
-import com.github.wautsns.simplevalidator.model.criterion.factory.typelike.text.AbstractTextLikeCriterionFactory;
-import com.github.wautsns.simplevalidator.model.criterion.factory.typelike.text.TextLikeUtility;
+import com.github.wautsns.simplevalidator.model.criterion.factory.special.AbstractCharSequenceCriterionFactory;
+import com.github.wautsns.simplevalidator.model.failure.ValidationFailure;
 import com.github.wautsns.simplevalidator.model.node.ConstrainedNode;
 
 import java.util.regex.Pattern;
@@ -24,20 +24,17 @@ import java.util.regex.Pattern;
  * @author wautsns
  * @since Mar 11, 2020
  */
-public class VPatternTextLikeCriterionFactory extends AbstractTextLikeCriterionFactory<VPattern> {
+public class VPatternTextLikeCriterionFactory extends AbstractCharSequenceCriterionFactory<VPattern> {
 
     @Override
-    protected <T> void process(
-            TextLikeUtility<T> utility,
-            ConstrainedNode node, VPattern constraint, TCriteria<T> wip) {
-        wip.add(produce(utility, constraint));
+    public void process(ConstrainedNode node, VPattern constraint, TCriteria<CharSequence> wip) {
+        wip.add(produce(constraint));
     }
-
     // ------------------------- criterion -----------------------------------------
 
-    protected static <T> TCriterion<T> produce(TextLikeUtility<T> utility, VPattern constraint) {
+    protected static TCriterion<CharSequence> produce(VPattern constraint) {
         Pattern pattern = Pattern.compile(constraint.regex());
-        return text -> pattern.matcher(utility.toCharSequence(text)).matches() ? null : utility.fail(text);
+        return value -> pattern.matcher(value).matches() ? null : new ValidationFailure(value);
     }
 
 }
