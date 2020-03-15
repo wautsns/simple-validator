@@ -18,6 +18,7 @@ package com.github.wautsns.simplevalidator.util;
 import com.github.wautsns.simplevalidator.constraint.AConstraint;
 import com.github.wautsns.simplevalidator.constraint.AVariableAlias;
 import com.github.wautsns.simplevalidator.exception.analysis.ConstraintAnalysisException;
+import com.github.wautsns.simplevalidator.model.criterion.factory.CriterionFactory;
 import com.github.wautsns.simplevalidator.util.common.CollectionUtils;
 import com.github.wautsns.simplevalidator.util.common.ReflectionUtils;
 import com.github.wautsns.templatemessage.variable.Variable;
@@ -305,6 +306,22 @@ public class ConstraintUtils {
         InvocationHandler h = Proxy.getInvocationHandler(constraint);
         Field field = ReflectionUtils.requireDeclaredField(h.getClass(), "memberValues");
         return ReflectionUtils.getValue(h, field);
+    }
+
+    // -------------------- criterion factories -----------------------------------------
+
+    /**
+     * Get criterion factories of the constraint.
+     *
+     * @param constraintClass constraint class
+     * @param <A> type of the constraint
+     * @return criterion factories of the constraint, or empty list(unmodified) if the constraint is a combined
+     * constraint
+     */
+    public static <A extends Annotation> List<CriterionFactory<A, ?, ?>> getCriterionFactories(
+            Class<A> constraintClass) {
+        Field field = ReflectionUtils.getDeclaredField(constraintClass, "CRITERION_FACTORIES");
+        return (field == null) ? Collections.emptyList() : ReflectionUtils.getValue(null, field);
     }
 
     // -------------------- variables ---------------------------------------------------

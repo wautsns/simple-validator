@@ -42,8 +42,8 @@ public class TemplateMessageFormatter implements Formatter<TemplateMessage> {
     private final TreeMap<Integer, Set<Processor>> processors = new TreeMap<>();
 
     @Override
-    public String format(TemplateMessage templateMessage, Locale locale) {
-        return process(templateMessage.getMessageTemplate(), templateMessage, locale);
+    public String format(TemplateMessage value, Locale locale) {
+        return process(value.getMessageTemplate(), value, locale);
     }
 
     /**

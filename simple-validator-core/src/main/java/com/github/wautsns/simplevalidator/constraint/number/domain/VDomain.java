@@ -14,12 +14,16 @@ package com.github.wautsns.simplevalidator.constraint.number.domain;
 
 import com.github.wautsns.simplevalidator.constraint.AConstraint;
 import com.github.wautsns.simplevalidator.constraint.AVariableAlias;
+import com.github.wautsns.simplevalidator.model.criterion.factory.CriterionFactory;
 import com.github.wautsns.templatemessage.formatter.multival.ArrayFormatter;
 import com.github.wautsns.templatemessage.variable.Variable;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 
 import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
 import static java.lang.annotation.ElementType.FIELD;
@@ -35,17 +39,19 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Documented
 @Retention(RUNTIME)
 @Target({FIELD, METHOD, PARAMETER, ANNOTATION_TYPE, TYPE_USE})
-@AConstraint(criterionFactories = {
-        VDomainComparableNumberCriterionFactory.class,
-        VDomainNumericTextCriterionFactory.class,
-        VDomainIntCriterionFactory.class,
-        VDomainLongCriterionFactory.class,
-        VDomainDoubleCriterionFactory.class,
-        VDomainByteCriterionFactory.class,
-        VDomainShortCriterionFactory.class,
-        VDomainFloatCriterionFactory.class,
-})
+@AConstraint
 public @interface VDomain {
+
+    List<CriterionFactory<VDomain, ?, ?>> CRITERION_FACTORIES = new LinkedList<>(Arrays.asList(
+            new VDomainComparableNumberCriterionFactory(),
+            new VDomainNumericTextCriterionFactory(),
+            new VDomainIntCriterionFactory(),
+            new VDomainLongCriterionFactory(),
+            new VDomainDoubleCriterionFactory(),
+            new VDomainByteCriterionFactory(),
+            new VDomainShortCriterionFactory(),
+            new VDomainFloatCriterionFactory()
+    ));
 
     String message() default "[`VDomain`]";
 

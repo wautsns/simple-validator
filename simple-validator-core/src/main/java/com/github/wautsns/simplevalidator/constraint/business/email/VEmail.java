@@ -22,11 +22,13 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Retention(RUNTIME)
 @Target({ANNOTATION_TYPE, FIELD, METHOD, PARAMETER, TYPE_USE})
 @AConstraint
-@VPattern(regex = "[a-zA-Z0-9-]+@[a-zA-z0-9-]+([.][a-zA-z0-9-]+)+")
+@VPattern(regex = VEmail.REGEX)
 public @interface VEmail {
 
     String message() default "[`VEmail`]";
 
     int order() default 0;
+
+    String REGEX = "[a-zA-Z0-9-]+@[a-zA-z0-9-]+([.][a-zA-z0-9-]+)+";
 
 }

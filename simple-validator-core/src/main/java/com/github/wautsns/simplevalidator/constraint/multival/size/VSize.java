@@ -16,11 +16,15 @@
 package com.github.wautsns.simplevalidator.constraint.multival.size;
 
 import com.github.wautsns.simplevalidator.constraint.AConstraint;
+import com.github.wautsns.simplevalidator.model.criterion.factory.CriterionFactory;
 import com.github.wautsns.templatemessage.variable.Variable;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 
 import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
 import static java.lang.annotation.ElementType.FIELD;
@@ -36,13 +40,15 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Documented
 @Retention(RUNTIME)
 @Target({FIELD, METHOD, PARAMETER, ANNOTATION_TYPE, TYPE_USE})
-@AConstraint(criterionFactories = {
-        VSizeTypeExtendsCollectionCriterionFactory.class,
-        VSizeTypeExtendsCharSequenceCriterionFactory.class,
-        VSizeTypeExtendsMapCriterionFactory.class,
-        VSizeArrayCriterionFactory.class
-})
+@AConstraint
 public @interface VSize {
+
+    List<CriterionFactory<VSize, ?, ?>> CRITERION_FACTORIES = new LinkedList<>(Arrays.asList(
+            new VSizeTypeExtendsCollectionCriterionFactory(),
+            new VSizeTypeExtendsCharSequenceCriterionFactory(),
+            new VSizeTypeExtendsMapCriterionFactory(),
+            new VSizeArrayCriterionFactory()
+    ));
 
     String message() default "[`VSize`]";
 

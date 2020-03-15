@@ -61,7 +61,7 @@ public class ConstrainedIterableElement extends ConstrainedTypeArg {
     public static class Factory implements ConstrainedTypeArg.Factory {
 
         @Override
-        public Class<?> getTargetClass() {
+        public Class<?> getTypeClass() {
             return Iterable.class;
         }
 

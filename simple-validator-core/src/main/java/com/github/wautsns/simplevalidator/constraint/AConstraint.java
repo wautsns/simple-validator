@@ -34,13 +34,6 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 public @interface AConstraint {
 
     /**
-     * Get criterion factories of the constraint.
-     *
-     * @return criterion factories of the constraint
-     */
-    Class<?>[] criterionFactories() default {};
-
-    /**
      * Get combined constraints.
      *
      * @return combined constraints

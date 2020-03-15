@@ -42,7 +42,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target({FIELD, METHOD, PARAMETER, ANNOTATION_TYPE, TYPE_USE})
 @AConstraint(combines = {
         @ACombine(constraint = VDomain.class, attributes = {
-                @AAttribute(name = "value", spel = "(inclusive ? '[' : '(') + value + ',~)'")
+                @AAttribute(name = "value", spel = "{(inclusive ? '[' : '(') + value + ',~)'}")
         })
 })
 public @interface VMin {

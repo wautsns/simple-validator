@@ -130,7 +130,7 @@ public abstract class ConstrainedType extends ConstrainedNode {
     @UtilityClass
     public static class TypeArgsFactories {
 
-        /** factories */
+        /** factories(order sensitive) TODO see #add(ConstrainedTypeArg.Factory) and add doc */
         private static final LinkedList<Map<Short, ConstrainedTypeArg.Factory>> DATA = new LinkedList<>();
 
         /**
@@ -142,7 +142,8 @@ public abstract class ConstrainedType extends ConstrainedNode {
         public static synchronized Map<Short, ConstrainedTypeArg.Factory> get(Type type) {
             for (Map<Short, ConstrainedTypeArg.Factory> factories : DATA) {
                 ConstrainedTypeArg.Factory factory = factories.entrySet().iterator().next().getValue();
-                if (TypeUtils.isAssignableTo(type, factory.getTargetClass())) {
+                if (TypeUtils.isAssignableTo(type, factory.getTypeClass())
+                        && TypeUtils.isAssignableToAll(type, factory.getTypeExtraInterfaces())) {
                     return factories;
                 }
             }
@@ -155,10 +156,10 @@ public abstract class ConstrainedType extends ConstrainedNode {
          * @param factory type arg factory
          */
         public static synchronized void add(ConstrainedTypeArg.Factory factory) {
-            Class<?> clazz = factory.getTargetClass();
+            Class<?> clazz = factory.getTypeClass();
             for (int i = 0; i < DATA.size(); i++) {
                 Map<Short, ConstrainedTypeArg.Factory> factories = DATA.get(i);
-                Class<?> ref = factories.entrySet().iterator().next().getValue().getTargetClass();
+                Class<?> ref = factories.entrySet().iterator().next().getValue().getTypeClass();
                 if (clazz == ref) {
                     factories.put(factory.getTypeArgIndex(), factory);
                     return;

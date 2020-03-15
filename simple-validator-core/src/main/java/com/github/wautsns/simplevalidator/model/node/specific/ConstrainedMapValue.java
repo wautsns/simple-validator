@@ -29,7 +29,6 @@ import com.github.wautsns.simplevalidator.model.failure.ValidationFailure;
 import com.github.wautsns.simplevalidator.model.node.ConstrainedType;
 import com.github.wautsns.simplevalidator.model.node.ConstrainedTypeArg;
 import lombok.AccessLevel;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.lang.annotation.Annotation;
@@ -43,7 +42,6 @@ import java.util.Map;
  * @author wautsns
  * @since Mar 13, 2020
  */
-@Getter
 public class ConstrainedMapValue extends ConstrainedTypeArg {
 
     /** name of the node */
@@ -63,7 +61,7 @@ public class ConstrainedMapValue extends ConstrainedTypeArg {
     public static class Factory implements ConstrainedTypeArg.Factory {
 
         @Override
-        public Class<?> getTargetClass() {
+        public Class<?> getTypeClass() {
             return Map.class;
         }
 

@@ -13,17 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.wautsns.simplevalidator.constraint.number.between;
+package com.github.wautsns.simplevalidator.constraint.any.spel;
 
-import com.github.wautsns.simplevalidator.constraint.AAttribute;
-import com.github.wautsns.simplevalidator.constraint.ACombine;
 import com.github.wautsns.simplevalidator.constraint.AConstraint;
-import com.github.wautsns.simplevalidator.constraint.number.domain.VDomain;
-import com.github.wautsns.templatemessage.variable.Variable;
+import com.github.wautsns.simplevalidator.model.criterion.factory.CriterionFactory;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 
 import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
 import static java.lang.annotation.ElementType.FIELD;
@@ -34,29 +34,22 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
  * @author wautsns
- * @since Mar 11, 2020
+ * @since Mar 15, 2020
  */
 @Documented
 @Retention(RUNTIME)
 @Target({FIELD, METHOD, PARAMETER, ANNOTATION_TYPE, TYPE_USE})
-@AConstraint(combines = {
-        @ACombine(constraint = VDomain.class, attributes = {
-                @AAttribute(name = "value", spel = "{'[' + min + ',' + max + ']'}")
-        })
-})
-public @interface VBetween {
+@AConstraint
+public @interface VWithSpel {
 
-    String message() default "[`VBetween`]";
+    List<CriterionFactory<VWithSpel, ?, ?>> CRITERION_FACTORIES = new LinkedList<>(Collections.singletonList(
+            new VWithSpelAnyTypeCriterionFactory()
+    ));
+
+    String message();
 
     int order() default 0;
 
-    String min();
-
-    String max();
-
-    // ------------------------- variables -----------------------------------------
-
-    Variable<String> MIN = new Variable<>("min");
-    Variable<String> MAX = new Variable<>("max");
+    String expr();
 
 }

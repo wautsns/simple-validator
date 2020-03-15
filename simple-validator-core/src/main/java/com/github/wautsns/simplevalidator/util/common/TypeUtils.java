@@ -24,6 +24,7 @@ import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.lang.reflect.WildcardType;
 import java.util.Arrays;
+import java.util.stream.StreamSupport;
 
 /**
  * Type utils.
@@ -163,6 +164,28 @@ public class TypeUtils {
      */
     public static boolean isAssignableToAll(Type type, Class<?>... classes) {
         return Arrays.stream(classes).allMatch(clazz -> isAssignableTo(type, clazz));
+    }
+
+    /**
+     * Return {@code true} if the type is assignable to any of the given classes, otherwise {@code false}.
+     *
+     * @param type type
+     * @param classes classes
+     * @return {@code true} if the type is assignable to any of the given classes, otherwise {@code false}
+     */
+    public static boolean isAssignableToAny(Type type, Iterable<Class<?>> classes) {
+        return StreamSupport.stream(classes.spliterator(), false).anyMatch(clazz -> isAssignableTo(type, clazz));
+    }
+
+    /**
+     * Return {@code true} if the type is assignable to all given classes, otherwise {@code false}.
+     *
+     * @param type type
+     * @param classes classes
+     * @return {@code true} if the type is assignable to all given classes, otherwise {@code false}
+     */
+    public static boolean isAssignableToAll(Type type, Iterable<Class<?>> classes) {
+        return StreamSupport.stream(classes.spliterator(), false).allMatch(clazz -> isAssignableTo(type, clazz));
     }
 
 }

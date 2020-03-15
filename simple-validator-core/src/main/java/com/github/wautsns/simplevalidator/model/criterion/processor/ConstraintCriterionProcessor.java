@@ -26,7 +26,6 @@ import com.github.wautsns.simplevalidator.model.criterion.factory.CriterionFacto
 import com.github.wautsns.simplevalidator.model.failure.ValidationFailure;
 import com.github.wautsns.simplevalidator.model.node.ConstrainedNode;
 import com.github.wautsns.simplevalidator.util.ConstraintUtils;
-import com.github.wautsns.simplevalidator.util.common.ReflectionUtils;
 import com.github.wautsns.templatemessage.variable.VariableValueMap;
 import org.springframework.expression.EvaluationContext;
 import org.springframework.expression.Expression;
@@ -39,9 +38,7 @@ import org.springframework.expression.spel.support.SimpleEvaluationContext;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -71,10 +68,10 @@ public class ConstraintCriterionProcessor<A extends Annotation> {
 
     public ConstraintCriterionProcessor(A constraint) {
         this.constraint = constraint;
-        Class<? extends Annotation> constraintClass = constraint.annotationType();
+        Class<A> constraintClass = (Class<A>) constraint.annotationType();
         AConstraint aconstraint = ConstraintUtils.requireAConstraint(constraintClass);
         this.order = aconstraint.order();
-        this.criterionFactories = initCriterionFactories(aconstraint);
+        this.criterionFactories = ConstraintUtils.getCriterionFactories(constraintClass);
         List<ConstraintCriterionProcessor<?>> processors = new LinkedList<>();
         processors.addAll(initProcessorsByACombines(constraint, aconstraint));
         processors.addAll(initProcessorsByDirectConstraints(constraintClass));
@@ -89,13 +86,13 @@ public class ConstraintCriterionProcessor<A extends Annotation> {
         }
     }
 
-    private ConstraintCriterionProcessor(A constraint, ACombine acombine) {
+    private ConstraintCriterionProcessor(Annotation constraint, ACombine acombine) {
         A proxy = proxyACombine(constraint, acombine);
         this.constraint = proxy;
-        Class<? extends Annotation> proxyClass = proxy.annotationType();
+        Class<A> proxyClass = (Class<A>) acombine.constraint();
         AConstraint aconstraint = ConstraintUtils.requireAConstraint(proxyClass);
         this.order = acombine.order();
-        this.criterionFactories = initCriterionFactories(aconstraint);
+        this.criterionFactories = ConstraintUtils.getCriterionFactories(proxyClass);
         List<ConstraintCriterionProcessor<?>> processors = new LinkedList<>();
         processors.addAll(initProcessorsByACombines(proxy, aconstraint));
         processors.addAll(initProcessorsByDirectConstraints(proxyClass));
@@ -146,15 +143,6 @@ public class ConstraintCriterionProcessor<A extends Annotation> {
     }
 
     // ------------------------- initialize utils -----------------------------------
-
-    private static <A extends Annotation> List<CriterionFactory<A, ?, ?>> initCriterionFactories(
-            AConstraint aconstraint) {
-        List criterionFactories = Arrays.stream(aconstraint.criterionFactories())
-                .filter(clazz -> !Modifier.isAbstract(clazz.getModifiers()))
-                .map(ReflectionUtils::newInstance)
-                .collect(Collectors.toCollection(LinkedList::new));
-        return criterionFactories.isEmpty() ? Collections.emptyList() : criterionFactories;
-    }
 
     private static List<ConstraintCriterionProcessor<?>> initProcessorsByDirectConstraints(
             Class<? extends Annotation> constraintClass) {

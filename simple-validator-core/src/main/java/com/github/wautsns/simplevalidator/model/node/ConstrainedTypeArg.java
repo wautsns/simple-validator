@@ -19,8 +19,10 @@ import lombok.Getter;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Abstract constrained type arg node.
@@ -49,11 +51,20 @@ public abstract class ConstrainedTypeArg extends ConstrainedType {
     public interface Factory {
 
         /**
-         * Get target class.
+         * Get type class.
          *
-         * @return target class
+         * @return type class
          */
-        Class<?> getTargetClass();
+        Class<?> getTypeClass();
+
+        /**
+         * Get type extra interfaces.
+         *
+         * @return extra interfaces
+         */
+        default Set<Class<?>> getTypeExtraInterfaces() {
+            return Collections.emptySet();
+        }
 
         /**
          * Get type arg index.
