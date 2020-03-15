@@ -44,8 +44,7 @@ public class LocalTimeFormatter implements Formatter<LocalTime> {
     private static final long serialVersionUID = -7202909023391923980L;
 
     /** string format of {@code null}, default is {@code "null"} */
-    private @NonNull
-    String stringWhenNull = "null";
+    private @NonNull String stringWhenNull = "null";
     /**
      * locale of string format, default is {@code null}
      *
@@ -53,8 +52,7 @@ public class LocalTimeFormatter implements Formatter<LocalTime> {
      */
     private Locale localeOfStringFormat = null;
     /** time format style, default is {@link FormatStyle#MEDIUM} */
-    private @NonNull
-    FormatStyle formatStyle = FormatStyle.MEDIUM;
+    private @NonNull FormatStyle formatStyle = FormatStyle.MEDIUM;
 
     @Override
     public String format(LocalTime value, Locale locale) {

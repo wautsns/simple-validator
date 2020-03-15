@@ -33,11 +33,9 @@ import java.util.concurrent.ConcurrentHashMap;
 public class TypeLikeUtilityVariableCache<U extends TypeLikeUtility> {
 
     /** cache */
-    private final @NonNull
-    Map<U, Variable> cache = new ConcurrentHashMap<>(8);
+    private final @NonNull Map<U, Variable> cache = new ConcurrentHashMap<>(8);
     /** name of variable */
-    private final @NonNull
-    String name;
+    private final @NonNull String name;
 
     /**
      * Get variable associated with the utility.

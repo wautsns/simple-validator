@@ -43,8 +43,7 @@ public class EnumFormatter implements Formatter<Enum> {
     private static final long serialVersionUID = 7938927921714729160L;
 
     /** string format of {@code null}, default is {@code "null"} */
-    private @NonNull
-    String stringFormatOfNull = "null";
+    private @NonNull String stringFormatOfNull = "null";
     /** whether to display class, default is {@code false} */
     private boolean displayClass = false;
 

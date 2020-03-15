@@ -53,8 +53,7 @@ public class ObjectFormatter implements Formatter<Object> {
     private static final long serialVersionUID = -3276250483374591036L;
 
     /** string format for {@code null}, default is {@code "null"} */
-    private @NonNull
-    String stringFormatOfNull = "null";
+    private @NonNull String stringFormatOfNull = "null";
 
     @Override
     @SuppressWarnings("unchecked")

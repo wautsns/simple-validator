@@ -46,29 +46,21 @@ public class ArrayFormatter<A, C> implements Formatter<A> {
     private static final long serialVersionUID = 1580600679331585336L;
 
     /** string format of {@code null}, default is {@code "null"} */
-    private @NonNull
-    String stringFormatOfNull = "null";
+    private @NonNull String stringFormatOfNull = "null";
     /** string format of empty array, default is {@code "[]"} */
-    private @NonNull
-    String stringFormatOfEmptyArray = "[]";
+    private @NonNull String stringFormatOfEmptyArray = "[]";
     /** prefix of string format, default is {@code "["} */
-    private @NonNull
-    String prefix = "[";
+    private @NonNull String prefix = "[";
     /** suffix of string format, default is {@code "]"} */
-    private @NonNull
-    String suffix = "]";
+    private @NonNull String suffix = "]";
     /** prefix of string format of component, default is {@code ""} */
-    private @NonNull
-    String componentPrefix = "";
+    private @NonNull String componentPrefix = "";
     /** suffix of string format of component, default is {@code ""} */
-    private @NonNull
-    String componentSuffix = "";
+    private @NonNull String componentSuffix = "";
     /** delimiter between string format of component, default is {@code ", "} */
-    private @NonNull
-    String delimiter = ", ";
+    private @NonNull String delimiter = ", ";
     /** formatter for component, default is {@link ObjectFormatter#DEFAULT} */
-    private @NonNull
-    Formatter<? super C> componentFormatter = ObjectFormatter.DEFAULT;
+    private @NonNull Formatter<? super C> componentFormatter = ObjectFormatter.DEFAULT;
 
     @Override
     @SuppressWarnings("unchecked")

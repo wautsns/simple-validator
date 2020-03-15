@@ -78,8 +78,7 @@ public class ConstrainedField extends ConstrainedType {
     @RequiredArgsConstructor
     private static class CriterionWrapper implements Criterion.Wrapper {
 
-        private final @NonNull
-        Field field;
+        private final @NonNull Field field;
 
         @Override
         public <T> TCriterion<?> wrapTCriterion(TCriterion<T> criterion) {

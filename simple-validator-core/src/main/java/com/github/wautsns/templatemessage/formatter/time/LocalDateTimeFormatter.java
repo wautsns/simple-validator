@@ -44,8 +44,7 @@ public class LocalDateTimeFormatter implements Formatter<LocalDateTime> {
     private static final long serialVersionUID = -7202909023391923980L;
 
     /** string format of {@code null}, default is {@code "null"} */
-    private @NonNull
-    String stringWhenNull = "null";
+    private @NonNull String stringWhenNull = "null";
     /**
      * locale of string format, default is {@code null}
      *

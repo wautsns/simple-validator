@@ -80,8 +80,7 @@ public class ConstrainedGetter extends ConstrainedType {
     @RequiredArgsConstructor
     private static class CriterionWrapper implements Criterion.Wrapper {
 
-        private final @NonNull
-        Method getter;
+        private final @NonNull Method getter;
 
         @Override
         public <T> TCriterion<?> wrapTCriterion(TCriterion<T> criterion) {

@@ -47,41 +47,29 @@ public class MapFormatter<K, V> implements Formatter<Map<K, V>> {
     private static final long serialVersionUID = -984612299189087446L;
 
     /** string format of {@code null}, default is {@code "null"} */
-    private @NonNull
-    String stringFormatOfNull = "null";
+    private @NonNull String stringFormatOfNull = "null";
     /** string format of empty array, default is {@code "[]"} */
-    private @NonNull
-    String stringFormatOfEmptyMap = "[]";
+    private @NonNull String stringFormatOfEmptyMap = "[]";
     /** prefix of string format, default is {@code "["} */
-    private @NonNull
-    String prefix = "[";
+    private @NonNull String prefix = "[";
     /** suffix of string format, default is {@code "]"} */
-    private @NonNull
-    String suffix = "]";
+    private @NonNull String suffix = "]";
     /** prefix of string format of key, default is {@code ""} */
-    private @NonNull
-    String keyPrefix = "";
+    private @NonNull String keyPrefix = "";
     /** suffix of string format of key, default is {@code ""} */
-    private @NonNull
-    String keySuffix = "";
+    private @NonNull String keySuffix = "";
     /** prefix of string format of value, default is {@code ""} */
-    private @NonNull
-    String valuePrefix = "";
+    private @NonNull String valuePrefix = "";
     /** suffix of string format of value, default is {@code ""} */
-    private @NonNull
-    String valueSuffix = "";
+    private @NonNull String valueSuffix = "";
     /** delimiter between string format of key and string format of value, default is {@code "="} */
-    private @NonNull
-    String keyValueDelimiter = "=";
+    private @NonNull String keyValueDelimiter = "=";
     /** delimiter of string format of entry, default is {@code ", "} */
-    private @NonNull
-    String delimiter = ", ";
+    private @NonNull String delimiter = ", ";
     /** formatter for key, default is {@link ObjectFormatter#DEFAULT} */
-    private @NonNull
-    Formatter<? super K> keyFormatter = ObjectFormatter.DEFAULT;
+    private @NonNull Formatter<? super K> keyFormatter = ObjectFormatter.DEFAULT;
     /** formatter for value, default is {@link ObjectFormatter#DEFAULT} */
-    private @NonNull
-    Formatter<? super V> valueFormatter = ObjectFormatter.DEFAULT;
+    private @NonNull Formatter<? super V> valueFormatter = ObjectFormatter.DEFAULT;
 
     @Override
     public String format(Map<K, V> value, Locale locale) {
