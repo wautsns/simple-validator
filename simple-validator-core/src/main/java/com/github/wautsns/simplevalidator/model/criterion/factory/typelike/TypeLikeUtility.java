@@ -41,7 +41,7 @@ public abstract class TypeLikeUtility<T> {
     }
 
     /**
-     * Return {@code true} if the utility applies to the type, otherwise {@code false}.
+     * Whether the utility applies to the type.
      *
      * @param type type
      * @return {@code true} if the utility applies to the type, otherwise {@code false}

@@ -48,8 +48,16 @@ import java.util.concurrent.ConcurrentHashMap;
 @UtilityClass
 public class CriterionUtils {
 
+    /** cache for criterion */
     private static final Map<ConstrainedNode, Criterion> CACHE = new ConcurrentHashMap<>(128);
 
+    /**
+     * Execute the criterion with the value.
+     *
+     * @param criterion criterion
+     * @param value value
+     * @return validation failure, or {@code null} if the value passed the validation
+     */
     @SuppressWarnings({"rawtypes", "unchecked"})
     public static ValidationFailure execute(Criterion criterion, Object value) {
         if (criterion instanceof TCriterion) {
@@ -61,20 +69,47 @@ public class CriterionUtils {
         }
     }
 
+    /**
+     * Get criterion for the specific class.
+     *
+     * @param clazz class
+     * @param <C> type of criterion
+     * @return criterion for the specific class
+     */
     public static <C extends Criterion> C forClass(Class<?> clazz) {
         return forNode(ConstrainedClass.getInstance(clazz));
     }
 
+    /**
+     * Create a criterion for the specific parameter.
+     *
+     * @param parameter parameter
+     * @param <C> type of criterion
+     * @return criterion for the specific parameter
+     */
     @SuppressWarnings("unchecked")
     public static <C extends Criterion> C forParameter(Parameter parameter) {
         return (C) resolveNode(new ConstrainedParameter(parameter));
     }
 
+    /**
+     * Get criterion for the specific node.
+     *
+     * @param node node
+     * @param <C> type of criterion
+     * @return criterion for the specific node
+     */
     @SuppressWarnings("unchecked")
     public static <C extends Criterion> C forNode(ConstrainedNode node) {
         return (C) CACHE.computeIfAbsent(node, CriterionUtils::resolveNode);
     }
 
+    /**
+     * Resolve node.
+     *
+     * @param node node
+     * @return criterion for the specific node
+     */
     private static Criterion resolveNode(ConstrainedNode node) {
         Criterion criterion = new NodeCriterionProducer(node).produce();
         if (criterion != null) { return criterion; }

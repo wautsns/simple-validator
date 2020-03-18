@@ -25,7 +25,7 @@ import java.util.LinkedList;
 import java.util.Locale;
 
 /**
- * Formatter for enums.
+ * Formatter for {@link Enum} value.
  *
  * @author wautsns
  * @since Mar 14, 2020

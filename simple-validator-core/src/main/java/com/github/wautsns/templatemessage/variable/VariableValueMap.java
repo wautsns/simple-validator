@@ -125,7 +125,7 @@ public class VariableValueMap implements Serializable {
     }
 
     /**
-     * Return {@code true} if the map is empty, otherwise {@code false}.
+     * Whether the map is empty.
      *
      * @return {@code true} if the map is empty, otherwise {@code false}
      */
@@ -134,7 +134,7 @@ public class VariableValueMap implements Serializable {
     }
 
     /**
-     * Return {@code true} if the map contains the variable, otherwise {@code false}.
+     * Whether the map contains the variable.
      *
      * @param variable variable
      * @return {@code true} if the map contains the variable, otherwise {@code false}

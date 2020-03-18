@@ -30,7 +30,7 @@ import java.lang.annotation.Annotation;
 public interface CriterionFactory<A extends Annotation, W extends Criteria<C>, C extends Criterion> {
 
     /**
-     * Return {@code true} if the factory applies to the constraint on the node, otherwise {@code false}.
+     * Whether the factory applies to the constraint on the node.
      *
      * @param node constrained node
      * @param constraint constraint

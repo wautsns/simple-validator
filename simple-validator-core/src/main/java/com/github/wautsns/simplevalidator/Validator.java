@@ -21,7 +21,7 @@ import com.github.wautsns.simplevalidator.util.CriterionUtils;
 import lombok.experimental.UtilityClass;
 
 /**
- * Validator.
+ * Validator utility.
  *
  * @author wautsns
  * @since Mar 14, 2020
@@ -30,18 +30,51 @@ import lombok.experimental.UtilityClass;
 @SuppressWarnings({"rawtypes", "unchecked"})
 public class Validator {
 
+    // -------------------- test --------------------------------------------------------
+
+    /**
+     * Test the value.
+     *
+     * @param value value
+     * @return {@code true} if the value passes the testing, otherwise {@code false}
+     */
     public static boolean test(Object value) {
         return (validateGently(value) == null);
     }
 
+    /**
+     * Test the value with the specific class.
+     *
+     * @param value value
+     * @param <T> type of value
+     * @return {@code true} if the value passes the testing, otherwise {@code false}
+     */
     public static <T> boolean test(Class<? super T> clazz, T value) {
         return (validateGently(clazz, value) == null);
     }
 
+    // -------------------- validate ----------------------------------------------------
+
+    /**
+     * Validate value rudely.
+     *
+     * @param value value
+     * @param <T> type of value
+     * @return original value
+     * @throws ValidationException if the value fails the validation
+     */
     public static <T> T validateRudely(T value) throws ValidationException {
         return validateRudely((Class<T>) value.getClass(), value);
     }
 
+    /**
+     * Validate value with specific class rudely.
+     *
+     * @param value value
+     * @param <T> type of value
+     * @return original value
+     * @throws ValidationException if the value fails the validation
+     */
     public static <T> T validateRudely(Class<? super T> clazz, T value) throws ValidationException {
         ValidationFailure failure = validateGently(clazz, value);
         if (failure == null) {
@@ -51,10 +84,23 @@ public class Validator {
         }
     }
 
+    /**
+     * Validate value gently.
+     *
+     * @param value value
+     * @return validation failure, or {@code null} if the value passes the validation
+     */
     public static ValidationFailure validateGently(Object value) {
         return validateGently((Class) value.getClass(), value);
     }
 
+    /**
+     * Validate value with specific class gently.
+     *
+     * @param value value
+     * @param <T> type of value
+     * @return validation failure, or {@code null} if the value passes the validation
+     */
     public static <T> ValidationFailure validateGently(Class<? super T> clazz, T value) {
         return CriterionUtils.execute(CriterionUtils.forClass(clazz), value);
     }

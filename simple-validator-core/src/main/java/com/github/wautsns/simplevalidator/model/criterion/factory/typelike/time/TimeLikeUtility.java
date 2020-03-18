@@ -67,7 +67,7 @@ public abstract class TimeLikeUtility<T> extends TypeLikeUtility<T> {
     public abstract int compare(T timeA, T timeB);
 
     /**
-     * Return {@code true} if timeA is before timeB, otherwise {@code false}.
+     * Whether timeA is before timeB.
      *
      * @param timeA time A
      * @param timeB time B
@@ -78,7 +78,7 @@ public abstract class TimeLikeUtility<T> extends TypeLikeUtility<T> {
     }
 
     /**
-     * Return {@code true} if timeA is after timeB, otherwise {@code false}.
+     * Whether timeA is after timeB.
      *
      * @param timeA time A
      * @param timeB time B

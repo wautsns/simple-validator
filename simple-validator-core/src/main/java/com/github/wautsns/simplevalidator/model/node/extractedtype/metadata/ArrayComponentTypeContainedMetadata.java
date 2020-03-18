@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.wautsns.simplevalidator.model.node.specific;
+package com.github.wautsns.simplevalidator.model.node.extractedtype.metadata;
 
 import com.github.wautsns.simplevalidator.model.criterion.basic.BooleanCriterion;
 import com.github.wautsns.simplevalidator.model.criterion.basic.ByteCriterion;
@@ -26,36 +26,37 @@ import com.github.wautsns.simplevalidator.model.criterion.basic.LongCriterion;
 import com.github.wautsns.simplevalidator.model.criterion.basic.ShortCriterion;
 import com.github.wautsns.simplevalidator.model.criterion.basic.TCriterion;
 import com.github.wautsns.simplevalidator.model.failure.ValidationFailure;
-import com.github.wautsns.simplevalidator.model.node.ConstrainedType;
-import com.github.wautsns.simplevalidator.model.node.ConstrainedTypeArg;
+import com.github.wautsns.simplevalidator.model.node.extractedtype.ConstrainedExtractedType;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Type;
-import java.util.List;
-import java.util.Map;
+import java.lang.reflect.AnnotatedArrayType;
+import java.lang.reflect.AnnotatedType;
 
 /**
- * Constrained array component.
+ * Type contained metadata of array component.
  *
  * @author wautsns
- * @since Mar 13, 2020
+ * @since Mar 18, 2020
  */
-public class ConstrainedArrayComponent extends ConstrainedTypeArg {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public class ArrayComponentTypeContainedMetadata extends ConstrainedExtractedType.Metadata {
 
-    /** name of the node */
-    public static final String NAME = "[i]";
+    public static final ArrayComponentTypeContainedMetadata INSTANCE = new ArrayComponentTypeContainedMetadata();
+
+    @Override
+    protected AnnotatedType extractFromArrayType(AnnotatedArrayType annotatedType) {
+        return annotatedType.getAnnotatedGenericComponentType();
+    }
+
+    @Override
+    public String getName() {
+        return "@ARRAY_COMPONENT";
+    }
 
     @Override
     public Criterion.Wrapper getCriterionWrapper() {
         return CriterionWrapper.INSTANCE;
-    }
-
-    public ConstrainedArrayComponent(
-            ConstrainedType parent, Type type, List<Short> indexes,
-            Map<List<Short>, List<Annotation>> indexesConstraints) {
-        super(parent, type, NAME, indexes, indexesConstraints);
     }
 
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -68,9 +69,7 @@ public class ConstrainedArrayComponent extends ConstrainedTypeArg {
             return array -> {
                 for (int i = 0; i < array.length; i++) {
                     ValidationFailure failure = criterion.test(array[i]);
-                    if (failure == null) { continue; }
-                    failure.addIndicator(i);
-                    return failure;
+                    if (failure != null) { return failure.addIndicator(i); }
                 }
                 return null;
             };
@@ -81,9 +80,7 @@ public class ConstrainedArrayComponent extends ConstrainedTypeArg {
             return array -> {
                 for (int i = 0; i < array.length; i++) {
                     ValidationFailure failure = criterion.test(array[i]);
-                    if (failure == null) { continue; }
-                    failure.addIndicator(i);
-                    return failure;
+                    if (failure != null) { return failure.addIndicator(i); }
                 }
                 return null;
             };
@@ -94,9 +91,7 @@ public class ConstrainedArrayComponent extends ConstrainedTypeArg {
             return array -> {
                 for (int i = 0; i < array.length; i++) {
                     ValidationFailure failure = criterion.test(array[i]);
-                    if (failure == null) { continue; }
-                    failure.addIndicator(i);
-                    return failure;
+                    if (failure != null) { return failure.addIndicator(i); }
                 }
                 return null;
             };
@@ -107,9 +102,7 @@ public class ConstrainedArrayComponent extends ConstrainedTypeArg {
             return array -> {
                 for (int i = 0; i < array.length; i++) {
                     ValidationFailure failure = criterion.test(array[i]);
-                    if (failure == null) { continue; }
-                    failure.addIndicator(i);
-                    return failure;
+                    if (failure != null) { return failure.addIndicator(i); }
                 }
                 return null;
             };
@@ -120,9 +113,7 @@ public class ConstrainedArrayComponent extends ConstrainedTypeArg {
             return array -> {
                 for (int i = 0; i < array.length; i++) {
                     ValidationFailure failure = criterion.test(array[i]);
-                    if (failure == null) { continue; }
-                    failure.addIndicator(i);
-                    return failure;
+                    if (failure != null) { return failure.addIndicator(i); }
                 }
                 return null;
             };
@@ -133,9 +124,7 @@ public class ConstrainedArrayComponent extends ConstrainedTypeArg {
             return array -> {
                 for (int i = 0; i < array.length; i++) {
                     ValidationFailure failure = criterion.test(array[i]);
-                    if (failure == null) { continue; }
-                    failure.addIndicator(i);
-                    return failure;
+                    if (failure != null) { return failure.addIndicator(i); }
                 }
                 return null;
             };
@@ -146,9 +135,7 @@ public class ConstrainedArrayComponent extends ConstrainedTypeArg {
             return array -> {
                 for (int i = 0; i < array.length; i++) {
                     ValidationFailure failure = criterion.test(array[i]);
-                    if (failure == null) { continue; }
-                    failure.addIndicator(i);
-                    return failure;
+                    if (failure != null) { return failure.addIndicator(i); }
                 }
                 return null;
             };
@@ -159,9 +146,7 @@ public class ConstrainedArrayComponent extends ConstrainedTypeArg {
             return array -> {
                 for (int i = 0; i < array.length; i++) {
                     ValidationFailure failure = criterion.test(array[i]);
-                    if (failure == null) { continue; }
-                    failure.addIndicator(i);
-                    return failure;
+                    if (failure != null) { return failure.addIndicator(i); }
                 }
                 return null;
             };
@@ -172,9 +157,7 @@ public class ConstrainedArrayComponent extends ConstrainedTypeArg {
             return array -> {
                 for (int i = 0; i < array.length; i++) {
                     ValidationFailure failure = criterion.test(array[i]);
-                    if (failure == null) { continue; }
-                    failure.addIndicator(i);
-                    return failure;
+                    if (failure != null) { return failure.addIndicator(i); }
                 }
                 return null;
             };

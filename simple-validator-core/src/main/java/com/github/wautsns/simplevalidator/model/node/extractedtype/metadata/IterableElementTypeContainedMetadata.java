@@ -13,62 +13,44 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.wautsns.simplevalidator.model.node.specific;
+package com.github.wautsns.simplevalidator.model.node.extractedtype.metadata;
 
 import com.github.wautsns.simplevalidator.model.criterion.basic.Criterion;
 import com.github.wautsns.simplevalidator.model.criterion.basic.TCriterion;
 import com.github.wautsns.simplevalidator.model.failure.ValidationFailure;
-import com.github.wautsns.simplevalidator.model.node.ConstrainedType;
-import com.github.wautsns.simplevalidator.model.node.ConstrainedTypeArg;
+import com.github.wautsns.simplevalidator.model.node.extractedtype.ConstrainedExtractedType;
+import com.github.wautsns.simplevalidator.util.common.TypeUtils;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Type;
-import java.util.List;
-import java.util.Map;
+import java.lang.reflect.AnnotatedParameterizedType;
+import java.lang.reflect.AnnotatedType;
 
 /**
- * Constrained iterable element.
+ * Type contained metadata of iterable element.
  *
  * @author wautsns
- * @since Mar 13, 2020
+ * @since Mar 18, 2020
  */
-public class ConstrainedIterableElement extends ConstrainedTypeArg {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public class IterableElementTypeContainedMetadata extends ConstrainedExtractedType.Metadata {
 
-    /** name of the node */
-    public static final String NAME = "[i]";
+    public static final IterableElementTypeContainedMetadata INSTANCE = new IterableElementTypeContainedMetadata();
+
+    @Override
+    protected AnnotatedType extractFromParameterizedType(AnnotatedParameterizedType annotatedType) {
+        if (!TypeUtils.isAssignableTo(annotatedType.getType(), Iterable.class)) { return null; }
+        return annotatedType.getAnnotatedActualTypeArguments()[0];
+    }
+
+    @Override
+    public String getName() {
+        return "@ITERABLE_ELEMENT";
+    }
 
     @Override
     public Criterion.Wrapper getCriterionWrapper() {
         return CriterionWrapper.INSTANCE;
-    }
-
-    public ConstrainedIterableElement(
-            ConstrainedType parent, Type type, List<Short> indexes,
-            Map<List<Short>, List<Annotation>> indexesConstraints) {
-        super(parent, type, NAME, indexes, indexesConstraints);
-    }
-
-    public static class Factory implements ConstrainedTypeArg.Factory {
-
-        @Override
-        public Class<?> getTypeClass() {
-            return Iterable.class;
-        }
-
-        @Override
-        public short getTypeArgIndex() {
-            return 0;
-        }
-
-        @Override
-        public ConstrainedTypeArg produce(
-                ConstrainedType parent, Type type, List<Short> indexes,
-                Map<List<Short>, List<Annotation>> indexesConstraints) {
-            return new ConstrainedIterableElement(parent, type, indexes, indexesConstraints);
-        }
-
     }
 
     @NoArgsConstructor(access = AccessLevel.PRIVATE)

@@ -16,7 +16,7 @@
 package com.github.wautsns.simplevalidator;
 
 import com.github.wautsns.simplevalidator.model.criterion.factory.CriterionFactory;
-import com.github.wautsns.simplevalidator.model.node.ConstrainedType;
+import com.github.wautsns.simplevalidator.model.node.extractedtype.ConstrainedExtractedType;
 import com.github.wautsns.simplevalidator.model.node.ConstrainedTypeArg;
 import com.github.wautsns.simplevalidator.util.ConstraintUtils;
 import lombok.AccessLevel;
@@ -34,6 +34,8 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class SimpleValidatorConfiguration {
 
+    // -------------------- criterion factory --------------------------------------------
+
     /**
      * Add criterion factory.
      *
@@ -43,21 +45,37 @@ public class SimpleValidatorConfiguration {
      */
     public static <A extends Annotation> void addCriterionFactory(
             Class<A> constraintClass, CriterionFactory<A, ?, ?> factory) {
+        addCriterionFactory(constraintClass, -1, factory);
+    }
+
+    /**
+     * Add criterion factory.
+     *
+     * @param constraintClass constraint class
+     * @param index index of the factory(negative index indicate counting from tail)
+     * @param factory criterion factory
+     * @param <A> type of constraint
+     */
+    public static <A extends Annotation> void addCriterionFactory(
+            Class<A> constraintClass, int index, CriterionFactory<A, ?, ?> factory) {
         List<CriterionFactory<A, ?, ?>> factories = ConstraintUtils.getCriterionFactories(constraintClass);
-        if (!factories.isEmpty()) { factories.add(factory); }
+        if (index < 0) { index = factories.size() + index; }
+        if (!factories.isEmpty()) { factories.add(index, factory); }
         throw new IllegalArgumentException(String.format(
-                "Constraint[%s] is a combined constraint, cannot add criterion factory",
+                "Constraint[%s] is a combined constraint, and cannot add criterion factory.",
                 constraintClass));
     }
+
+    // -------------------- constrained type arg factory --------------------------------
 
     /**
      * Add constrained type arg factory.
      *
      * @param factory constrained type arg factory
-     * @see ConstrainedType.TypeArgsFactories#add(ConstrainedTypeArg.Factory)
+     * @see ConstrainedExtractedType.TypeArgsFactories#add(ConstrainedTypeArg.Factory)
      */
     public static void addConstrainedTypeArgFactory(ConstrainedTypeArg.Factory factory) {
-        ConstrainedType.TypeArgsFactories.add(factory);
+        ConstrainedExtractedType.TypeArgsFactories.add(factory);
     }
 
 }

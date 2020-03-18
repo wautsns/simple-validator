@@ -60,8 +60,7 @@ public class VFutureTimeLikeCriterionFactory extends AbstractTimeLikeCriterionFa
         };
     }
 
-    private static <T> TCriterion<T> initWithMillisecondsOffset(
-            TimeLikeUtility<T> utility, long milliseconds) {
+    private static <T> TCriterion<T> initWithMillisecondsOffset(TimeLikeUtility<T> utility, long milliseconds) {
         return time -> {
             T ref = utility.now(milliseconds);
             return utility.isAfter(time, ref) ? null : wrong(utility, time, ref);

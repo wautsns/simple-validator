@@ -68,7 +68,7 @@ public class TypeUtils {
     }
 
     /**
-     * Return {@code true} if the type is primitive, otherwise {@code false}.
+     * Whether the type is primitive.
      *
      * @param type type
      * @return {@code true} if the type is primitive, otherwise {@code false}.
@@ -78,7 +78,7 @@ public class TypeUtils {
     }
 
     /**
-     * Return {@code true} if the type is array, otherwise {@code false}.
+     * Whether the type is array.
      *
      * @param type type
      * @return {@code true} if the type is array, otherwise {@code false}.
@@ -88,7 +88,7 @@ public class TypeUtils {
     }
 
     /**
-     * Return {@code true} if the type is enum, otherwise {@code false}.
+     * Whether the type is enum.
      *
      * @param type type
      * @return {@code true} if the type is enum, otherwise {@code false}.
@@ -114,7 +114,7 @@ public class TypeUtils {
     }
 
     /**
-     * Return {@code true} if the type is assignable to the class, otherwise {@code false}.
+     * Whether the type is assignable to the class.
      *
      * @param type type
      * @param clazz class
@@ -145,7 +145,7 @@ public class TypeUtils {
     }
 
     /**
-     * Return {@code true} if the type is assignable to any of the given classes, otherwise {@code false}.
+     * Whether the type is assignable to any of the given classes.
      *
      * @param type type
      * @param classes classes
@@ -156,7 +156,7 @@ public class TypeUtils {
     }
 
     /**
-     * Return {@code true} if the type is assignable to all given classes, otherwise {@code false}.
+     * Whether the type is assignable to all given classes.
      *
      * @param type type
      * @param classes classes
@@ -167,7 +167,7 @@ public class TypeUtils {
     }
 
     /**
-     * Return {@code true} if the type is assignable to any of the given classes, otherwise {@code false}.
+     * Whether the type is assignable to any of the given classes.
      *
      * @param type type
      * @param classes classes
@@ -178,7 +178,7 @@ public class TypeUtils {
     }
 
     /**
-     * Return {@code true} if the type is assignable to all given classes, otherwise {@code false}.
+     * Whether the type is assignable to all given classes.
      *
      * @param type type
      * @param classes classes

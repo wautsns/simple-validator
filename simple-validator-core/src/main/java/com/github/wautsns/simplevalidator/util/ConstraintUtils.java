@@ -55,24 +55,14 @@ import java.util.stream.Collectors;
 @UtilityClass
 public class ConstraintUtils {
 
-    // -------------------- constraint --------------------------------------------------
-
-    /**
-     * Return {@code true} if the annotation is constraint. otherwise {@code false}.
-     *
-     * @param annotation annotation
-     * @return {@code true} if the annotation is constraint. otherwise {@code false}
-     */
-    public static boolean isConstraint(Annotation annotation) {
-        return annotation.annotationType().isAnnotationPresent(AConstraint.class);
-    }
+    // -------------------- AConstraint -------------------------------------------------
 
     /**
      * Require {@code AConstraint} value on the constraint annotation class.
      *
-     * @param constraintClass constraint annotation class
-     * @return {@code AConstraint} value on the constraint annotation class
-     * @throws ConstraintAnalysisException if there is no {@code AConstraint} annotation on the constraint class.
+     * @param constraintClass constraint class
+     * @return {@code AConstraint} value on the constraint class
+     * @throws ConstraintAnalysisException if there is no {@code AConstraint} on the constraint class.
      */
     public static AConstraint requireAConstraint(Class<? extends Annotation> constraintClass) {
         AConstraint aConstraint = getAConstraint(constraintClass);
@@ -83,19 +73,31 @@ public class ConstraintUtils {
     /**
      * Get {@code AConstraint} value on the constraint annotation class.
      *
-     * @param constraintClass constraint annotation class
-     * @return {@code AConstraint} value on the constraint annotation class, or {@code null} if there is no {@code
-     * AConstraint} annotation on the constraint class
+     * @param constraintClass constraint class
+     * @return {@code AConstraint} value on the constraint class, or {@code null} if there is no {@code AConstraint}
+     * annotation on the constraint class
      */
     public static AConstraint getAConstraint(Class<? extends Annotation> constraintClass) {
         return constraintClass.getAnnotation(AConstraint.class);
+    }
+
+    // -------------------- constraint --------------------------------------------------
+
+    /**
+     * Whether the annotation is constraint(i.e. annotated with {@linkplain AConstraint @AConstraint}).
+     *
+     * @param annotation annotation
+     * @return {@code true} if the annotation is constraint, otherwise {@code false}
+     */
+    public static boolean isConstraint(Annotation annotation) {
+        return annotation.annotationType().isAnnotationPresent(AConstraint.class);
     }
 
     /**
      * Filter out constraints.
      *
      * @param annotations annotations
-     * @return constraints
+     * @return constraints(unmodified)
      */
     public static List<Annotation> filterOutConstraints(Annotation[] annotations) {
         return filterOutConstraints(Arrays.asList(annotations));
@@ -105,7 +107,7 @@ public class ConstraintUtils {
      * Filter out constraints.
      *
      * @param annotations annotations
-     * @return constraints
+     * @return constraints(unmodified)
      */
     public static List<Annotation> filterOutConstraints(List<Annotation> annotations) {
         return CollectionUtils.unmodifiableList(annotations.stream()
@@ -117,7 +119,7 @@ public class ConstraintUtils {
      * Get indexes constraints.
      *
      * @param annotatedType annotated type
-     * @return indexes constraints
+     * @return indexes constraints(the map is modifiable, but the value of map is unmodifiable)
      */
     public static Map<List<Short>, List<Annotation>> getIndexesConstraints(AnnotatedType annotatedType) {
         Map<List<Short>, List<Annotation>> indexesAnnotations = IndexesAnnotationsUtils.resolve(annotatedType);
@@ -156,8 +158,8 @@ public class ConstraintUtils {
         /**
          * Resolve annotatedType and return indexes annotation map.
          *
-         * @param annotatedType an annotated type
-         * @return indexes annotation map
+         * @param annotatedType annotated type
+         * @return indexes annotation map(unmodifiable)
          */
         public static Map<List<Short>, List<Annotation>> resolve(AnnotatedType annotatedType) {
             if (annotatedType.getClass() == ANNOTATED_TYPE_BASE_IMPL) {
@@ -179,7 +181,7 @@ public class ConstraintUtils {
         /**
          * Resolve type annotation.
          *
-         * @param indexesAnnotations an indexes constraints map
+         * @param indexesAnnotations indexes annotations
          * @param typeAnnotation type annotation
          */
         private static void resolve(Map<List<Short>, List<Annotation>> indexesAnnotations, Object typeAnnotation) {
@@ -198,7 +200,7 @@ public class ConstraintUtils {
 
     }
 
-    // -------------------- attributes --------------------------------------------------
+    // -------------------- attribute ---------------------------------------------------
 
     /** constraint attributes */
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -212,7 +214,7 @@ public class ConstraintUtils {
     }
 
     /**
-     * Require the attribute named the specific name.
+     * Require the attribute.
      *
      * @param constraintClass constraint class.
      * @param name attribute name
@@ -236,7 +238,7 @@ public class ConstraintUtils {
         return ReflectionUtils.getDeclaredMethod(constraintClass, name);
     }
 
-    /** not attribute method names */
+    /** non-attribute method names */
     private static final Set<String> NOT_ATTRIBUTE_NAMES = new HashSet<>(Arrays.asList(
             "annotationType", "hashCode", "equals", "toString"));
 
@@ -251,6 +253,8 @@ public class ConstraintUtils {
                 .filter(method -> !NOT_ATTRIBUTE_NAMES.contains(method.getName()))
                 .collect(Collectors.toCollection(LinkedList::new));
     }
+
+    // -------------------- attribute value ---------------------------------------------
 
     /**
      * Get value of attribute `message`.
@@ -300,7 +304,7 @@ public class ConstraintUtils {
      * Get attribute value map.
      *
      * @param constraint constraint
-     * @return attribute-value map
+     * @return attribute value map
      */
     public static Map<String, Object> getAttributeValueMap(Annotation constraint) {
         InvocationHandler h = Proxy.getInvocationHandler(constraint);
@@ -327,10 +331,10 @@ public class ConstraintUtils {
     // -------------------- variables ---------------------------------------------------
 
     /**
-     * Get variable value map in the constraint.
+     * Get variable value map defined the constraint.
      *
      * @param constraint constraint
-     * @return variable-value map
+     * @return variable value map
      */
     @SuppressWarnings({"rawtypes", "unchecked"})
     public static VariableValueMap getVariableValueMap(Annotation constraint) {
@@ -342,7 +346,8 @@ public class ConstraintUtils {
                     Variable variable = ReflectionUtils.getValue(null, variableField);
                     AVariableAlias variableAlias = variableField.getAnnotation(AVariableAlias.class);
                     String name = (variableAlias == null) ? variable.getName() : variableAlias.value();
-                    variableValueMap.put(variable, getValue(constraint, name));
+                    Object value = getValue(constraint, name);
+                    if (value != null) { variableValueMap.put(variable, value); }
                 });
         return variableValueMap;
     }
