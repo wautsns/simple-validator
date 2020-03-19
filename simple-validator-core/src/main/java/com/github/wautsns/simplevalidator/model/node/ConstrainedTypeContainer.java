@@ -16,7 +16,10 @@
 package com.github.wautsns.simplevalidator.model.node;
 
 import com.github.wautsns.simplevalidator.model.node.extractedtype.ConstrainedExtractedType;
-import com.github.wautsns.simplevalidator.model.node.extractedtype.metadata.ArrayComponentTypeContainedMetadata;
+import com.github.wautsns.simplevalidator.model.node.extractedtype.metadata.ArrayComponentExtractedTypeMetadata;
+import com.github.wautsns.simplevalidator.model.node.extractedtype.metadata.IterableElementExtractedTypeMetadata;
+import com.github.wautsns.simplevalidator.model.node.extractedtype.metadata.MapKeyExtractedTypeMetadata;
+import com.github.wautsns.simplevalidator.model.node.extractedtype.metadata.MapValueExtractedTypeMetadata;
 import lombok.Getter;
 
 import java.lang.reflect.AnnotatedType;
@@ -64,9 +67,27 @@ public abstract class ConstrainedTypeContainer extends ConstrainedNode {
     private static final TreeMap<Integer, List<ConstrainedExtractedType.Metadata>> METADATA = new TreeMap<>();
 
     static {
-        addTypeExtractedMetadata(0, ArrayComponentTypeContainedMetadata.INSTANCE);
+        addTypeExtractedMetadata(1000, IterableElementExtractedTypeMetadata.INSTANCE);
+        addTypeExtractedMetadata(2000, MapKeyExtractedTypeMetadata.INSTANCE);
+        addTypeExtractedMetadata(3000, MapValueExtractedTypeMetadata.INSTANCE);
+        addTypeExtractedMetadata(4000, ArrayComponentExtractedTypeMetadata.INSTANCE);
     }
 
+    /**
+     * Add extracted type metadata.
+     *
+     * <ul>
+     * default type extracted metadata are as followers:
+     * <li>1000: {@link IterableElementExtractedTypeMetadata#INSTANCE}</li>
+     * <li>2000: {@link MapKeyExtractedTypeMetadata#INSTANCE}</li>
+     * <li>3000: {@link MapValueExtractedTypeMetadata#INSTANCE}</li>
+     * <li>4000: {@link ArrayComponentExtractedTypeMetadata#INSTANCE}</li>
+     * </ul>
+     *
+     * @param order order
+     * @param metadata extracted type metadata
+     * @see ConstrainedTypeContainer#addTypeExtractedMetadata(int, ConstrainedExtractedType.Metadata)
+     */
     public static void addTypeExtractedMetadata(int order, ConstrainedExtractedType.Metadata metadata) {
         METADATA.computeIfAbsent(order, i -> new LinkedList<>()).add(metadata);
     }

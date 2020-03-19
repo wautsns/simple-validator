@@ -40,8 +40,8 @@ public class VariableValueMap implements Serializable {
 
     /** serializable data */
     private Map<Variable<?>, Serializable> serializableData = Collections.emptyMap();
-    /** unserializable data */
-    private transient Map<Variable<?>, Object> unserializableData = Collections.emptyMap();
+    /** non-serializable data */
+    private transient Map<Variable<?>, Object> nonSerializableData = Collections.emptyMap();
 
     /**
      * Put variable value map.
@@ -65,12 +65,12 @@ public class VariableValueMap implements Serializable {
     public <T> VariableValueMap put(Variable<T> variable, T value) {
         if (value == null || value instanceof Serializable) {
             if (serializableData.isEmpty()) { serializableData = new HashMap<>(8, 1f); }
-            unserializableData.remove(variable);
+            nonSerializableData.remove(variable);
             serializableData.put(variable, (Serializable) value);
         } else {
-            if (unserializableData.isEmpty()) { unserializableData = new HashMap<>(4, 1f); }
+            if (nonSerializableData.isEmpty()) { nonSerializableData = new HashMap<>(4, 1f); }
             serializableData.remove(variable);
-            unserializableData.put(variable, value);
+            nonSerializableData.put(variable, value);
         }
         return this;
     }
@@ -78,7 +78,7 @@ public class VariableValueMap implements Serializable {
     /** Clear the map. */
     public void clear() {
         serializableData.clear();
-        unserializableData.clear();
+        nonSerializableData.clear();
     }
 
     /**
@@ -89,7 +89,7 @@ public class VariableValueMap implements Serializable {
      */
     public VariableValueMap remove(Variable<?> variable) {
         serializableData.remove(variable);
-        unserializableData.remove(variable);
+        nonSerializableData.remove(variable);
         return this;
     }
 
@@ -118,9 +118,9 @@ public class VariableValueMap implements Serializable {
         T value = (T) serializableData.remove(variable);
         if (value != null) { return value; }
         if (serializableData.containsKey(variable)) { return null; }
-        value = (T) unserializableData.remove(variable);
+        value = (T) nonSerializableData.remove(variable);
         if (value != null) { return value; }
-        if (unserializableData.containsKey(variable)) { return null; }
+        if (nonSerializableData.containsKey(variable)) { return null; }
         return defaultValue;
     }
 
@@ -130,7 +130,7 @@ public class VariableValueMap implements Serializable {
      * @return {@code true} if the map is empty, otherwise {@code false}
      */
     public boolean isEmpty() {
-        return serializableData.isEmpty() && unserializableData.isEmpty();
+        return serializableData.isEmpty() && nonSerializableData.isEmpty();
     }
 
     /**
@@ -140,7 +140,7 @@ public class VariableValueMap implements Serializable {
      * @return {@code true} if the map contains the variable, otherwise {@code false}
      */
     public boolean containsVariable(Variable<?> variable) {
-        return serializableData.containsKey(variable) || unserializableData.containsKey(variable);
+        return serializableData.containsKey(variable) || nonSerializableData.containsKey(variable);
     }
 
     /**
@@ -149,7 +149,7 @@ public class VariableValueMap implements Serializable {
      * @return size of the map
      */
     public int size() {
-        return serializableData.size() + unserializableData.size();
+        return serializableData.size() + nonSerializableData.size();
     }
 
     /**
@@ -193,9 +193,9 @@ public class VariableValueMap implements Serializable {
         T value = (T) serializableData.get(variable);
         if (value != null) { return value; }
         if (serializableData.containsKey(variable)) { return null; }
-        value = (T) unserializableData.get(variable);
+        value = (T) nonSerializableData.get(variable);
         if (value != null) { return value; }
-        if (unserializableData.containsKey(variable)) { return null; }
+        if (nonSerializableData.containsKey(variable)) { return null; }
         return defaultValue;
     }
 
@@ -207,17 +207,17 @@ public class VariableValueMap implements Serializable {
     @SuppressWarnings({"rawtypes", "unchecked"})
     public Stream<Map.Entry<Variable, Object>> entryStream() {
         if (serializableData.isEmpty()) {
-            if (unserializableData.isEmpty()) {
+            if (nonSerializableData.isEmpty()) {
                 return Stream.empty();
             } else {
-                return (Stream) unserializableData.entrySet().stream();
+                return (Stream) nonSerializableData.entrySet().stream();
             }
-        } else if (unserializableData.isEmpty()) {
+        } else if (nonSerializableData.isEmpty()) {
             return (Stream) serializableData.entrySet().stream();
         } else {
             return Stream.concat(
                     (Stream) serializableData.entrySet().stream(),
-                    unserializableData.entrySet().stream());
+                    nonSerializableData.entrySet().stream());
         }
     }
 
@@ -229,7 +229,7 @@ public class VariableValueMap implements Serializable {
     @SuppressWarnings("rawtypes")
     public void forEach(BiConsumer<Variable, Object> action) {
         serializableData.forEach(action);
-        unserializableData.forEach(action);
+        nonSerializableData.forEach(action);
     }
 
     /**

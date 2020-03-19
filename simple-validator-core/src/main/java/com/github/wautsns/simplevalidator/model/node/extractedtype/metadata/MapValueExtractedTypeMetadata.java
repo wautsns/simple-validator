@@ -19,59 +19,65 @@ import com.github.wautsns.simplevalidator.model.criterion.basic.Criterion;
 import com.github.wautsns.simplevalidator.model.criterion.basic.TCriterion;
 import com.github.wautsns.simplevalidator.model.failure.ValidationFailure;
 import com.github.wautsns.simplevalidator.model.node.extractedtype.ConstrainedExtractedType;
-import com.github.wautsns.simplevalidator.util.common.TypeUtils;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
-import java.lang.reflect.AnnotatedParameterizedType;
-import java.lang.reflect.AnnotatedType;
 import java.util.Map;
 
 /**
- * Type contained metadata of map key.
+ * Type contained metadata of map value.
  *
  * @author wautsns
  * @since Mar 18, 2020
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class MapKeyTypeContainedMetadata extends ConstrainedExtractedType.Metadata {
+public class MapValueExtractedTypeMetadata extends ConstrainedExtractedType.Metadata {
 
-    public static final MapKeyTypeContainedMetadata INSTANCE = new MapKeyTypeContainedMetadata();
+    public static final MapValueExtractedTypeMetadata INSTANCE = new MapValueExtractedTypeMetadata();
 
     @Override
-    protected AnnotatedType extractFromParameterizedType(AnnotatedParameterizedType annotatedType) {
-        if (!TypeUtils.isAssignableTo(annotatedType.getType(), Map.class)) { return null; }
-        return annotatedType.getAnnotatedActualTypeArguments()[0];
+    protected TypeParameterMetadata getTypeParameterMetadata() {
+        return TYPE_PARAMETER_METADATA;
     }
 
     @Override
     public String getName() {
-        return "@MAP_KEY";
+        return "@MAP_VALUE";
     }
 
     @Override
     public Criterion.Wrapper getCriterionWrapper() {
-        return CriterionWrapper.INSTANCE;
+        return CRITERION_WRAPPER;
     }
 
-    @NoArgsConstructor(access = AccessLevel.PRIVATE)
-    private static class CriterionWrapper extends Criterion.Wrapper {
+    // -------------------- internal utils ----------------------------------------------
 
-        public static final CriterionWrapper INSTANCE = new CriterionWrapper();
+    private static final TypeParameterMetadata TYPE_PARAMETER_METADATA = new TypeParameterMetadata() {
 
         @Override
-        protected <T> TCriterion<Iterable<T>> wrap(TCriterion<T> criterion) {
-            return iterable -> {
-                int index = 0;
-                for (T value : iterable) {
-                    ValidationFailure failure = criterion.test(value);
-                    if (failure != null) { return failure.addIndicator(index); }
-                    index++;
+        public Class<?> getTypeContainer() {
+            return Map.class;
+        }
+
+        @Override
+        public int getTypeParameterIndex() {
+            return 1;
+        }
+    };
+
+    private static final Criterion.Wrapper CRITERION_WRAPPER = new Criterion.Wrapper() {
+
+        @Override
+        protected <T> TCriterion<Map<?, T>> wrap(TCriterion<T> criterion) {
+            return map -> {
+                for (Map.Entry<?, T> entry : map.entrySet()) {
+                    ValidationFailure failure = criterion.test(entry.getValue());
+                    if (failure != null) { return failure.addIndicator(entry.getKey()); }
                 }
                 return null;
             };
         }
 
-    }
+    };
 
 }

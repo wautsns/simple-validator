@@ -16,14 +16,17 @@
 package com.github.wautsns.simplevalidator;
 
 import com.github.wautsns.simplevalidator.model.criterion.factory.CriterionFactory;
+import com.github.wautsns.simplevalidator.model.node.ConstrainedParameter;
+import com.github.wautsns.simplevalidator.model.node.ConstrainedTypeContainer;
 import com.github.wautsns.simplevalidator.model.node.extractedtype.ConstrainedExtractedType;
-import com.github.wautsns.simplevalidator.model.node.ConstrainedTypeArg;
 import com.github.wautsns.simplevalidator.util.ConstraintUtils;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Parameter;
 import java.util.List;
+import java.util.function.Function;
 
 /**
  * Simple validator configuration.
@@ -34,48 +37,61 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class SimpleValidatorConfiguration {
 
-    // -------------------- criterion factory --------------------------------------------
+    // -------------------- criterion factory -------------------------------------------
 
     /**
      * Add criterion factory.
      *
-     * @param constraintClass constraint class
+     * @param constraint constraint class
      * @param factory criterion factory
      * @param <A> type of constraint
      */
     public static <A extends Annotation> void addCriterionFactory(
-            Class<A> constraintClass, CriterionFactory<A, ?, ?> factory) {
-        addCriterionFactory(constraintClass, -1, factory);
+            Class<A> constraint, CriterionFactory<A, ?, ?> factory) {
+        addCriterionFactory(constraint, -1, factory);
     }
 
     /**
      * Add criterion factory.
      *
-     * @param constraintClass constraint class
+     * @param constraint constraint class
      * @param index index of the factory(negative index indicate counting from tail)
      * @param factory criterion factory
      * @param <A> type of constraint
      */
     public static <A extends Annotation> void addCriterionFactory(
-            Class<A> constraintClass, int index, CriterionFactory<A, ?, ?> factory) {
-        List<CriterionFactory<A, ?, ?>> factories = ConstraintUtils.getCriterionFactories(constraintClass);
+            Class<A> constraint, int index, CriterionFactory<A, ?, ?> factory) {
+        List<CriterionFactory<A, ?, ?>> factories = ConstraintUtils.getCriterionFactories(constraint);
         if (index < 0) { index = factories.size() + index; }
         if (!factories.isEmpty()) { factories.add(index, factory); }
         throw new IllegalArgumentException(String.format(
-                "Constraint[%s] is a combined constraint, and cannot add criterion factory.",
-                constraintClass));
+                "Constraint[%s] is a combined constraint, and cannot addCriterionFactory criterion factory.",
+                constraint));
     }
 
-    // -------------------- constrained type arg factory --------------------------------
+    // -------------------- extracted type metadata -------------------------------------
 
     /**
-     * Add constrained type arg factory.
+     * Add extracted type metadata.
      *
-     * @param factory constrained type arg factory
-     * @see ConstrainedExtractedType.TypeArgsFactories#add(ConstrainedTypeArg.Factory)
+     * @param order order
+     * @param metadata extracted type metadata
+     * @see ConstrainedTypeContainer#addTypeExtractedMetadata(int, ConstrainedExtractedType.Metadata)
      */
-    public static void addConstrainedTypeArgFactory(ConstrainedTypeArg.Factory factory) {
-        ConstrainedExtractedType.TypeArgsFactories.add(factory);
+    public static void addConstrainedExtractedTypeMetadata(int order, ConstrainedExtractedType.Metadata metadata) {
+        ConstrainedTypeContainer.addTypeExtractedMetadata(order, metadata);
+    }
+
+    // -------------------- parameter ---------------------------------------------------
+
+    /**
+     * Set parameter name generator.
+     *
+     * @param parameterNameGenerator parameter name generator
+     * @see ConstrainedParameter#setParameterNameGenerator(Function)
+     */
+    public static void setParameterNameGenerator(Function<Parameter, String> parameterNameGenerator) {
+        ConstrainedParameter.setParameterNameGenerator(parameterNameGenerator);
     }
 
 }

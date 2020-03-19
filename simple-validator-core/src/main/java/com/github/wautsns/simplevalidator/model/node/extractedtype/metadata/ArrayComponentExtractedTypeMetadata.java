@@ -40,9 +40,9 @@ import java.lang.reflect.AnnotatedType;
  * @since Mar 18, 2020
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class ArrayComponentTypeContainedMetadata extends ConstrainedExtractedType.Metadata {
+public class ArrayComponentExtractedTypeMetadata extends ConstrainedExtractedType.Metadata {
 
-    public static final ArrayComponentTypeContainedMetadata INSTANCE = new ArrayComponentTypeContainedMetadata();
+    public static final ArrayComponentExtractedTypeMetadata INSTANCE = new ArrayComponentExtractedTypeMetadata();
 
     @Override
     protected AnnotatedType extractFromArrayType(AnnotatedArrayType annotatedType) {
@@ -56,13 +56,12 @@ public class ArrayComponentTypeContainedMetadata extends ConstrainedExtractedTyp
 
     @Override
     public Criterion.Wrapper getCriterionWrapper() {
-        return CriterionWrapper.INSTANCE;
+        return CRITERION_WRAPPER;
     }
 
-    @NoArgsConstructor(access = AccessLevel.PRIVATE)
-    private static class CriterionWrapper extends Criterion.Wrapper {
+    // -------------------- internal utils ----------------------------------------------
 
-        public static final CriterionWrapper INSTANCE = new CriterionWrapper();
+    private static final Criterion.Wrapper CRITERION_WRAPPER = new Criterion.Wrapper() {
 
         @Override
         protected <T> TCriterion<T[]> wrap(TCriterion<T> criterion) {
@@ -163,6 +162,6 @@ public class ArrayComponentTypeContainedMetadata extends ConstrainedExtractedTyp
             };
         }
 
-    }
+    };
 
 }

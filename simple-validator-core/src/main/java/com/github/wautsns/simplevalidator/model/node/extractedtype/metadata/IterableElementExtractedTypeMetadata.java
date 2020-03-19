@@ -19,12 +19,8 @@ import com.github.wautsns.simplevalidator.model.criterion.basic.Criterion;
 import com.github.wautsns.simplevalidator.model.criterion.basic.TCriterion;
 import com.github.wautsns.simplevalidator.model.failure.ValidationFailure;
 import com.github.wautsns.simplevalidator.model.node.extractedtype.ConstrainedExtractedType;
-import com.github.wautsns.simplevalidator.util.common.TypeUtils;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-
-import java.lang.reflect.AnnotatedParameterizedType;
-import java.lang.reflect.AnnotatedType;
 
 /**
  * Type contained metadata of iterable element.
@@ -33,14 +29,13 @@ import java.lang.reflect.AnnotatedType;
  * @since Mar 18, 2020
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class IterableElementTypeContainedMetadata extends ConstrainedExtractedType.Metadata {
+public class IterableElementExtractedTypeMetadata extends ConstrainedExtractedType.Metadata {
 
-    public static final IterableElementTypeContainedMetadata INSTANCE = new IterableElementTypeContainedMetadata();
+    public static final IterableElementExtractedTypeMetadata INSTANCE = new IterableElementExtractedTypeMetadata();
 
     @Override
-    protected AnnotatedType extractFromParameterizedType(AnnotatedParameterizedType annotatedType) {
-        if (!TypeUtils.isAssignableTo(annotatedType.getType(), Iterable.class)) { return null; }
-        return annotatedType.getAnnotatedActualTypeArguments()[0];
+    protected TypeParameterMetadata getTypeParameterMetadata() {
+        return TYPE_PARAMETER_METADATA;
     }
 
     @Override
@@ -50,13 +45,25 @@ public class IterableElementTypeContainedMetadata extends ConstrainedExtractedTy
 
     @Override
     public Criterion.Wrapper getCriterionWrapper() {
-        return CriterionWrapper.INSTANCE;
+        return CRITERION_WRAPPER;
     }
 
-    @NoArgsConstructor(access = AccessLevel.PRIVATE)
-    private static class CriterionWrapper extends Criterion.Wrapper {
+    // -------------------- internal utils ----------------------------------------------
 
-        public static final CriterionWrapper INSTANCE = new CriterionWrapper();
+    private static final TypeParameterMetadata TYPE_PARAMETER_METADATA = new TypeParameterMetadata() {
+
+        @Override
+        public Class<?> getTypeContainer() {
+            return Iterable.class;
+        }
+
+        @Override
+        public int getTypeParameterIndex() {
+            return 0;
+        }
+    };
+
+    private static final Criterion.Wrapper CRITERION_WRAPPER = new Criterion.Wrapper() {
 
         @Override
         protected <T> TCriterion<Iterable<T>> wrap(TCriterion<T> criterion) {
@@ -71,6 +78,6 @@ public class IterableElementTypeContainedMetadata extends ConstrainedExtractedTy
             };
         }
 
-    }
+    };
 
 }

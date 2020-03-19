@@ -29,7 +29,7 @@ import org.springframework.expression.spel.support.SimpleEvaluationContext;
 import java.util.Locale;
 
 /**
- * Template message formatting processor for SPEL(Spring expression language).
+ * Template message formatting processor for Spel(Spring expression language).
  *
  * @author wautsns
  * @since Mar 10, 2020

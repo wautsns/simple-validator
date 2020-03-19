@@ -23,7 +23,6 @@ import com.github.wautsns.simplevalidator.model.node.ConstrainedClass;
 import com.github.wautsns.simplevalidator.model.node.ConstrainedNode;
 import com.github.wautsns.simplevalidator.util.CriterionUtils;
 
-import java.lang.annotation.Annotation;
 import java.util.List;
 
 /**
@@ -42,14 +41,14 @@ public class VRefAnyTypeCriterionFactory extends AbstractAnyTypeCriterionFactory
     protected static Criterion produce(ConstrainedNode node, VRef constraint) {
         ConstrainedClass refClass = ConstrainedClass.getInstance(constraint.value());
         String property = constraint.property();
-        if (property.isEmpty()) { property = node.getName(); }
+        if (property.isEmpty()) { property = node.getLocation().getSimpleName(); }
         ConstrainedNode ref = refClass.requireChild(property);
         if (constraint.useRefTarget()) { return CriterionUtils.forNode(ref); }
         return new NodeCriterionProducer(initTmpConstrainedNode(node, ref)).produce();
     }
 
     private static ConstrainedNode initTmpConstrainedNode(ConstrainedNode node, ConstrainedNode ref) {
-        return new ConstrainedNode(node.getType(), node.getLocation()) {
+        return new ConstrainedNode(node.getLocation(), node.getType(), ref.getConstraints()) {
             @Override
             public ConstrainedNode getParent() {
                 return node.getParent();
@@ -58,11 +57,6 @@ public class VRefAnyTypeCriterionFactory extends AbstractAnyTypeCriterionFactory
             @Override
             public List<? extends ConstrainedNode> getChildren() {
                 return ref.getChildren();
-            }
-
-            @Override
-            public List<Annotation> getConstraints() {
-                return ref.getConstraints();
             }
 
             @Override

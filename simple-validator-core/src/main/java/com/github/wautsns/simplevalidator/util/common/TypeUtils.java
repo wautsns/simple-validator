@@ -188,4 +188,84 @@ public class TypeUtils {
         return StreamSupport.stream(classes.spliterator(), false).allMatch(clazz -> isAssignableTo(type, clazz));
     }
 
+    public static int getTypeParameterIndex(Class<?> clazz, Class<?> targetClass, int targetTypeParameterIndex) {
+        if (!targetClass.isAssignableFrom(clazz)) {
+            return -1;
+        } else if (targetClass.isInterface()) {
+            return getTypeParameterIndexForInterface(clazz, targetClass, targetTypeParameterIndex);
+        } else {
+            return getTypeParameterIndexForSuperclass(clazz, targetClass, targetTypeParameterIndex);
+        }
+    }
+
+    private static int getTypeParameterIndexForSuperclass(
+            Class<?> clazz, Class<?> targetClass, int targetTypeParameterIndex) {
+        int typeParametersLength = clazz.getTypeParameters().length;
+        for (int typeParameterIndex = 0; typeParameterIndex < typeParametersLength; typeParameterIndex++) {
+            if (checkTypeParameterForSuperclass(clazz, typeParameterIndex, targetClass, targetTypeParameterIndex)) {
+                return typeParameterIndex;
+            }
+        }
+        return -1;
+    }
+
+    private static boolean checkTypeParameterForSuperclass(
+            Class<?> clazz, int typeParameterIndex, Class<?> targetClass, int targetTypeParameterIndex) {
+        if (clazz == targetClass) { return typeParameterIndex == targetTypeParameterIndex; }
+        TypeVariable<?>[] typeParameters = clazz.getTypeParameters();
+        if (typeParameters.length <= typeParameterIndex) { return false; }
+        TypeVariable<?> typeParameter = typeParameters[typeParameterIndex];
+        Type genericSuperclass = clazz.getGenericSuperclass();
+        if (!(genericSuperclass instanceof ParameterizedType)) { return false; }
+        ParameterizedType parameterizedSuperclass = (ParameterizedType) genericSuperclass;
+        Class<?> superclass = (Class<?>) parameterizedSuperclass.getRawType();
+        Type[] actualTypeArguments = parameterizedSuperclass.getActualTypeArguments();
+        for (int i = 0; i < actualTypeArguments.length; i++) {
+            Type actualTypeArgument = actualTypeArguments[i];
+            if (actualTypeArgument == typeParameter
+                    && checkTypeParameterForSuperclass(superclass, i, targetClass, targetTypeParameterIndex)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static int getTypeParameterIndexForInterface(
+            Class<?> clazz, Class<?> targetInterface, int targetTypeParameterIndex) {
+        int typeParametersLength = clazz.getTypeParameters().length;
+        for (int typeParameterIndex = 0; typeParameterIndex < typeParametersLength; typeParameterIndex++) {
+            if (checkTypeParameterIndexForInterface(clazz, typeParameterIndex, targetInterface,
+                    targetTypeParameterIndex)) {
+                return typeParameterIndex;
+            }
+        }
+        return -1;
+    }
+
+    private static boolean checkTypeParameterIndexForInterface(
+            Class<?> clazz, int typeParameterIndex, Class<?> targetInterface, int targetTypeParameterIndex) {
+        if (clazz == targetInterface) { return typeParameterIndex == targetTypeParameterIndex; }
+        TypeVariable<?>[] typeParameters = clazz.getTypeParameters();
+        if (typeParameters.length <= typeParameterIndex) { return false; }
+        TypeVariable<?> typeParameter = typeParameters[typeParameterIndex];
+        for (Type genericInterface : clazz.getGenericInterfaces()) {
+            if (!(genericInterface instanceof ParameterizedType)) { return false; }
+            ParameterizedType parameterizedInterface = (ParameterizedType) genericInterface;
+            Class<?> interfaceClass = (Class<?>) parameterizedInterface.getRawType();
+            if (!targetInterface.isAssignableFrom(interfaceClass)) { continue; }
+            Type[] actualTypeArguments = parameterizedInterface.getActualTypeArguments();
+            for (int i = 0; i < actualTypeArguments.length; i++) {
+                Type actualTypeArgument = actualTypeArguments[i];
+                if (actualTypeArgument == typeParameter
+                        && checkTypeParameterIndexForInterface(interfaceClass, i, targetInterface,
+                        targetTypeParameterIndex)) {
+                    return true;
+                }
+            }
+        }
+        Class<?> superclass = clazz.getSuperclass();
+        int index = getTypeParameterIndexForInterface(superclass, targetInterface, targetTypeParameterIndex);
+        return checkTypeParameterForSuperclass(clazz, typeParameterIndex, superclass, index);
+    }
+
 }

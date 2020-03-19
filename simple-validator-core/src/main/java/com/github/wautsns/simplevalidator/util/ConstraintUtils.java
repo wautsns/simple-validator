@@ -110,9 +110,11 @@ public class ConstraintUtils {
      * @return constraints(unmodified)
      */
     public static List<Annotation> filterOutConstraints(List<Annotation> annotations) {
-        return CollectionUtils.unmodifiableList(annotations.stream()
+        List<Annotation> constraints = annotations.stream()
                 .filter(ConstraintUtils::isConstraint)
-                .collect(Collectors.toCollection(LinkedList::new)));
+                .collect(Collectors.toCollection(LinkedList::new));
+        if (constraints.equals(annotations)) { constraints = annotations; }
+        return CollectionUtils.unmodifiableList(constraints);
     }
 
     /**

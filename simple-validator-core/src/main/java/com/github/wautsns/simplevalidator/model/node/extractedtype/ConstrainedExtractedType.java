@@ -19,6 +19,7 @@ import com.github.wautsns.simplevalidator.model.criterion.basic.Criterion;
 import com.github.wautsns.simplevalidator.model.node.ConstrainedNode;
 import com.github.wautsns.simplevalidator.model.node.ConstrainedTypeContainer;
 import com.github.wautsns.simplevalidator.util.common.ReflectionUtils;
+import com.github.wautsns.simplevalidator.util.common.TypeUtils;
 import lombok.Getter;
 
 import java.lang.reflect.AnnotatedArrayType;
@@ -58,13 +59,21 @@ public class ConstrainedExtractedType extends ConstrainedTypeContainer {
     public abstract static class Metadata {
 
         private static final Class<?> ANNOTATED_TYPE_BASE_IMPL = ReflectionUtils.requireClass(
-                "sun.reflect.annotation.AnnotatedTypeFactory.AnnotatedTypeBaseImpl");
+                "sun.reflect.annotation.AnnotatedTypeFactory$AnnotatedTypeBaseImpl");
 
         public final AnnotatedType extract(AnnotatedType annotatedType) {
-            if (ANNOTATED_TYPE_BASE_IMPL.isInstance(annotatedType)) {
+            if (ANNOTATED_TYPE_BASE_IMPL == annotatedType.getClass()) {
                 return extractFromTypeBase(annotatedType);
             } else if (annotatedType instanceof AnnotatedParameterizedType) {
-                return extractFromParameterizedType((AnnotatedParameterizedType) annotatedType);
+                Class<?> clazz = TypeUtils.getClass(annotatedType.getType());
+                TypeParameterMetadata typeParameterMetadata = getTypeParameterMetadata();
+                if (typeParameterMetadata == null) { return null; }
+                Class<?> typeContainer = typeParameterMetadata.getTypeContainer();
+                int typeParameterIndex = typeParameterMetadata.getTypeParameterIndex();
+                typeParameterIndex = TypeUtils.getTypeParameterIndex(clazz, typeContainer, typeParameterIndex);
+                if (typeParameterIndex < 0) { return null; }
+                AnnotatedParameterizedType annotatedParameterizedType = (AnnotatedParameterizedType) annotatedType;
+                return annotatedParameterizedType.getAnnotatedActualTypeArguments()[typeParameterIndex];
             } else if (annotatedType instanceof AnnotatedArrayType) {
                 return extractFromArrayType((AnnotatedArrayType) annotatedType);
             } else if (annotatedType instanceof AnnotatedTypeVariable) {
@@ -80,7 +89,7 @@ public class ConstrainedExtractedType extends ConstrainedTypeContainer {
             return null;
         }
 
-        protected AnnotatedType extractFromParameterizedType(AnnotatedParameterizedType annotatedType) {
+        protected TypeParameterMetadata getTypeParameterMetadata() {
             return null;
         }
 
@@ -89,17 +98,38 @@ public class ConstrainedExtractedType extends ConstrainedTypeContainer {
         }
 
         protected AnnotatedType extractFromTypeVariable(AnnotatedTypeVariable annotatedType) {
-            AnnotatedType[] annotatedBounds = annotatedType.getAnnotatedBounds();
+            for (AnnotatedType annotatedBound : annotatedType.getAnnotatedBounds()) {
+                AnnotatedType extractedType = extract(annotatedBound);
+                if (extractedType != null) { return extractedType; }
+            }
             return null;
         }
 
         protected AnnotatedType extractFromWildcardType(AnnotatedWildcardType annotatedType) {
+            for (AnnotatedType annotatedLowerBound : annotatedType.getAnnotatedLowerBounds()) {
+                AnnotatedType extractedType = extract(annotatedLowerBound);
+                if (extractedType != null) { return extractedType; }
+            }
+            for (AnnotatedType annotatedUpperBound : annotatedType.getAnnotatedUpperBounds()) {
+                AnnotatedType extractedType = extract(annotatedUpperBound);
+                if (extractedType != null) { return extractedType; }
+            }
             return null;
         }
 
         public abstract String getName();
 
         public abstract Criterion.Wrapper getCriterionWrapper();
+
+        // -------------------- internal utils -----------------------------------------------
+
+        protected interface TypeParameterMetadata {
+
+            Class<?> getTypeContainer();
+
+            int getTypeParameterIndex();
+
+        }
 
     }
 
