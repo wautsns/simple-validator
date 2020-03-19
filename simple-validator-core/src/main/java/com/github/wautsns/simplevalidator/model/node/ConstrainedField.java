@@ -44,7 +44,6 @@ public class ConstrainedField extends ConstrainedTypeContainer {
     private final Field origin;
     private final Criterion.Wrapper criterionWrapper;
 
-
     /**
      * Get the declaring class node of the field.
      *

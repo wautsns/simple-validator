@@ -68,7 +68,7 @@ public class SimpleMethodValidationPostProcessor extends AbstractBeanFactoryAwar
                     int modifiers = method.getModifiers();
                     if (!Modifier.isPublic(modifiers) || Modifier.isStatic(modifiers)) { return false; }
                     return Arrays.stream(method.getParameters())
-                            .map(Parameter::getAnnotations)
+                            .map(Parameter::getDeclaredAnnotations)
                             .flatMap(Arrays::stream)
                             .anyMatch(ConstraintUtils::isConstraint);
                 }

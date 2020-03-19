@@ -166,11 +166,11 @@ public abstract class ConstrainedNode {
     }
 
     private static List<Annotation> getAllAnnotations(AnnotatedType annotatedType) {
-        List<Annotation> annotations = new LinkedList<>(Arrays.asList(annotatedType.getAnnotations()));
+        List<Annotation> annotations = new LinkedList<>(Arrays.asList(annotatedType.getDeclaredAnnotations()));
         Type type = annotatedType.getType();
         if (type instanceof TypeVariable) {
             TypeVariable<?> typeVariable = (TypeVariable<?>) type;
-            annotations.addAll(0, Arrays.asList(typeVariable.getAnnotations()));
+            annotations.addAll(0, Arrays.asList(typeVariable.getDeclaredAnnotations()));
             for (AnnotatedType annotatedBound : typeVariable.getAnnotatedBounds()) {
                 annotations.addAll(0, getAllAnnotations(annotatedBound));
             }

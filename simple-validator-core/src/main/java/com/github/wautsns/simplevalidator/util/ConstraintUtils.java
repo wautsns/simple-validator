@@ -28,18 +28,13 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.UtilityClass;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.AnnotatedType;
-import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -115,91 +110,6 @@ public class ConstraintUtils {
                 .collect(Collectors.toCollection(LinkedList::new));
         if (constraints.equals(annotations)) { constraints = annotations; }
         return CollectionUtils.unmodifiableList(constraints);
-    }
-
-    /**
-     * Get indexes constraints.
-     *
-     * @param annotatedType annotated type
-     * @return indexes constraints(the map is modifiable, but the value of map is unmodifiable)
-     */
-    public static Map<List<Short>, List<Annotation>> getIndexesConstraints(AnnotatedType annotatedType) {
-        Map<List<Short>, List<Annotation>> indexesAnnotations = IndexesAnnotationsUtils.resolve(annotatedType);
-        HashMap<List<Short>, List<Annotation>> indexesConstraints = new HashMap<>(8);
-        indexesAnnotations.forEach((indexes, annotations) -> {
-            List<Annotation> constraints = filterOutConstraints(annotations);
-            if (!constraints.isEmpty()) { indexesConstraints.put(indexes, constraints); }
-        });
-        return indexesConstraints;
-    }
-
-    /** Indexes annotations utils. */
-    @UtilityClass
-    private static class IndexesAnnotationsUtils {
-
-        /** class: AnnotatedTypeBaseImpl */
-        private static final Class<?> ANNOTATED_TYPE_BASE_IMPL = ReflectionUtils.requireClass(
-                "sun.reflect.annotation.AnnotatedTypeFactory$AnnotatedTypeBaseImpl");
-        /** field: AnnotatedTypeFactory$AnnotatedTypeBaseImpl#allOnSameTargetTypeAnnotations */
-        private static final Field ALL_ON_SAME_TARGET_TYPE_ANNOTATIONS = ReflectionUtils.requireDeclaredField(
-                ReflectionUtils.requireClass("sun.reflect.annotation.AnnotatedTypeFactory$AnnotatedTypeBaseImpl"),
-                "allOnSameTargetTypeAnnotations");
-        /** field: TypeAnnotation#annotation */
-        private static final Field ANNOTATION_OF_TYPE_ANNOTATION = ReflectionUtils.requireDeclaredField(
-                ReflectionUtils.requireClass("sun.reflect.annotation.TypeAnnotation"), "annotation");
-        /** field: TypeAnnotation#loc */
-        private static final Field LOC_OF_TYPE_ANNOTATION = ReflectionUtils.requireDeclaredField(
-                ReflectionUtils.requireClass("sun.reflect.annotation.TypeAnnotation"), "loc");
-        /** field: TypeAnnotation$LocationInfo#locations */
-        private static final Field LOCATIONS_OF_LOCATION_INFO = ReflectionUtils.requireDeclaredField(
-                ReflectionUtils.requireClass("sun.reflect.annotation.TypeAnnotation$LocationInfo"), "locations");
-        /** field: TypeAnnotation$LocationInfo$Location#index */
-        private static final Field INDEX_OF_LOCATION = ReflectionUtils.requireDeclaredField(
-                ReflectionUtils.requireClass("sun.reflect.annotation.TypeAnnotation$LocationInfo$Location"), "index");
-
-        /**
-         * Resolve annotatedType and return indexes annotation map.
-         *
-         * @param annotatedType annotated type
-         * @return indexes annotation map(unmodifiable)
-         */
-        public static Map<List<Short>, List<Annotation>> resolve(AnnotatedType annotatedType) {
-            if (annotatedType.getClass() == ANNOTATED_TYPE_BASE_IMPL) {
-                List<Short> indexes = Collections.emptyList();
-                List<Annotation> annotations = Arrays.asList(annotatedType.getAnnotations());
-                return Collections.singletonMap(indexes, annotations);
-            }
-            Map<List<Short>, List<Annotation>> indexesConstraints = new LinkedHashMap<>();
-            Object allOnSameTargetTypeAnnotations = ReflectionUtils.getValue(
-                    annotatedType, ALL_ON_SAME_TARGET_TYPE_ANNOTATIONS);
-            for (int i = 0, l = Array.getLength(allOnSameTargetTypeAnnotations); i < l; i++) {
-                Object typeAnnotation = Array.get(allOnSameTargetTypeAnnotations, i);
-                resolve(indexesConstraints, typeAnnotation);
-            }
-            indexesConstraints.entrySet().forEach(e -> e.setValue(CollectionUtils.unmodifiableList(e.getValue())));
-            return indexesConstraints;
-        }
-
-        /**
-         * Resolve type annotation.
-         *
-         * @param indexesAnnotations indexes annotations
-         * @param typeAnnotation type annotation
-         */
-        private static void resolve(Map<List<Short>, List<Annotation>> indexesAnnotations, Object typeAnnotation) {
-            Annotation annotation = ReflectionUtils.getValue(typeAnnotation, ANNOTATION_OF_TYPE_ANNOTATION);
-            Object loc = ReflectionUtils.getValue(typeAnnotation, LOC_OF_TYPE_ANNOTATION);
-            Object locations = ReflectionUtils.getValue(loc, LOCATIONS_OF_LOCATION_INFO);
-            int locationsLength = Array.getLength(locations);
-            List<Short> indexes = new ArrayList<>(locationsLength);
-            for (int j = 0; j < locationsLength; j++) {
-                Object location = Array.get(locations, j);
-                short index = ReflectionUtils.getShort(location, INDEX_OF_LOCATION);
-                indexes.add(index);
-            }
-            indexesAnnotations.computeIfAbsent(indexes, i -> new LinkedList<>()).add(annotation);
-        }
-
     }
 
     // -------------------- attribute ---------------------------------------------------

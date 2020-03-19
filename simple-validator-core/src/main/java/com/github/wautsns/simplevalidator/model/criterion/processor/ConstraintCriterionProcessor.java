@@ -147,7 +147,7 @@ public class ConstraintCriterionProcessor<A extends Annotation> {
     private static List<ConstraintCriterionProcessor<?>> initProcessorsByDirectConstraints(
             Class<? extends Annotation> constraintClass) {
         List<ConstraintCriterionProcessor<?>> processors = new LinkedList<>();
-        for (Annotation annotation : constraintClass.getAnnotations()) {
+        for (Annotation annotation : constraintClass.getDeclaredAnnotations()) {
             if (ConstraintUtils.isConstraint(annotation)) {
                 processors.add(new ConstraintCriterionProcessor<>(annotation));
             }

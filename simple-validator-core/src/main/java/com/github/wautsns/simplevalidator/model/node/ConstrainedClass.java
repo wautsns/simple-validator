@@ -123,7 +123,7 @@ public class ConstrainedClass extends ConstrainedNode {
     // -------------------- constructor -------------------------------------------------
 
     private ConstrainedClass(Class<?> clazz) {
-        super(clazz.getName(), clazz, clazz.getAnnotations());
+        super(clazz.getName(), clazz, clazz.getDeclaredAnnotations());
         this.fields = initFields(this);
         this.getters = initGetters(this);
     }
