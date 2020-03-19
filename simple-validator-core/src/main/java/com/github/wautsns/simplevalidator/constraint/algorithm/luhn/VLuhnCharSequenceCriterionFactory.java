@@ -10,7 +10,7 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-package com.github.wautsns.simplevalidator.constraint.business.bankcard;
+package com.github.wautsns.simplevalidator.constraint.algorithm.luhn;
 
 import com.github.wautsns.simplevalidator.model.criterion.basic.TCriteria;
 import com.github.wautsns.simplevalidator.model.criterion.basic.TCriterion;
@@ -21,38 +21,36 @@ import com.github.wautsns.simplevalidator.util.common.TypeUtils;
 
 /**
  * @author wautsns
- * @since Mar 11, 2020
+ * @since Mar 19, 2020
  */
-public class VBankCardTypeExtendsCharSequenceCriterionFactory implements TCriterionFactory<VBankCard, CharSequence> {
+public class VLuhnCharSequenceCriterionFactory implements TCriterionFactory<VLuhn, CharSequence> {
 
     @Override
-    public boolean appliesTo(ConstrainedNode node, VBankCard constraint) {
+    public boolean appliesTo(ConstrainedNode node, VLuhn constraint) {
         return TypeUtils.isAssignableTo(node.getType(), CharSequence.class);
     }
 
     @Override
-    public void process(ConstrainedNode node, VBankCard constraint, TCriteria<CharSequence> wip) {
-        wip.add(produceWithLuhn());
+    public void process(ConstrainedNode node, VLuhn constraint, TCriteria<CharSequence> wip) {
+        wip.add(CRITERION);
     }
 
     // ------------------------- criterion -----------------------------------------
 
-    protected static TCriterion<CharSequence> produceWithLuhn() {
-        return id -> {
-            int length = id.length();
-            if (length < 8 || length > 19) { return new ValidationFailure(id); }
-            int sum = 0;
-            for (int i = 0; i < length; i++) {
-                int digit = id.charAt(i) - '0';
-                if ((i & 1) == 0) {
-                    sum += digit;
-                } else {
-                    digit <<= 1;
-                    sum += (digit < 9) ? digit : (digit - 9);
-                }
+    private static final TCriterion<CharSequence> CRITERION = id -> {
+        int length = id.length();
+        if (length < 8 || length > 19) { return new ValidationFailure(id); }
+        int sum = 0;
+        for (int i = 0; i < length; i++) {
+            int digit = id.charAt(i) - '0';
+            if ((i & 1) == 0) {
+                sum += digit;
+            } else {
+                digit <<= 1;
+                sum += (digit < 9) ? digit : (digit - 9);
             }
-            return ((sum % 10) == 0) ? null : new ValidationFailure(id);
-        };
-    }
+        }
+        return ((sum % 10) == 0) ? null : new ValidationFailure(id);
+    };
 
 }
