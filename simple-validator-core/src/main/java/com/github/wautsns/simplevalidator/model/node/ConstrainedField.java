@@ -32,7 +32,7 @@ import lombok.RequiredArgsConstructor;
 import java.lang.reflect.Field;
 
 /**
- * Constrained field.
+ * The constrained field.
  *
  * @author wautsns
  * @since Mar 19, 2020
@@ -40,14 +40,17 @@ import java.lang.reflect.Field;
 @Getter
 public class ConstrainedField extends ConstrainedTypeContainer {
 
+    /** declaring class */
     private final ConstrainedClass declaringClass;
+    /** original field */
     private final Field origin;
+    /** criterion wrapper */
     private final Criterion.Wrapper criterionWrapper;
 
     /**
-     * Get the declaring class node of the field.
+     * The method is equal to {@link #getDeclaringClass()}.
      *
-     * @return the declaring class node of the field
+     * @return declaring class
      * @see #getDeclaringClass()
      */
     @Override
@@ -57,6 +60,12 @@ public class ConstrainedField extends ConstrainedTypeContainer {
 
     // -------------------- constructor -------------------------------------------------
 
+    /**
+     * Construct a constrained field.
+     *
+     * @param declaringClass declaring class
+     * @param field field
+     */
     ConstrainedField(ConstrainedClass declaringClass, Field field) {
         super(declaringClass, generateName(field), field.getAnnotatedType());
         this.declaringClass = declaringClass;
@@ -79,9 +88,11 @@ public class ConstrainedField extends ConstrainedTypeContainer {
 
     // -------------------- internal utils -----------------------------------------------
 
+    /** criterion wrapper */
     @RequiredArgsConstructor
     private static class CriterionWrapper extends Criterion.Wrapper {
 
+        /** accessible field */
         private final Field field;
 
         @Override

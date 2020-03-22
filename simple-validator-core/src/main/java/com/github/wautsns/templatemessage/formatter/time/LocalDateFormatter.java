@@ -16,6 +16,7 @@
 package com.github.wautsns.templatemessage.formatter.time;
 
 import com.github.wautsns.templatemessage.formatter.Formatter;
+import com.github.wautsns.templatemessage.formatter.time.util.TimeFormatterUtils;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NonNull;

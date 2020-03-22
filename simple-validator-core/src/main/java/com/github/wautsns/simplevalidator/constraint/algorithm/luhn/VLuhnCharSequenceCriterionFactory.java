@@ -18,16 +18,24 @@ import com.github.wautsns.simplevalidator.model.criterion.factory.TCriterionFact
 import com.github.wautsns.simplevalidator.model.failure.ValidationFailure;
 import com.github.wautsns.simplevalidator.model.node.ConstrainedNode;
 import com.github.wautsns.simplevalidator.util.common.TypeUtils;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+import java.lang.reflect.Type;
 
 /**
  * @author wautsns
  * @since Mar 19, 2020
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class VLuhnCharSequenceCriterionFactory implements TCriterionFactory<VLuhn, CharSequence> {
 
+    /** {@code VLuhnCharSequenceCriterionFactory} instance */
+    public static final VLuhnCharSequenceCriterionFactory INSTANCE = new VLuhnCharSequenceCriterionFactory();
+
     @Override
-    public boolean appliesTo(ConstrainedNode node, VLuhn constraint) {
-        return TypeUtils.isAssignableTo(node.getType(), CharSequence.class);
+    public boolean appliesTo(Type type, VLuhn constraint) {
+        return TypeUtils.isAssignableTo(type, CharSequence.class);
     }
 
     @Override

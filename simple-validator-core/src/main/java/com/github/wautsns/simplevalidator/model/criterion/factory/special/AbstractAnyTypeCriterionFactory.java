@@ -18,9 +18,9 @@ package com.github.wautsns.simplevalidator.model.criterion.factory.special;
 import com.github.wautsns.simplevalidator.model.criterion.basic.Criteria;
 import com.github.wautsns.simplevalidator.model.criterion.basic.Criterion;
 import com.github.wautsns.simplevalidator.model.criterion.factory.CriterionFactory;
-import com.github.wautsns.simplevalidator.model.node.ConstrainedNode;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Type;
 
 /**
  * Abstract any type criterion factory.
@@ -32,7 +32,7 @@ public abstract class AbstractAnyTypeCriterionFactory<A extends Annotation>
         implements CriterionFactory<A, Criteria<Criterion>, Criterion> {
 
     @Override
-    public boolean appliesTo(ConstrainedNode node, A constraint) {
+    public boolean appliesTo(Type type, A constraint) {
         return true;
     }
 

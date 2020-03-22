@@ -16,10 +16,9 @@
 package com.github.wautsns.templatemessage.variable;
 
 import com.github.wautsns.templatemessage.formatter.Formatter;
-import com.github.wautsns.templatemessage.formatter.ObjectFormatter;
+import com.github.wautsns.templatemessage.formatter.common.ObjectFormatter;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.ToString;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -27,14 +26,11 @@ import java.util.Objects;
 /**
  * Variable.
  *
- * <p>A variable has a name and formatter for value.
- *
  * @param <T> type of value of variable
  * @author wautsns
  * @since Mar 10, 2020
  */
 @Getter
-@ToString(of = "name")
 @EqualsAndHashCode(of = "name")
 public class Variable<T> implements Serializable {
 
@@ -45,8 +41,15 @@ public class Variable<T> implements Serializable {
     /** formatter of value of variable */
     private final Formatter<? super T> formatter;
 
+    @Override
+    public String toString() {
+        return name;
+    }
+
+    // #################### constructor ##################################################
+
     /**
-     * Construct variable with {@linkplain ObjectFormatter#DEFAULT default formatter}.
+     * Construct a variable with {@linkplain ObjectFormatter#DEFAULT default formatter}.
      *
      * @param name name of variable
      */
@@ -54,6 +57,12 @@ public class Variable<T> implements Serializable {
         this(name, ObjectFormatter.DEFAULT);
     }
 
+    /**
+     * Construct a variable.
+     *
+     * @param name variable name
+     * @param formatter value formatter
+     */
     public Variable(String name, Formatter<? super T> formatter) {
         this.name = Objects.requireNonNull(name);
         this.formatter = Objects.requireNonNull(formatter);

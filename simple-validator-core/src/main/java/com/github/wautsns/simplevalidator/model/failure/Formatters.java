@@ -15,7 +15,7 @@
  */
 package com.github.wautsns.simplevalidator.model.failure;
 
-import com.github.wautsns.templatemessage.formatter.EnumFormatter;
+import com.github.wautsns.templatemessage.formatter.common.EnumFormatter;
 import com.github.wautsns.templatemessage.formatter.Formatter;
 import com.github.wautsns.templatemessage.formatter.multival.ArrayFormatter;
 import lombok.experimental.UtilityClass;

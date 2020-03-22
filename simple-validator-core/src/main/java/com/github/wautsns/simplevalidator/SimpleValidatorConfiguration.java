@@ -15,17 +15,20 @@
  */
 package com.github.wautsns.simplevalidator;
 
+import com.github.wautsns.simplevalidator.exception.analysis.ConstraintAnalysisException;
+import com.github.wautsns.simplevalidator.model.constraint.ConstraintMetadata;
 import com.github.wautsns.simplevalidator.model.criterion.factory.CriterionFactory;
 import com.github.wautsns.simplevalidator.model.node.ConstrainedParameter;
 import com.github.wautsns.simplevalidator.model.node.ConstrainedTypeContainer;
-import com.github.wautsns.simplevalidator.model.node.extractedtype.ConstrainedExtractedType;
-import com.github.wautsns.simplevalidator.util.ConstraintUtils;
+import com.github.wautsns.simplevalidator.model.node.extraction.type.ConstrainedExtractedType;
+import com.github.wautsns.simplevalidator.util.common.NumericTextParser;
+import com.github.wautsns.simplevalidator.util.extractor.ValueExtractor;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Parameter;
-import java.util.List;
+import java.util.Objects;
 import java.util.function.Function;
 
 /**
@@ -37,52 +40,40 @@ import java.util.function.Function;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class SimpleValidatorConfiguration {
 
-    // -------------------- criterion factory -------------------------------------------
+    // #################### criterion factory ###########################################
 
     /**
      * Add criterion factory.
      *
-     * @param constraint constraint class
-     * @param factory criterion factory
-     * @param <A> type of constraint
+     * @param constraintType constraint class
+     * @param criterionFactory criterion factory
+     * @param <A> constraint type
      */
     public static <A extends Annotation> void addCriterionFactory(
-            Class<A> constraint, CriterionFactory<A, ?, ?> factory) {
-        addCriterionFactory(constraint, -1, factory);
+            Class<A> constraintType, CriterionFactory<A, ?, ?> criterionFactory) {
+        ConstraintMetadata<A> metadata = ConstraintMetadata.getInstance(constraintType);
+        if (metadata.isOnlyUsedToCombineOtherConstraints()) {
+            throw new ConstraintAnalysisException(
+                    "[%s] cannot add criterion factory, because it is only used to combine other constraints.",
+                    constraintType);
+        }
+        metadata.getCriterionFactoryList().add(Objects.requireNonNull(criterionFactory));
     }
 
-    /**
-     * Add criterion factory.
-     *
-     * @param constraint constraint class
-     * @param index index of the factory(negative index indicate counting from tail)
-     * @param factory criterion factory
-     * @param <A> type of constraint
-     */
-    public static <A extends Annotation> void addCriterionFactory(
-            Class<A> constraint, int index, CriterionFactory<A, ?, ?> factory) {
-        List<CriterionFactory<A, ?, ?>> factories = ConstraintUtils.getCriterionFactories(constraint);
-        if (index < 0) { index = factories.size() + index; }
-        if (!factories.isEmpty()) { factories.add(index, factory); }
-        throw new IllegalArgumentException(String.format(
-                "Constraint[%s] is a combined constraint, and cannot addCriterionFactory criterion factory.",
-                constraint));
-    }
-
-    // -------------------- extracted type metadata -------------------------------------
+    // #################### extracted type metadata #####################################
 
     /**
      * Add extracted type metadata.
      *
      * @param order order
-     * @param metadata extracted type metadata
-     * @see ConstrainedTypeContainer#addTypeExtractedMetadata(int, ConstrainedExtractedType.Metadata)
+     * @param extractedTypeMetadata extracted type metadata
+     * @see ConstrainedTypeContainer#addExtractedTypeMetadata(int, ConstrainedExtractedType.Metadata)
      */
-    public static void addConstrainedExtractedTypeMetadata(int order, ConstrainedExtractedType.Metadata metadata) {
-        ConstrainedTypeContainer.addTypeExtractedMetadata(order, metadata);
+    public static void addExtractedTypeMetadata(int order, ConstrainedExtractedType.Metadata extractedTypeMetadata) {
+        ConstrainedTypeContainer.addExtractedTypeMetadata(order, extractedTypeMetadata);
     }
 
-    // -------------------- parameter ---------------------------------------------------
+    // #################### parameter ###################################################
 
     /**
      * Set parameter name generator.
@@ -92,6 +83,31 @@ public class SimpleValidatorConfiguration {
      */
     public static void setParameterNameGenerator(Function<Parameter, String> parameterNameGenerator) {
         ConstrainedParameter.setParameterNameGenerator(parameterNameGenerator);
+    }
+
+    // #################### value #######################################################
+
+    /**
+     * Add value extractor.
+     *
+     * @param constraintType constraint type
+     * @param valueExtractor value extractor
+     */
+    public static void addValueExtractor(Class<? extends Annotation> constraintType, ValueExtractor valueExtractor) {
+        ConstraintMetadata.getInstance(constraintType).getValueExtractorList().add(valueExtractor);
+    }
+
+    /**
+     * Add numeric text parser.
+     *
+     * @param type numeric value type
+     * @param parser text parser
+     * @param <T> type of numeric value
+     * @see NumericTextParser#addParser(Class, Function)
+     */
+    public static <T extends Number & Comparable<T>> void addNumericValueParser(
+            Class<T> type, Function<String, T> parser) {
+        NumericTextParser.addParser(type, parser);
     }
 
 }

@@ -20,6 +20,7 @@ import com.github.wautsns.simplevalidator.model.criterion.basic.Criterion;
 import com.github.wautsns.simplevalidator.model.node.ConstrainedNode;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Type;
 
 /**
  * Criterion factory.
@@ -32,11 +33,11 @@ public interface CriterionFactory<A extends Annotation, W extends Criteria<C>, C
     /**
      * Whether the factory applies to the constraint on the node.
      *
-     * @param node constrained node
+     * @param type constrained type
      * @param constraint constraint
      * @return {@code true} if the factory applies to the constraint on the node, otherwise {@code false}
      */
-    boolean appliesTo(ConstrainedNode node, A constraint);
+    boolean appliesTo(Type type, A constraint);
 
     /**
      * Process the criterion wip.

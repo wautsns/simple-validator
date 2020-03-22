@@ -19,6 +19,8 @@ import com.github.wautsns.simplevalidator.model.failure.ValidationFailure;
 import com.github.wautsns.simplevalidator.model.node.ConstrainedNode;
 import com.github.wautsns.simplevalidator.util.common.TypeUtils;
 
+import java.lang.reflect.Type;
+
 /**
  * @author wautsns
  * @since Mar 11, 2020
@@ -26,8 +28,8 @@ import com.github.wautsns.simplevalidator.util.common.TypeUtils;
 public class VSizeCharSequenceCriterionFactory implements TCriterionFactory<VSize, CharSequence> {
 
     @Override
-    public boolean appliesTo(ConstrainedNode node, VSize constraint) {
-        return TypeUtils.isAssignableTo(node.getType(), CharSequence.class);
+    public boolean appliesTo(Type type, VSize constraint) {
+        return TypeUtils.isAssignableTo(type, CharSequence.class);
     }
 
     @Override

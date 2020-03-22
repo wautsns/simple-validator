@@ -16,7 +16,7 @@
 package com.github.wautsns.templatemessage.formatter.multival;
 
 import com.github.wautsns.templatemessage.formatter.Formatter;
-import com.github.wautsns.templatemessage.formatter.ObjectFormatter;
+import com.github.wautsns.templatemessage.formatter.common.ObjectFormatter;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NonNull;
@@ -62,24 +62,6 @@ public class ArrayFormatter<A, C> implements Formatter<A> {
     /** formatter for component, default is {@link ObjectFormatter#DEFAULT} */
     private @NonNull Formatter<? super C> componentFormatter = ObjectFormatter.DEFAULT;
 
-    @Override
-    @SuppressWarnings("unchecked")
-    public String format(A value, Locale locale) {
-        if (value == null) { return stringFormatOfNull; }
-        int length = Array.getLength(value);
-        if (length == 0) { return stringFormatOfEmptyArray; }
-        StringBuilder result = new StringBuilder();
-        result.append(prefix);
-        for (int i = 0; i < length; i++) {
-            String component = componentFormatter.format((C) Array.get(value, i), locale);
-            result.append(componentPrefix).append(component).append(componentSuffix);
-            result.append(delimiter);
-        }
-        result.delete(result.length() - delimiter.length(), result.length());
-        result.append(suffix);
-        return result.toString();
-    }
-
     /**
      * Set prefix and suffix.
      *
@@ -104,6 +86,24 @@ public class ArrayFormatter<A, C> implements Formatter<A> {
         setComponentPrefix(prefix);
         setComponentSuffix(suffix);
         return this;
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public String format(A value, Locale locale) {
+        if (value == null) { return stringFormatOfNull; }
+        int length = Array.getLength(value);
+        if (length == 0) { return stringFormatOfEmptyArray; }
+        StringBuilder result = new StringBuilder();
+        result.append(prefix);
+        for (int i = 0; i < length; i++) {
+            String component = componentFormatter.format((C) Array.get(value, i), locale);
+            result.append(componentPrefix).append(component).append(componentSuffix);
+            result.append(delimiter);
+        }
+        result.delete(result.length() - delimiter.length(), result.length());
+        result.append(suffix);
+        return result.toString();
     }
 
 }

@@ -25,7 +25,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  *
  * <p>Used to specify attribute in {@linkplain ACombine @ACombine}.
  *
- * <p>Priority: {@linkplain #spel() spel}, {@linkplain #value() value}, {@linkplain #ref() ref}.
+ * <p>Priority: {@linkplain #spel() spel}, {@linkplain #values() value}, {@linkplain #ref() ref}.
  *
  * @author wautsns
  * @see ACombine
@@ -60,7 +60,7 @@ public @interface AAttribute {
      *
      * @return set value by strings
      */
-    String[] value() default {LOOK_REF};
+    String[] values() default {LOOK_REF};
 
     /**
      * Set value by a ref.

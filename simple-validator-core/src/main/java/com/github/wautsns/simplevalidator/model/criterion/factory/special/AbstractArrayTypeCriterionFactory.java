@@ -33,8 +33,8 @@ public abstract class AbstractArrayTypeCriterionFactory<A extends Annotation>
         implements TCriterionFactory<A, Object> {
 
     @Override
-    public boolean appliesTo(ConstrainedNode node, A constraint) {
-        return TypeUtils.isArray(node.getType());
+    public boolean appliesTo(Type type, A constraint) {
+        return TypeUtils.isArray(type);
     }
 
     @Override

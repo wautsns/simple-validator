@@ -30,7 +30,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @VPositive
 public @interface VId {
 
-    List<CriterionFactory<VId, ?, ?>> CRITERION_FACTORIES = new LinkedList<>(Collections.singletonList(
+    List<CriterionFactory<VId, ?, ?>> CRITERION_FACTORY_LIST = new LinkedList<>(Collections.singletonList(
             new VIdIntegerLongBigIntegerCriterionFactory()
     ));
 

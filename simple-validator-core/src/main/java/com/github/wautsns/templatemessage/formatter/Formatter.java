@@ -25,7 +25,6 @@ import java.util.Locale;
  * @author wautsns
  * @since Mar 10, 2020
  */
-@FunctionalInterface
 public interface Formatter<T> extends Serializable {
 
     /**

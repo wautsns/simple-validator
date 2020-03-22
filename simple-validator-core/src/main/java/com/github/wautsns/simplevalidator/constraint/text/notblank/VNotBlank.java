@@ -39,7 +39,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @AConstraint
 public @interface VNotBlank {
 
-    List<CriterionFactory<VNotBlank, ?, ?>> CRITERION_FACTORIES = new LinkedList<>(Collections.singletonList(
+    List<CriterionFactory<VNotBlank, ?, ?>> CRITERION_FACTORY_LIST = new LinkedList<>(Collections.singletonList(
             new VNotBlankTextLikeCriterionFactory()
     ));
 

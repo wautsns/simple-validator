@@ -15,14 +15,16 @@
  */
 package com.github.wautsns.simplevalidator.constraint.any.ref;
 
+import com.github.wautsns.simplevalidator.model.constraint.Constraint;
 import com.github.wautsns.simplevalidator.model.criterion.basic.Criteria;
 import com.github.wautsns.simplevalidator.model.criterion.basic.Criterion;
 import com.github.wautsns.simplevalidator.model.criterion.factory.special.AbstractAnyTypeCriterionFactory;
-import com.github.wautsns.simplevalidator.model.criterion.processor.NodeCriterionProducer;
+import com.github.wautsns.simplevalidator.model.criterion.util.CriterionUtils;
 import com.github.wautsns.simplevalidator.model.node.ConstrainedClass;
 import com.github.wautsns.simplevalidator.model.node.ConstrainedNode;
-import com.github.wautsns.simplevalidator.util.CriterionUtils;
+import com.github.wautsns.simplevalidator.model.node.extraction.value.ConstrainedExtractedValue;
 
+import java.lang.reflect.Type;
 import java.util.List;
 
 /**
@@ -44,25 +46,31 @@ public class VRefAnyTypeCriterionFactory extends AbstractAnyTypeCriterionFactory
         if (property.isEmpty()) { property = node.getLocation().getSimpleName(); }
         ConstrainedNode ref = refClass.requireChild(property);
         if (constraint.useRefTarget()) { return CriterionUtils.forNode(ref); }
-        return new NodeCriterionProducer(initTmpConstrainedNode(node, ref)).produce();
+        return CriterionUtils.produce(initTmpConstrainedNode(node, ref));
     }
 
     private static ConstrainedNode initTmpConstrainedNode(ConstrainedNode node, ConstrainedNode ref) {
-        return new ConstrainedNode(node.getLocation(), node.getType(), ref.getConstraints()) {
+        ConstrainedNode.Location location = node.getLocation();
+        Type type = node.getType();
+        List<Constraint<?>> constraintList = ref.getConstraintList();
+        List<ConstrainedExtractedValue> extractedValueList = ref.getExtractedValueList();
+        return new ConstrainedNode(location, type, constraintList, extractedValueList) {
+
             @Override
             public ConstrainedNode getParent() {
                 return node.getParent();
             }
 
             @Override
-            public List<? extends ConstrainedNode> getChildren() {
-                return ref.getChildren();
+            public List<? extends ConstrainedNode> getChildList() {
+                return ref.getChildList();
             }
 
             @Override
             public Criterion.Wrapper getCriterionWrapper() {
                 return node.getCriterionWrapper();
             }
+
         };
     }
 

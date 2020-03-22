@@ -19,7 +19,7 @@ import com.github.wautsns.simplevalidator.model.criterion.basic.TCriteria;
 import com.github.wautsns.simplevalidator.model.criterion.basic.TCriterion;
 import com.github.wautsns.simplevalidator.model.criterion.factory.special.AbstractNonPrimitiveCriterionFactory;
 import com.github.wautsns.simplevalidator.model.node.ConstrainedNode;
-import com.github.wautsns.simplevalidator.util.CriterionUtils;
+import com.github.wautsns.simplevalidator.model.criterion.util.CriterionUtils;
 import com.github.wautsns.simplevalidator.util.common.TypeUtils;
 
 import java.util.Objects;
@@ -39,7 +39,7 @@ public class VSuperclassNonPrimitiveCriterionFactory extends AbstractNonPrimitiv
 
     protected TCriterion<Object> produce(ConstrainedNode node) {
         Class<?> superclass = TypeUtils.getClass(node.getType()).getSuperclass();
-        return CriterionUtils.forClass(Objects.requireNonNull(superclass));
+        return CriterionUtils.forType(Objects.requireNonNull(superclass));
     }
 
 }

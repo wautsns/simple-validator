@@ -15,6 +15,10 @@ package com.github.wautsns.simplevalidator.constraint.number.domain;
 import com.github.wautsns.simplevalidator.constraint.AConstraint;
 import com.github.wautsns.simplevalidator.constraint.AVariableAlias;
 import com.github.wautsns.simplevalidator.model.criterion.factory.CriterionFactory;
+import com.github.wautsns.simplevalidator.model.node.extraction.value.optional.DoubleExtractorForOptionalDouble;
+import com.github.wautsns.simplevalidator.model.node.extraction.value.optional.IntExtractorForOptionalInt;
+import com.github.wautsns.simplevalidator.model.node.extraction.value.optional.LongExtractorForOptionalLong;
+import com.github.wautsns.simplevalidator.util.extractor.ValueExtractor;
 import com.github.wautsns.templatemessage.formatter.multival.ArrayFormatter;
 import com.github.wautsns.templatemessage.variable.Variable;
 
@@ -42,7 +46,15 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @AConstraint
 public @interface VDomain {
 
-    List<CriterionFactory<VDomain, ?, ?>> CRITERION_FACTORIES = new LinkedList<>(Arrays.asList(
+    String message() default "[`VDomain`]";
+
+    int order() default 0;
+
+    String[] value();
+
+    // -------------------- metadata ----------------------------------------------------
+
+    List<CriterionFactory<VDomain, ?, ?>> CRITERION_FACTORY_LIST = new LinkedList<>(Arrays.asList(
             new VDomainComparableNumberCriterionFactory(),
             new VDomainNumericTextCriterionFactory(),
             new VDomainIntCriterionFactory(),
@@ -53,11 +65,11 @@ public @interface VDomain {
             new VDomainFloatCriterionFactory()
     ));
 
-    String message() default "[`VDomain`]";
-
-    int order() default 0;
-
-    String[] value();
+    List<ValueExtractor> VALUE_EXTRACTOR_LIST = new LinkedList<>(Arrays.asList(
+            IntExtractorForOptionalInt.INSTANCE,
+            LongExtractorForOptionalLong.INSTANCE,
+            DoubleExtractorForOptionalDouble.INSTANCE
+    ));
 
     // ------------------------- variables -----------------------------------------
 

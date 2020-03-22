@@ -42,7 +42,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @AConstraint
 public @interface VRef {
 
-    List<CriterionFactory<VRef, ?, ?>> CRITERION_FACTORIES = new LinkedList<>(Collections.singletonList(
+    List<CriterionFactory<VRef, ?, ?>> CRITERION_FACTORY_LIST = new LinkedList<>(Collections.singletonList(
             new VRefAnyTypeCriterionFactory()
     ));
 

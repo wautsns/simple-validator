@@ -27,14 +27,12 @@ public class IllegalConstrainedNodeException extends ConstraintAnalysisException
     /** serialVersionUID */
     private static final long serialVersionUID = -8702277455494595168L;
 
-    /**
-     * Construct {@code IllegalConstrainedNodeException}.
-     *
-     * @param node constrained node
-     * @param constraint constraint on the node
-     */
-    public IllegalConstrainedNodeException(ConstrainedNode node, Annotation constraint) {
-        super(String.format("Constraint %s on %s is illegal.", constraint, node));
+    public IllegalConstrainedNodeException(ConstrainedNode.Location location, Annotation constraint) {
+        this(null, location, constraint);
+    }
+
+    public IllegalConstrainedNodeException(Throwable cause, ConstrainedNode.Location location, Annotation constraint) {
+        super(cause, "Constraint %s on %s is illegal.", constraint, location);
     }
 
 }

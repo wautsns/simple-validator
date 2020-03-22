@@ -36,12 +36,7 @@ import java.util.stream.Collectors;
 @UtilityClass
 public class ReflectionUtils {
 
-    /** empty class array */
-    private static final Class<?>[] EMPTY_CLASS_ARRAY = new Class[0];
-    /** empty object array */
-    private static final Object[] EMPTY_OBJECT_ARRAY = new Object[0];
-
-    // -------------------- class -------------------------------------------------------
+    // #################### class #######################################################
 
     /**
      * Require class silently.
@@ -54,7 +49,7 @@ public class ReflectionUtils {
         return Class.forName(name);
     }
 
-    // -------------------- field -------------------------------------------------------
+    // #################### field #######################################################
 
     /**
      * Require the declared field and set accessible to {@code true}.
@@ -332,5 +327,12 @@ public class ReflectionUtils {
         constructor.setAccessible(true);
         return constructor.newInstance();
     }
+
+    // #################### internal utils ##############################################
+
+    /** empty class array */
+    private static final Class<?>[] EMPTY_CLASS_ARRAY = new Class[0];
+    /** empty object array */
+    private static final Object[] EMPTY_OBJECT_ARRAY = new Object[0];
 
 }

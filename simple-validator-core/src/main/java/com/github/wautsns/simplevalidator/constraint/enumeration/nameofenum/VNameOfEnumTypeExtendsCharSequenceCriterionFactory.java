@@ -20,6 +20,7 @@ import com.github.wautsns.simplevalidator.model.failure.ValidationFailure;
 import com.github.wautsns.simplevalidator.model.node.ConstrainedNode;
 import com.github.wautsns.simplevalidator.util.common.TypeUtils;
 
+import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Map;
@@ -35,8 +36,8 @@ public class VNameOfEnumTypeExtendsCharSequenceCriterionFactory
         implements TCriterionFactory<VNameOfEnum, CharSequence> {
 
     @Override
-    public boolean appliesTo(ConstrainedNode node, VNameOfEnum constraint) {
-        return TypeUtils.isAssignableTo(node.getType(), CharSequence.class);
+    public boolean appliesTo(Type type, VNameOfEnum constraint) {
+        return TypeUtils.isAssignableTo(type, CharSequence.class);
     }
 
     @Override

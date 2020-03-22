@@ -38,7 +38,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @AConstraint
 public @interface VSuperclass {
 
-    List<CriterionFactory<VSuperclass, ?, ?>> CRITERION_FACTORIES = new LinkedList<>(Collections.singletonList(
+    List<CriterionFactory<VSuperclass, ?, ?>> CRITERION_FACTORY_LIST = new LinkedList<>(Collections.singletonList(
             new VSuperclassNonPrimitiveCriterionFactory()
     ));
 

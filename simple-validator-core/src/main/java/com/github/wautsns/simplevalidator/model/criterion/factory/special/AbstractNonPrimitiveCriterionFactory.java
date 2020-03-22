@@ -16,10 +16,10 @@
 package com.github.wautsns.simplevalidator.model.criterion.factory.special;
 
 import com.github.wautsns.simplevalidator.model.criterion.factory.TCriterionFactory;
-import com.github.wautsns.simplevalidator.model.node.ConstrainedNode;
 import com.github.wautsns.simplevalidator.util.common.TypeUtils;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Type;
 
 /**
  * Abstract non-primitive criterion factory.
@@ -31,8 +31,8 @@ public abstract class AbstractNonPrimitiveCriterionFactory<A extends Annotation>
         implements TCriterionFactory<A, Object> {
 
     @Override
-    public boolean appliesTo(ConstrainedNode node, A constraint) {
-        return !TypeUtils.isPrimitive(node.getType());
+    public boolean appliesTo(Type type, A constraint) {
+        return !TypeUtils.isPrimitive(type);
     }
 
 }

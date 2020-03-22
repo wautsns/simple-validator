@@ -35,6 +35,8 @@ public class VariableFormattingProcessor extends TemplateMessageFormatter.Proces
         super(leftDelimiter, rightDelimiter);
     }
 
+    // #################### process #####################################################
+
     @Override
     public String process(String text, VariableValueMap variableValueMap, Locale locale) {
         Variable<Object> variable = variableValueMap.getVariable(text);

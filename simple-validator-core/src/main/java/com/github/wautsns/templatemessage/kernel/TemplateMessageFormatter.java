@@ -22,10 +22,11 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import java.io.Serializable;
-import java.util.HashSet;
+import java.util.Collection;
 import java.util.Locale;
-import java.util.Set;
-import java.util.TreeMap;
+import java.util.Map;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.ConcurrentSkipListMap;
 
 /**
  * Formatter for {@code TemplateMessageFormatter} value.
@@ -38,13 +39,8 @@ public class TemplateMessageFormatter implements Formatter<TemplateMessage> {
 
     private static final long serialVersionUID = -316723311454568554L;
 
-    /** processors */
-    private final TreeMap<Integer, Set<Processor>> processors = new TreeMap<>();
-
-    @Override
-    public String format(TemplateMessage value, Locale locale) {
-        return process(value.getMessageTemplate(), value, locale);
-    }
+    /** order -> processors map */
+    private final Map<Integer, Collection<Processor>> orderedProcessorsMap = new ConcurrentSkipListMap<>();
 
     /**
      * Add a processor.
@@ -56,8 +52,17 @@ public class TemplateMessageFormatter implements Formatter<TemplateMessage> {
      * @return self reference
      */
     public TemplateMessageFormatter addProcessor(int order, Processor processor) {
-        processors.computeIfAbsent(order, i -> new HashSet<>(2, 1F)).add(processor);
+        orderedProcessorsMap
+                .computeIfAbsent(order, i -> new ConcurrentLinkedQueue<>())
+                .add(processor);
         return this;
+    }
+
+    // #################### format ######################################################
+
+    @Override
+    public String format(TemplateMessage value, Locale locale) {
+        return process(value.getMessageTemplate(), value, locale);
     }
 
     /**
@@ -69,17 +74,17 @@ public class TemplateMessageFormatter implements Formatter<TemplateMessage> {
      * @return message after processing
      */
     private String process(CharSequence wip, VariableValueMap variableValueMap, Locale locale) {
-        StringBuilder temp = new StringBuilder(wip);
-        processors.forEach((order, ps) -> ps.forEach(p -> process(temp, p, variableValueMap, locale)));
-        if (temp.length() != wip.length()) {
-            return process(temp, variableValueMap, locale);
+        StringBuilder tmp = new StringBuilder(wip);
+        orderedProcessorsMap.forEach((order, ps) -> ps.forEach(p -> process(tmp, p, variableValueMap, locale)));
+        if (tmp.length() != wip.length()) {
+            return process(tmp, variableValueMap, locale);
         } else {
-            for (int i = 0; i < temp.length(); i++) {
-                if (temp.charAt(i) != wip.charAt(i)) {
-                    return process(temp, variableValueMap, locale);
+            for (int i = 0; i < tmp.length(); i++) {
+                if (tmp.charAt(i) != wip.charAt(i)) {
+                    return process(tmp, variableValueMap, locale);
                 }
             }
-            return temp.toString();
+            return tmp.toString();
         }
     }
 
@@ -116,6 +121,8 @@ public class TemplateMessageFormatter implements Formatter<TemplateMessage> {
             }
         }
     }
+
+    // #################### utils #######################################################
 
     /** Processor when formatting variable values. */
     @Getter

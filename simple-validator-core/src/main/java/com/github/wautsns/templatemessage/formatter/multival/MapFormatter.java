@@ -16,7 +16,7 @@
 package com.github.wautsns.templatemessage.formatter.multival;
 
 import com.github.wautsns.templatemessage.formatter.Formatter;
-import com.github.wautsns.templatemessage.formatter.ObjectFormatter;
+import com.github.wautsns.templatemessage.formatter.common.ObjectFormatter;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NonNull;
@@ -71,25 +71,6 @@ public class MapFormatter<K, V> implements Formatter<Map<K, V>> {
     /** formatter for value, default is {@link ObjectFormatter#DEFAULT} */
     private @NonNull Formatter<? super V> valueFormatter = ObjectFormatter.DEFAULT;
 
-    @Override
-    public String format(Map<K, V> value, Locale locale) {
-        if (value == null) { return stringFormatOfNull; }
-        if (value.isEmpty()) { return stringFormatOfEmptyMap; }
-        StringBuilder result = new StringBuilder();
-        result.append(prefix);
-        for (Map.Entry<K, V> entry : value.entrySet()) {
-            String key = keyFormatter.format(entry.getKey(), locale);
-            String val = valueFormatter.format(entry.getValue(), locale);
-            result.append(keyPrefix).append(key).append(keySuffix);
-            result.append(keyValueDelimiter);
-            result.append(valuePrefix).append(val).append(valueSuffix);
-            result.append(delimiter);
-        }
-        result.delete(result.length() - delimiter.length(), result.length());
-        result.append(suffix);
-        return result.toString();
-    }
-
     /**
      * Set prefix and suffix.
      *
@@ -127,6 +108,25 @@ public class MapFormatter<K, V> implements Formatter<Map<K, V>> {
         setValuePrefix(prefix);
         setValueSuffix(suffix);
         return this;
+    }
+
+    @Override
+    public String format(Map<K, V> value, Locale locale) {
+        if (value == null) { return stringFormatOfNull; }
+        if (value.isEmpty()) { return stringFormatOfEmptyMap; }
+        StringBuilder result = new StringBuilder();
+        result.append(prefix);
+        for (Map.Entry<K, V> entry : value.entrySet()) {
+            String key = keyFormatter.format(entry.getKey(), locale);
+            String val = valueFormatter.format(entry.getValue(), locale);
+            result.append(keyPrefix).append(key).append(keySuffix);
+            result.append(keyValueDelimiter);
+            result.append(valuePrefix).append(val).append(valueSuffix);
+            result.append(delimiter);
+        }
+        result.delete(result.length() - delimiter.length(), result.length());
+        result.append(suffix);
+        return result.toString();
     }
 
 }

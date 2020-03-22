@@ -44,7 +44,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @AConstraint
 public @interface VNameOfEnum {
 
-    List<CriterionFactory<VNameOfEnum, ?, ?>> CRITERION_FACTORIES = new LinkedList<>(Collections.singletonList(
+    List<CriterionFactory<VNameOfEnum, ?, ?>> CRITERION_FACTORY_LIST = new LinkedList<>(Collections.singletonList(
             new VNameOfEnumTypeExtendsCharSequenceCriterionFactory()
     ));
 

@@ -15,7 +15,6 @@
  */
 package com.github.wautsns.simplevalidator.model.criterion.factory.special;
 
-import com.github.wautsns.simplevalidator.model.node.ConstrainedNode;
 import com.github.wautsns.simplevalidator.util.common.TypeUtils;
 
 import java.lang.annotation.Annotation;
@@ -29,10 +28,9 @@ public abstract class AbstractComparableNumberCriterionFactory<A extends Annotat
         extends AbstractComparableCriterionFactory<A, Number> {
 
     @Override
-    public boolean appliesTo(ConstrainedNode node, A constraint) {
-        Type type = node.getType();
+    public boolean appliesTo(Type type, A constraint) {
         return TypeUtils.isAssignableTo(type, Number.class)
-                && super.appliesTo(node, constraint);
+                && super.appliesTo(type, constraint);
     }
 
 }

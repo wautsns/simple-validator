@@ -46,6 +46,8 @@ public class SpelFormattingProcessor extends TemplateMessageFormatter.Processor 
         super(leftDelimiter, rightDelimiter);
     }
 
+    // #################### process #####################################################
+
     @Override
     public String process(String text, VariableValueMap variableValueMap, Locale locale) {
         try {
@@ -60,6 +62,8 @@ public class SpelFormattingProcessor extends TemplateMessageFormatter.Processor 
         }
     }
 
+    // #################### internal utils ##############################################
+
     /** property accessors */
     private static final PropertyAccessor[] PROPERTY_ACCESSORS = new PropertyAccessor[]{
             new VariableValueMapAccessor(), DataBindingPropertyAccessor.forReadOnlyAccess()
@@ -68,6 +72,7 @@ public class SpelFormattingProcessor extends TemplateMessageFormatter.Processor 
     /** Variable value map accessor. */
     private static class VariableValueMapAccessor implements PropertyAccessor {
 
+        /** specific target classes */
         private static final Class<?>[] SPECIFIC_TARGET_CLASSES = new Class[]{VariableValueMap.class};
 
         @Override

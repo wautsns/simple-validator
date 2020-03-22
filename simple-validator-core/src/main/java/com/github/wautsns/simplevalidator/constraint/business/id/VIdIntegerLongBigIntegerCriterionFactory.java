@@ -31,8 +31,7 @@ import java.util.Map;
 public class VIdIntegerLongBigIntegerCriterionFactory extends AbstractComparableNumberCriterionFactory<VId> {
 
     @Override
-    public boolean appliesTo(ConstrainedNode node, VId constraint) {
-        Type type = node.getType();
+    public boolean appliesTo(Type type, VId constraint) {
         return TypeUtils.isAssignableToAny(type, Long.class, BigInteger.class)
                 || (!constraint.unsigned() && TypeUtils.isAssignableTo(type, Integer.class));
     }

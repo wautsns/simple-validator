@@ -19,7 +19,7 @@ import com.github.wautsns.simplevalidator.model.criterion.basic.TCriteria;
 import com.github.wautsns.simplevalidator.model.criterion.basic.TCriterion;
 import com.github.wautsns.simplevalidator.model.criterion.factory.special.AbstractNonPrimitiveCriterionFactory;
 import com.github.wautsns.simplevalidator.model.node.ConstrainedNode;
-import com.github.wautsns.simplevalidator.util.CriterionUtils;
+import com.github.wautsns.simplevalidator.model.criterion.util.CriterionUtils;
 import com.github.wautsns.simplevalidator.util.common.TypeUtils;
 
 /**
@@ -37,7 +37,7 @@ public class VInDepthNonPrimitiveCriterionFactory extends AbstractNonPrimitiveCr
     // ------------------------- criterion -----------------------------------------
 
     protected TCriterion<?> produce(ConstrainedNode node) {
-        TCriterion<?> criterion = CriterionUtils.forClass(TypeUtils.getClass(node.getType()));
+        TCriterion<?> criterion = CriterionUtils.forType(TypeUtils.getClass(node.getType()));
         return (criterion == TCriterion.TRUTH) ? null : criterion;
     }
 

@@ -15,7 +15,7 @@
  */
 package com.github.wautsns.simplevalidator.springbootstarter.handler.validation;
 
-import com.github.wautsns.simplevalidator.util.ConstraintUtils;
+import com.github.wautsns.simplevalidator.model.constraint.ConstraintMetadata;
 import org.springframework.aop.ClassFilter;
 import org.springframework.aop.MethodMatcher;
 import org.springframework.aop.Pointcut;
@@ -25,6 +25,7 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.beanvalidation.MethodValidationPostProcessor;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Parameter;
@@ -70,7 +71,8 @@ public class SimpleMethodValidationPostProcessor extends AbstractBeanFactoryAwar
                     return Arrays.stream(method.getParameters())
                             .map(Parameter::getDeclaredAnnotations)
                             .flatMap(Arrays::stream)
-                            .anyMatch(ConstraintUtils::isConstraint);
+                            .map(Annotation::annotationType)
+                            .anyMatch(ConstraintMetadata::isConstraintType);
                 }
 
                 @Override

@@ -17,7 +17,7 @@ package com.github.wautsns.simplevalidator.constraint.number.domain;
 
 import com.github.wautsns.simplevalidator.model.criterion.basic.DoubleCriteria;
 import com.github.wautsns.simplevalidator.model.criterion.basic.DoubleCriterion;
-import com.github.wautsns.simplevalidator.model.criterion.factory.primitive.AbstractDoubleCriterionFactory;
+import com.github.wautsns.simplevalidator.model.criterion.factory.primitive.DoubleCriterionFactory;
 import com.github.wautsns.simplevalidator.model.failure.ValidationFailure;
 import com.github.wautsns.simplevalidator.model.node.ConstrainedNode;
 
@@ -27,7 +27,7 @@ import java.util.function.DoublePredicate;
  * @author wautsns
  * @since Mar 11, 2020
  */
-public class VDomainDoubleCriterionFactory extends AbstractDoubleCriterionFactory<VDomain> {
+public class VDomainDoubleCriterionFactory extends DoubleCriterionFactory<VDomain> {
 
     @Override
     public void process(ConstrainedNode node, VDomain constraint, DoubleCriteria wip) {

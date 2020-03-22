@@ -19,6 +19,7 @@ import com.github.wautsns.simplevalidator.model.failure.ValidationFailure;
 import com.github.wautsns.simplevalidator.model.node.ConstrainedNode;
 import com.github.wautsns.simplevalidator.util.common.TypeUtils;
 
+import java.lang.reflect.Type;
 import java.util.Map;
 
 /**
@@ -28,8 +29,8 @@ import java.util.Map;
 public class VSizeMapCriterionFactory implements TCriterionFactory<VSize, Map<?, ?>> {
 
     @Override
-    public boolean appliesTo(ConstrainedNode node, VSize constraint) {
-        return TypeUtils.isAssignableTo(node.getType(), Map.class);
+    public boolean appliesTo(Type type, VSize constraint) {
+        return TypeUtils.isAssignableTo(type, Map.class);
     }
 
     @Override

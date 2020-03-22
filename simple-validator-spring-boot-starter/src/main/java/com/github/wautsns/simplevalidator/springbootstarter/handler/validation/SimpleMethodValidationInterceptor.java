@@ -14,10 +14,9 @@ package com.github.wautsns.simplevalidator.springbootstarter.handler.validation;
 
 import com.github.wautsns.simplevalidator.exception.ValidationException;
 import com.github.wautsns.simplevalidator.model.criterion.basic.Criterion;
-import com.github.wautsns.simplevalidator.model.criterion.processor.NodeCriterionProducer;
+import com.github.wautsns.simplevalidator.model.criterion.util.CriterionUtils;
 import com.github.wautsns.simplevalidator.model.failure.ValidationFailure;
 import com.github.wautsns.simplevalidator.model.node.ConstrainedParameter;
-import com.github.wautsns.simplevalidator.util.CriterionUtils;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 import org.springframework.beans.factory.FactoryBean;
@@ -58,7 +57,7 @@ public class SimpleMethodValidationInterceptor implements MethodInterceptor {
     private Criterion[] initParametersCriterion(Method method) {
         return Arrays.stream(method.getParameters())
                 .map(ConstrainedParameter::new)
-                .map(p -> new NodeCriterionProducer(p).produce())
+                .map(CriterionUtils::produce)
                 .toArray(Criterion[]::new);
     }
 

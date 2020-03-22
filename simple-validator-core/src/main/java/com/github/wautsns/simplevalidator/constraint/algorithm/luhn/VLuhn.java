@@ -2,6 +2,7 @@ package com.github.wautsns.simplevalidator.constraint.algorithm.luhn;
 
 import com.github.wautsns.simplevalidator.constraint.AConstraint;
 import com.github.wautsns.simplevalidator.model.criterion.factory.CriterionFactory;
+import com.github.wautsns.simplevalidator.util.extractor.ValueExtractor;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
@@ -27,12 +28,16 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @AConstraint
 public @interface VLuhn {
 
-    List<CriterionFactory<VLuhn, ?, ?>> CRITERION_FACTORIES = new LinkedList<>(Collections.singletonList(
-            new VLuhnCharSequenceCriterionFactory()
-    ));
-
     String message() default "[`VLuhn`]";
 
     int order() default 0;
+
+    // -------------------- metadata ----------------------------------------------------
+
+    List<CriterionFactory<VLuhn, ?, ?>> CRITERION_FACTORY_LIST = new LinkedList<>(Collections.singletonList(
+            VLuhnCharSequenceCriterionFactory.INSTANCE
+    ));
+
+    List<ValueExtractor> VALUE_EXTRACTOR_LIST = new LinkedList<>();
 
 }

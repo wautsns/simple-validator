@@ -16,8 +16,8 @@
 package com.github.wautsns.simplevalidator;
 
 import com.github.wautsns.simplevalidator.exception.ValidationException;
+import com.github.wautsns.simplevalidator.model.criterion.util.CriterionUtils;
 import com.github.wautsns.simplevalidator.model.failure.ValidationFailure;
-import com.github.wautsns.simplevalidator.util.CriterionUtils;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -29,8 +29,6 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 @SuppressWarnings({"rawtypes", "unchecked"})
 public class Validator {
-
-    // -------------------- test --------------------------------------------------------
 
     /**
      * Test the value.
@@ -52,8 +50,6 @@ public class Validator {
     public static <T> boolean test(Class<? super T> clazz, T value) {
         return (validateGently(clazz, value) == null);
     }
-
-    // -------------------- validate ----------------------------------------------------
 
     /**
      * Validate value rudely.
@@ -102,7 +98,7 @@ public class Validator {
      * @return validation failure, or {@code null} if the value passes the validation
      */
     public static <T> ValidationFailure validateGently(Class<? super T> clazz, T value) {
-        return CriterionUtils.execute(CriterionUtils.forClass(clazz), value);
+        return CriterionUtils.execute(CriterionUtils.forType(clazz), value);
     }
 
 }

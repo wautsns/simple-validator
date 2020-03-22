@@ -16,7 +16,6 @@
 package com.github.wautsns.simplevalidator.model.criterion.factory.typelike;
 
 import com.github.wautsns.simplevalidator.model.criterion.factory.TCriterionFactory;
-import com.github.wautsns.simplevalidator.model.node.ConstrainedNode;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
@@ -35,8 +34,7 @@ public abstract class TypeLikeCriterionFactory<A extends Annotation, U extends T
     private final List<U> utilities = initUtilities();
 
     @Override
-    public boolean appliesTo(ConstrainedNode node, A constraint) {
-        Type type = node.getType();
+    public boolean appliesTo(Type type, A constraint) {
         return utilities.stream().anyMatch(u -> u.appliesTo(type));
     }
 

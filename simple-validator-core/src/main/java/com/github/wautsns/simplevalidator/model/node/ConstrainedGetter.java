@@ -25,7 +25,7 @@ import lombok.RequiredArgsConstructor;
 import java.lang.reflect.Method;
 
 /**
- * Constrained getter.
+ * The constrained getter.
  *
  * @author wautsns
  * @since Mar 19, 2020
@@ -33,14 +33,17 @@ import java.lang.reflect.Method;
 @Getter
 public class ConstrainedGetter extends ConstrainedTypeContainer {
 
+    /** declaring class */
     private final ConstrainedClass declaringClass;
+    /** original getter */
     private final Method origin;
+    /** criterion wrapper */
     private final CriterionWrapper criterionWrapper;
 
     /**
-     * Get the declaring class node of the getter.
+     * The method is equal to {@link #getDeclaringClass()}.
      *
-     * @return the declaring class node of the getter
+     * @return declaring class
      * @see #getDeclaringClass()
      */
     @Override
@@ -50,6 +53,12 @@ public class ConstrainedGetter extends ConstrainedTypeContainer {
 
     // -------------------- constructor -------------------------------------------------
 
+    /**
+     * Construct a constrained getter.
+     *
+     * @param declaringClass declaring class
+     * @param getter getter
+     */
     ConstrainedGetter(ConstrainedClass declaringClass, Method getter) {
         super(declaringClass, generateName(getter), getter.getAnnotatedReturnType());
         this.declaringClass = declaringClass;
@@ -72,9 +81,11 @@ public class ConstrainedGetter extends ConstrainedTypeContainer {
 
     // -------------------- internal utils -----------------------------------------------
 
+    /** criterion wrapper */
     @RequiredArgsConstructor
     private static class CriterionWrapper extends Criterion.Wrapper {
 
+        /** accessible getter */
         private final Method getter;
 
         @Override

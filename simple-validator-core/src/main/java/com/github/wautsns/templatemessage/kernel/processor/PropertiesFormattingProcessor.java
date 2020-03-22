@@ -49,26 +49,11 @@ public class PropertiesFormattingProcessor extends TemplateMessageFormatter.Proc
     /** serialVersionUID */
     private static final long serialVersionUID = -5669893817925948919L;
 
-    /** locale properties map */
-    private final Map<Locale, Properties> data = new ConcurrentHashMap<>();
+    /** locale -> properties map */
+    private final Map<Locale, Properties> localePropertiesMap = new ConcurrentHashMap<>();
 
     public PropertiesFormattingProcessor(String leftDelimiter, String rightDelimiter) {
         super(leftDelimiter, rightDelimiter);
-    }
-
-    @Override
-    public String process(String text, VariableValueMap variableValueMap, Locale locale) {
-        Properties properties = data.get(locale);
-        if (properties != null) { return properties.getProperty(text); }
-        if (!locale.getVariant().isEmpty()) {
-            properties = data.get(new Locale(locale.getLanguage(), locale.getCountry()));
-            if (properties == null) { properties = data.get(new Locale(locale.getLanguage())); }
-        } else if (!locale.getCountry().isEmpty()) {
-            properties = data.get(new Locale(locale.getLanguage()));
-        }
-        if (properties == null) { return null; }
-        data.put(locale, properties);
-        return properties.getProperty(text);
     }
 
     /**
@@ -79,7 +64,7 @@ public class PropertiesFormattingProcessor extends TemplateMessageFormatter.Proc
      * @return self reference
      */
     public PropertiesFormattingProcessor load(Locale locale, Properties properties) {
-        data.computeIfAbsent(locale, i -> new Properties()).putAll(properties);
+        localePropertiesMap.computeIfAbsent(locale, i -> new Properties()).putAll(properties);
         return this;
     }
 
@@ -99,12 +84,12 @@ public class PropertiesFormattingProcessor extends TemplateMessageFormatter.Proc
     }
 
     /**
-     * Load properties.
+     * Load properties from the specific folder.
      *
      * <p>eg. load("/i18n", "messages") -> /i18n/messages_zh.properties; /i18n/messages_en.properties
      *
      * @param folderPath folder path
-     * @param baseName base name of properties
+     * @param baseName base name of properties file
      * @return self reference
      */
     @SneakyThrows
@@ -121,10 +106,18 @@ public class PropertiesFormattingProcessor extends TemplateMessageFormatter.Proc
                 JarURLConnection jarURLConnection = (JarURLConnection) url.openConnection();
                 return load(jarURLConnection.getJarFile(), folderPath, baseName);
             default:
-                throw new IllegalStateException("Unsupported protocol: " + url.getProtocol());
+                throw new IllegalStateException("Cannot read properties from " + url);
         }
     }
 
+    /**
+     * Load properties from jar file.
+     *
+     * @param jarFile jar file
+     * @param folderPath folder path
+     * @param baseName base name of properties file
+     * @return self reference
+     */
     @SneakyThrows
     public PropertiesFormattingProcessor load(JarFile jarFile, String folderPath, String baseName) {
         Enumeration<JarEntry> entries = jarFile.entries();
@@ -137,7 +130,7 @@ public class PropertiesFormattingProcessor extends TemplateMessageFormatter.Proc
                 int lastIndexOfSlash = name.lastIndexOf('/');
                 if (lastIndexOfSlash >= prefix.length()) { continue; }
                 String fileName = name.substring(lastIndexOfSlash + 1);
-                Locale locale = getLocaleByFileName(fileName, baseName);
+                Locale locale = getLocaleFromFileName(fileName, baseName);
                 @Cleanup InputStream inputStream = classLoader.getResourceAsStream(name);
                 load(locale, inputStream);
             }
@@ -145,6 +138,13 @@ public class PropertiesFormattingProcessor extends TemplateMessageFormatter.Proc
         return this;
     }
 
+    /**
+     * Load properties from the specific directory.
+     *
+     * @param directory directory
+     * @param baseName base name of properties file
+     * @return self reference
+     */
     @SneakyThrows
     public PropertiesFormattingProcessor load(File directory, String baseName) {
         File[] files = directory.listFiles((f, n) -> n.startsWith(baseName) && isEndsWithDotProperties(n));
@@ -161,11 +161,43 @@ public class PropertiesFormattingProcessor extends TemplateMessageFormatter.Proc
         return this;
     }
 
+    // #################### process #####################################################
+
+    @Override
+    public String process(String text, VariableValueMap variableValueMap, Locale locale) {
+        Properties properties = localePropertiesMap.get(locale);
+        if (properties != null) { return properties.getProperty(text); }
+        if (!locale.getVariant().isEmpty()) {
+            properties = localePropertiesMap.get(new Locale(locale.getLanguage(), locale.getCountry()));
+            if (properties == null) { properties = localePropertiesMap.get(new Locale(locale.getLanguage())); }
+        } else if (!locale.getCountry().isEmpty()) {
+            properties = localePropertiesMap.get(new Locale(locale.getLanguage()));
+        }
+        if (properties == null) { return null; }
+        localePropertiesMap.put(locale, properties);
+        return properties.getProperty(text);
+    }
+
+    // #################### internal utils ##############################################
+
+    /**
+     * Whether the file name is ends with {@code ".properties"}
+     *
+     * @param fileName file name
+     * @return {@code true} if the file name is ends with {@code ".properties"}, otherwise {@code false}
+     */
     private static boolean isEndsWithDotProperties(String fileName) {
         return fileName.endsWith(".properties");
     }
 
-    private static Locale getLocaleByFileName(String fileName, String baseName) {
+    /**
+     * Get locale from file name like 'abc_zh.properties'
+     *
+     * @param fileName file name
+     * @param baseName base name of properties file
+     * @return locale
+     */
+    private static Locale getLocaleFromFileName(String fileName, String baseName) {
         String langTag = fileName.substring(baseName.length() + 1, fileName.length() - ".properties".length());
         return Locale.forLanguageTag(langTag);
     }

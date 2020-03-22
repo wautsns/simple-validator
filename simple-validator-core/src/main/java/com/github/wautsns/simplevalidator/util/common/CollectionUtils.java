@@ -30,19 +30,6 @@ import java.util.Map;
 @UtilityClass
 public class CollectionUtils {
 
-    /** class: Collections$UnmodifiableCollection */
-    private static final Class<?> CLASS_UNMODIFIABLE_COLLECTION = ReflectionUtils.requireClass(
-            "java.util.Collections$UnmodifiableCollection");
-    /** class: Collections$SingletonList */
-    private static final Class<?> CLASS_SINGLETON_LIST = ReflectionUtils.requireClass(
-            "java.util.Collections$SingletonList");
-    /** class: Collections$UnmodifiableMap */
-    private static final Class<?> CLASS_UNMODIFIABLE_MAP = ReflectionUtils.requireClass(
-            "java.util.Collections$UnmodifiableMap");
-    /** class: Collections$SingletonMap */
-    private static final Class<?> CLASS_SINGLETON_MAP = ReflectionUtils.requireClass(
-            "java.util.Collections$SingletonMap");
-
     /**
      * Wrap the list into unmodifiable list.
      *
@@ -95,9 +82,19 @@ public class CollectionUtils {
         }
     }
 
-    public static <K, V> V removeAndGet(Map<K, V> map, K key, V defaultValue) {
-        V value = map.remove(key);
-        return (value != null) ? value : defaultValue;
-    }
+    // #################### internal utils ###############################################
+
+    /** class: Collections$UnmodifiableCollection */
+    private static final Class<?> CLASS_UNMODIFIABLE_COLLECTION = ReflectionUtils.requireClass(
+            "java.util.Collections$UnmodifiableCollection");
+    /** class: Collections$SingletonList */
+    private static final Class<?> CLASS_SINGLETON_LIST = ReflectionUtils.requireClass(
+            "java.util.Collections$SingletonList");
+    /** class: Collections$UnmodifiableMap */
+    private static final Class<?> CLASS_UNMODIFIABLE_MAP = ReflectionUtils.requireClass(
+            "java.util.Collections$UnmodifiableMap");
+    /** class: Collections$SingletonMap */
+    private static final Class<?> CLASS_SINGLETON_MAP = ReflectionUtils.requireClass(
+            "java.util.Collections$SingletonMap");
 
 }

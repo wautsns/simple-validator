@@ -16,7 +16,7 @@
 package com.github.wautsns.templatemessage.formatter.multival;
 
 import com.github.wautsns.templatemessage.formatter.Formatter;
-import com.github.wautsns.templatemessage.formatter.ObjectFormatter;
+import com.github.wautsns.templatemessage.formatter.common.ObjectFormatter;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NonNull;
@@ -61,23 +61,6 @@ public class IterableFormatter<E> implements Formatter<Iterable<E>> {
     /** formatter for iterable element, default is {@link ObjectFormatter#DEFAULT} */
     private @NonNull Formatter<? super E> elementFormatter = ObjectFormatter.DEFAULT;
 
-    @Override
-    public String format(Iterable<E> value, Locale locale) {
-        if (value == null) { return stringFormatOfNull; }
-        Iterator<E> iterator = value.iterator();
-        if (!iterator.hasNext()) { return stringFormatOfEmptyIterable; }
-        StringBuilder result = new StringBuilder();
-        result.append(prefix);
-        do {
-            String element = elementFormatter.format(iterator.next(), locale);
-            result.append(elementPrefix).append(element).append(elementSuffix);
-            result.append(elementDelimiter);
-        } while (iterator.hasNext());
-        result.delete(result.length() - elementDelimiter.length(), result.length());
-        result.append(suffix);
-        return result.toString();
-    }
-
     /**
      * Set prefix and suffix.
      *
@@ -102,6 +85,23 @@ public class IterableFormatter<E> implements Formatter<Iterable<E>> {
         setElementPrefix(prefix);
         setElementSuffix(suffix);
         return this;
+    }
+
+    @Override
+    public String format(Iterable<E> value, Locale locale) {
+        if (value == null) { return stringFormatOfNull; }
+        Iterator<E> iterator = value.iterator();
+        if (!iterator.hasNext()) { return stringFormatOfEmptyIterable; }
+        StringBuilder result = new StringBuilder();
+        result.append(prefix);
+        do {
+            String element = elementFormatter.format(iterator.next(), locale);
+            result.append(elementPrefix).append(element).append(elementSuffix);
+            result.append(elementDelimiter);
+        } while (iterator.hasNext());
+        result.delete(result.length() - elementDelimiter.length(), result.length());
+        result.append(suffix);
+        return result.toString();
     }
 
 }

@@ -12,7 +12,7 @@
  */
 package com.github.wautsns.simplevalidator.constraint.number.domain;
 
-import com.github.wautsns.simplevalidator.util.common.NumericTextUtils;
+import com.github.wautsns.simplevalidator.util.common.NumericTextParser;
 import com.github.wautsns.simplevalidator.util.function.BytePredicate;
 import com.github.wautsns.simplevalidator.util.function.FloatPredicate;
 import com.github.wautsns.simplevalidator.util.function.ShortPredicate;
@@ -203,7 +203,7 @@ public class DomainUtils {
         public <T extends Number & Comparable<T>> Predicate<T> forComparableNumber(
                 Class<T> clazz) {
             List<T> refs = Arrays.stream(data)
-                    .map(text -> NumericTextUtils.parse(text, clazz))
+                    .map(text -> NumericTextParser.parse(text, clazz))
                     .sorted()
                     .collect(Collectors.toCollection(LinkedList::new));
             return value -> (Collections.binarySearch(refs, value) >= 0);
@@ -298,7 +298,7 @@ public class DomainUtils {
         @Override
         public <T extends Number & Comparable<T>> Predicate<T> forComparableNumber(
                 Class<T> clazz) {
-            T ref = NumericTextUtils.parse(data, clazz);
+            T ref = NumericTextParser.parse(data, clazz);
             boolean inclusive = this.inclusive;
             boolean left = this.left;
             return value -> {

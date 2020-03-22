@@ -27,7 +27,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
- * Constrained parameter.
+ * The constrained parameter.
  *
  * @author wautsns
  * @since Mar 19, 2020
@@ -35,10 +35,11 @@ import java.util.stream.Collectors;
 @Getter
 public class ConstrainedParameter extends ConstrainedTypeContainer {
 
+    /** original parameter */
     private final Parameter origin;
 
     /**
-     * The {@code ConstrainedParameter} is <strong>root</strong> node.
+     * The {@code ConstrainedParameter} is <strong>root</strong>.
      *
      * @return {@code null}
      */
@@ -48,7 +49,7 @@ public class ConstrainedParameter extends ConstrainedTypeContainer {
     }
 
     /**
-     * The {@code ConstrainedParameter} is <strong>root</strong> node.
+     * The {@code ConstrainedParameter} is <strong>root</strong>.
      *
      * @return {@code null}
      */
@@ -59,6 +60,11 @@ public class ConstrainedParameter extends ConstrainedTypeContainer {
 
     // -------------------- constructor -------------------------------------------------
 
+    /**
+     * Construct a constrained parameter.
+     *
+     * @param parameter parameter
+     */
     public ConstrainedParameter(Parameter parameter) {
         super(parameterNameGenerator.apply(parameter), parameter.getAnnotatedType());
         this.origin = parameter;
@@ -66,7 +72,11 @@ public class ConstrainedParameter extends ConstrainedTypeContainer {
 
     // -------------------- utils -------------------------------------------------------
 
-    /** default parameter name generator: parameter -> TargetClass#targetMethod(String,int)@age */
+    /**
+     * parameter name generator
+     *
+     * <p>default: parameter(age) -> {@code "TargetClassSimpleName#targetMethodName(String,int)@age"}
+     */
     @Setter
     private static @NonNull Function<Parameter, String> parameterNameGenerator = parameter -> {
         Executable executable = parameter.getDeclaringExecutable();

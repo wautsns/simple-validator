@@ -17,7 +17,7 @@ package com.github.wautsns.simplevalidator.constraint.number.domain;
 
 import com.github.wautsns.simplevalidator.model.criterion.basic.LongCriteria;
 import com.github.wautsns.simplevalidator.model.criterion.basic.LongCriterion;
-import com.github.wautsns.simplevalidator.model.criterion.factory.primitive.AbstractLongCriterionFactory;
+import com.github.wautsns.simplevalidator.model.criterion.factory.primitive.LongCriterionFactory;
 import com.github.wautsns.simplevalidator.model.failure.ValidationFailure;
 import com.github.wautsns.simplevalidator.model.node.ConstrainedNode;
 
@@ -27,7 +27,7 @@ import java.util.function.LongPredicate;
  * @author wautsns
  * @since Mar 11, 2020
  */
-public class VDomainLongCriterionFactory extends AbstractLongCriterionFactory<VDomain> {
+public class VDomainLongCriterionFactory extends LongCriterionFactory<VDomain> {
 
     @Override
     public void process(ConstrainedNode node, VDomain constraint, LongCriteria wip) {

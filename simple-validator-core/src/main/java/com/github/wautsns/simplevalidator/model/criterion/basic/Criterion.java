@@ -42,7 +42,7 @@ public interface Criterion {
          * Wrap the criterion.
          *
          * @param criterion criterion
-         * @return new criterion
+         * @return criterion
          */
         public final Criterion wrap(Criterion criterion) {
             if (criterion instanceof TCriterion) { return wrap((TCriterion<?>) criterion); }
@@ -65,7 +65,7 @@ public interface Criterion {
          *
          * @param criterion criterion
          * @param <T> type of value to be validated of criterion
-         * @return new criterion
+         * @return TCriterion
          */
         protected <T> TCriterion<?> wrap(TCriterion<T> criterion) {
             throw new UnsupportedOperationException();
@@ -76,7 +76,7 @@ public interface Criterion {
          *
          * @param criterion primitive criterion
          * @param <W> type of wrapped value
-         * @return new TCriterion, or {@code null} if not supported
+         * @return TCriterion, or {@code null} if not supported
          */
         protected <W> TCriterion<?> wrap(PrimitiveCriterion<W> criterion) {
             return null;
@@ -86,7 +86,7 @@ public interface Criterion {
          * Wrap the criterion.
          *
          * @param criterion criterion
-         * @return new criterion
+         * @return criterion
          */
         protected Criterion wrap(BooleanCriterion criterion) {
             throw new UnsupportedOperationException();
@@ -96,7 +96,7 @@ public interface Criterion {
          * Wrap the criterion.
          *
          * @param criterion criterion
-         * @return new criterion
+         * @return criterion
          */
         protected Criterion wrap(CharCriterion criterion) {
             throw new UnsupportedOperationException();
@@ -106,7 +106,7 @@ public interface Criterion {
          * Wrap the criterion.
          *
          * @param criterion criterion
-         * @return new criterion
+         * @return criterion
          */
         protected Criterion wrap(ByteCriterion criterion) {
             throw new UnsupportedOperationException();
@@ -116,7 +116,7 @@ public interface Criterion {
          * Wrap the criterion.
          *
          * @param criterion criterion
-         * @return new criterion
+         * @return criterion
          */
         protected Criterion wrap(ShortCriterion criterion) {
             throw new UnsupportedOperationException();
@@ -126,7 +126,7 @@ public interface Criterion {
          * Wrap the criterion.
          *
          * @param criterion criterion
-         * @return new criterion
+         * @return criterion
          */
         protected Criterion wrap(IntCriterion criterion) {
             throw new UnsupportedOperationException();
@@ -136,7 +136,7 @@ public interface Criterion {
          * Wrap the criterion.
          *
          * @param criterion criterion
-         * @return new criterion
+         * @return criterion
          */
         protected Criterion wrap(LongCriterion criterion) {
             throw new UnsupportedOperationException();
@@ -146,7 +146,7 @@ public interface Criterion {
          * Wrap the criterion.
          *
          * @param criterion criterion
-         * @return new criterion
+         * @return criterion
          */
         protected Criterion wrap(FloatCriterion criterion) {
             throw new UnsupportedOperationException();
@@ -156,7 +156,7 @@ public interface Criterion {
          * Wrap the criterion.
          *
          * @param criterion criterion
-         * @return new criterion
+         * @return criterion
          */
         protected Criterion wrap(DoubleCriterion criterion) {
             throw new UnsupportedOperationException();

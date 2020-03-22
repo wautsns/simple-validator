@@ -16,6 +16,7 @@
 package com.github.wautsns.simplevalidator.model.node;
 
 import com.github.wautsns.simplevalidator.model.criterion.basic.Criterion;
+import com.github.wautsns.simplevalidator.util.common.CollectionUtils;
 import com.github.wautsns.simplevalidator.util.common.ReflectionUtils;
 import lombok.Getter;
 
@@ -28,7 +29,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 /**
- * Constrained class.
+ * The constrained class.
  *
  * @author wautsns
  * @since Mar 19, 2020
@@ -36,11 +37,13 @@ import java.util.stream.Collectors;
 @Getter
 public class ConstrainedClass extends ConstrainedNode {
 
-    private final List<ConstrainedField> fields;
-    private final List<ConstrainedGetter> getters;
+    /** field list */
+    private final List<ConstrainedField> fieldList;
+    /** getter list */
+    private final List<ConstrainedGetter> getterList;
 
     /**
-     * The {@code ConstrainedClass} is <strong>root</strong> node.
+     * The {@code ConstrainedClass} is <strong>root</strong>.
      *
      * @return {@code null}
      */
@@ -50,53 +53,52 @@ public class ConstrainedClass extends ConstrainedNode {
     }
 
     /**
-     * Get field node.
+     * Get field.
      *
-     * @param name name
-     * @return field node, or {@code null} if no field is named the specific name
+     * @param name field name
+     * @return field, or {@code null} if there is no field named the specified name
      * @see ConstrainedField#generateName(Field)
      */
     public ConstrainedField getField(String name) {
-        for (ConstrainedField field : fields) {
-            if (field.getLocation().getSimpleName().equals(name)) {
-                return field;
-            }
-        }
-        return null;
+        return fieldList.stream()
+                .filter(field -> field.getLocation().getSimpleName().equals(name))
+                .findFirst()
+                .orElse(null);
     }
 
     /**
-     * Get getter node.
+     * Get getter.
      *
-     * @param name name
-     * @return getter node, or {@code null} if no getter is named the specific name
+     * @param name getter name
+     * @return getter, or {@code null} if there is no getter named the specified name
      * @see ConstrainedGetter#generateName(Method)
      */
     public ConstrainedGetter getGetter(String name) {
-        for (ConstrainedGetter getter : getters) {
-            if (getter.getLocation().getSimpleName().equals(name)) {
-                return getter;
-            }
-        }
-        return null;
+        return getterList.stream()
+                .filter(getter -> getter.getLocation().getSimpleName().equals(name))
+                .findFirst()
+                .orElse(null);
     }
 
     @Override
-    public List<? extends ConstrainedNode> getChildren() {
-        if (getters.isEmpty()) {
-            return fields;
-        } else if (fields.isEmpty()) {
-            return getters;
-        } else {
-            LinkedList<ConstrainedNode> children = new LinkedList<>();
-            children.addAll(fields);
-            children.addAll(getters);
-            return children;
+    public List<? extends ConstrainedNode> getChildList() {
+        List<? extends ConstrainedNode> superChildList = super.getChildList();
+        if (superChildList.isEmpty()) {
+            if (getterList.isEmpty()) {
+                return fieldList;
+            } else if (fieldList.isEmpty()) {
+                return getterList;
+            }
         }
+        List<ConstrainedNode> childList = new LinkedList<>();
+        childList.addAll(superChildList);
+        childList.addAll(fieldList);
+        childList.addAll(getterList);
+        return CollectionUtils.unmodifiableList(childList);
     }
 
     /**
-     * The {@code ConstrainedClass} is <strong>root</strong> node.
+     * The {@code ConstrainedClass} is <strong>root</strong>.
      *
      * @return {@code null}
      */
@@ -105,35 +107,40 @@ public class ConstrainedClass extends ConstrainedNode {
         return null;
     }
 
-    // -------------------- instance ----------------------------------------------------
+    // #################### instance ####################################################
 
-    /** instances of constrained class */
-    private static final Map<Class<?>, ConstrainedClass> CACHE = new ConcurrentHashMap<>(64);
+    /** type -> constrained class map */
+    private static final Map<Class<?>, ConstrainedClass> INSTANCE_MAP = new ConcurrentHashMap<>(64);
 
     /**
-     * Get {@code ConstrainedNode} instance for the class.
+     * Get {@code ConstrainedNode} instance for the specific class.
      *
      * @param clazz class
-     * @return {@code ConstrainedNode} instance for the clas
+     * @return {@code ConstrainedNode} instance for the specific class
      */
     public static ConstrainedClass getInstance(Class<?> clazz) {
-        return CACHE.computeIfAbsent(clazz, ConstrainedClass::new);
+        return INSTANCE_MAP.computeIfAbsent(clazz, ConstrainedClass::new);
     }
 
     // -------------------- constructor -------------------------------------------------
 
+    /**
+     * Construct a constrained class.
+     *
+     * @param clazz class
+     */
     private ConstrainedClass(Class<?> clazz) {
         super(clazz.getName(), clazz, clazz.getDeclaredAnnotations());
-        this.fields = initFields(this);
-        this.getters = initGetters(this);
+        this.fieldList = initFields(this);
+        this.getterList = initGetters(this);
     }
 
     // -------------------- internal utils -----------------------------------------------
 
     /**
-     * Initialize field nodes.
+     * Initialize fields.
      *
-     * @param clazz declaring class of the field nodes
+     * @param clazz declaring class of fields
      * @return constrained field nodes
      */
     private static List<ConstrainedField> initFields(ConstrainedClass clazz) {
@@ -145,9 +152,9 @@ public class ConstrainedClass extends ConstrainedNode {
     }
 
     /**
-     * Initialize getter nodes.
+     * Initialize getters.
      *
-     * @param clazz declaring class of the getter nodes
+     * @param clazz declaring class of getters
      * @return constrained getter nodes
      */
     private static List<ConstrainedGetter> initGetters(ConstrainedClass clazz) {
