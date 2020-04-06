@@ -36,10 +36,26 @@ import java.util.stream.StreamSupport;
 public class TypeUtils {
 
     /**
-     * Get class of the type.
+     * Get class of the specified type.
+     *
+     * <pre>
+     * // class
+     * Integer.class &lt;== Integer
+     * Integer[].class &lt;== Integer[]
+     * // generic array type
+     * List[].class &lt;== List&lt;String&gt;[]
+     * // parameterized type
+     * HashMap.class &lt;== HashMap&lt;String, Object&gt;
+     * // type variable
+     * Number.class &lt;== T extends Number & Comparable&lt;T&gt;
+     * // wildcard type
+     * Number.class &lt;== ? extends Number
+     * Number.class &lt;== ? super Number
+     * Number.class &lt;== ? super T, T extends Number & Comparable&lt;T&gt;
+     * </pre>
      *
      * @param type type
-     * @return class of the type
+     * @return class of the specified type
      */
     public static Class<?> getClass(Type type) {
         if (type instanceof Class) {
@@ -68,40 +84,40 @@ public class TypeUtils {
     }
 
     /**
-     * Whether the type is primitive.
+     * Whether the specified type is primitive.
      *
      * @param type type
-     * @return {@code true} if the type is primitive, otherwise {@code false}.
+     * @return {@code true} if the specified type is primitive, otherwise {@code false}
      */
     public static boolean isPrimitive(Type type) {
         return (type instanceof Class && ((Class<?>) type).isPrimitive());
     }
 
     /**
-     * Whether the type is array.
+     * Whether the specified type is array.
      *
      * @param type type
-     * @return {@code true} if the type is array, otherwise {@code false}.
+     * @return {@code true} if the specified type is array, otherwise {@code false}
      */
     public static boolean isArray(Type type) {
         return (getComponentType(type) != null);
     }
 
     /**
-     * Whether the type is enum.
+     * Whether the specified type is enum.
      *
      * @param type type
-     * @return {@code true} if the type is enum, otherwise {@code false}.
+     * @return {@code true} if the specified type is enum, otherwise {@code false}
      */
     public static boolean isEnum(Type type) {
         return getClass(type).isEnum();
     }
 
     /**
-     * Get component type of the type.
+     * Get component type of the specified type.
      *
      * @param type type
-     * @return component type of the type, or {@code null} if the type is not array.
+     * @return component type of the specified type, or {@code null} if the specified type is not array
      */
     public static Type getComponentType(Type type) {
         if (type instanceof Class) {
@@ -113,12 +129,14 @@ public class TypeUtils {
         }
     }
 
+    // #################### is assignable to ############################################
+
     /**
-     * Whether the type is assignable to the class.
+     * Whether the specified type is assignable to the specified class.
      *
      * @param type type
      * @param clazz class
-     * @return {@code true} if the type is assignable to the class, otherwise {@code false}
+     * @return {@code true} if the specified type is assignable to the specified class, otherwise {@code false}
      */
     public static boolean isAssignableTo(Type type, Class<?> clazz) {
         if (type instanceof Class) {
@@ -145,77 +163,179 @@ public class TypeUtils {
     }
 
     /**
-     * Whether the type is assignable to any of the given classes.
+     * Whether the specified type is assignable to any of the specified classes.
      *
      * @param type type
      * @param classes classes
-     * @return {@code true} if the type is assignable to any of the given classes, otherwise {@code false}
+     * @return {@code true} if the specified type is assignable to any of the specified classes, otherwise {@code false}
      */
     public static boolean isAssignableToAny(Type type, Class<?>... classes) {
         return Arrays.stream(classes).anyMatch(clazz -> isAssignableTo(type, clazz));
     }
 
     /**
-     * Whether the type is assignable to all given classes.
+     * Whether the specified type is assignable to all specified classes.
      *
      * @param type type
      * @param classes classes
-     * @return {@code true} if the type is assignable to all given classes, otherwise {@code false}
+     * @return {@code true} if the specified type is assignable to all specified classes, otherwise {@code false}
      */
     public static boolean isAssignableToAll(Type type, Class<?>... classes) {
         return Arrays.stream(classes).allMatch(clazz -> isAssignableTo(type, clazz));
     }
 
     /**
-     * Whether the type is assignable to any of the given classes.
+     * Whether the specified type is assignable to any of the specified classes.
      *
      * @param type type
      * @param classes classes
-     * @return {@code true} if the type is assignable to any of the given classes, otherwise {@code false}
+     * @return {@code true} if the specified type is assignable to any of the specified classes, otherwise {@code false}
      */
     public static boolean isAssignableToAny(Type type, Iterable<Class<?>> classes) {
         return StreamSupport.stream(classes.spliterator(), false).anyMatch(clazz -> isAssignableTo(type, clazz));
     }
 
     /**
-     * Whether the type is assignable to all given classes.
+     * Whether the specified type is assignable to all specified classes.
      *
      * @param type type
      * @param classes classes
-     * @return {@code true} if the type is assignable to all given classes, otherwise {@code false}
+     * @return {@code true} if the specified type is assignable to all specified classes, otherwise {@code false}
      */
     public static boolean isAssignableToAll(Type type, Iterable<Class<?>> classes) {
         return StreamSupport.stream(classes.spliterator(), false).allMatch(clazz -> isAssignableTo(type, clazz));
     }
 
-    public static int getTypeParameterIndex(Class<?> clazz, Class<?> targetClass, int targetTypeParameterIndex) {
-        if (!targetClass.isAssignableFrom(clazz)) {
+    // #################### type parameter ##############################################
+
+    /**
+     * Get type parameter index corresponding to the target type parameter index.
+     *
+     * <pre>
+     * // example A:
+     * public class MyMapA&lt;K, V&gt; extends HashMap&lt;K, V&gt; {}
+     * -1 &lt;== getTypeParameterIndex(MyMap.class, LinkedList.class, 0);
+     * 0 &lt;== getTypeParameterIndex(MyMap.class, Map.class, 0);
+     * 1 &lt;== getTypeParameterIndex(MyMap.class, Map.class, 1);
+     * // example B:
+     * public class MyMapB&lt;V&gt; extends HashMap&lt;String, V&gt; {}
+     * -1 &lt;== getTypeParameterIndex(MyMap.class, Map.class, 0);
+     * 0 &lt;== getTypeParameterIndex(MyMap.class, Map.class, 1);
+     * 0 &lt;== getTypeParameterIndex(MyMap.class, HashMap.class, 1);
+     * </pre>
+     *
+     * @param type type
+     * @param targetType target type
+     * @param targetTypeParameterIndex target type parameter index
+     * @return type parameter index, or {@code -1} if there is no correspondence
+     */
+    public static int getTypeParameterIndex(Class<?> type, Class<?> targetType, int targetTypeParameterIndex) {
+        if (!targetType.isAssignableFrom(type)) {
             return -1;
-        } else if (targetClass.isInterface()) {
-            return getTypeParameterIndexForInterface(clazz, targetClass, targetTypeParameterIndex);
+        } else if (targetType.isInterface()) {
+            return getTypeParameterIndexForInterface(type, targetType, targetTypeParameterIndex);
         } else {
-            return getTypeParameterIndexForSuperclass(clazz, targetClass, targetTypeParameterIndex);
+            return getTypeParameterIndexForSuperclass(type, targetType, targetTypeParameterIndex);
         }
     }
 
-    private static int getTypeParameterIndexForSuperclass(
-            Class<?> clazz, Class<?> targetClass, int targetTypeParameterIndex) {
-        int typeParametersLength = clazz.getTypeParameters().length;
+    /**
+     * Get type parameter index corresponding to the target interface parameter index.
+     *
+     * <p>The type must be assignable to target type.
+     *
+     * @param type type
+     * @param targetType target interface
+     * @param targetTypeParameterIndex target type parameter index
+     * @return type parameter index, or {@code -1} if there is no correspondence
+     */
+    private static int getTypeParameterIndexForInterface(
+            Class<?> type, Class<?> targetType, int targetTypeParameterIndex) {
+        int typeParametersLength = type.getTypeParameters().length;
         for (int typeParameterIndex = 0; typeParameterIndex < typeParametersLength; typeParameterIndex++) {
-            if (checkTypeParameterForSuperclass(clazz, typeParameterIndex, targetClass, targetTypeParameterIndex)) {
+            if (checkTypeParameterIndexForInterface(type, typeParameterIndex, targetType, targetTypeParameterIndex)) {
                 return typeParameterIndex;
             }
         }
         return -1;
     }
 
-    private static boolean checkTypeParameterForSuperclass(
-            Class<?> clazz, int typeParameterIndex, Class<?> targetClass, int targetTypeParameterIndex) {
-        if (clazz == targetClass) { return typeParameterIndex == targetTypeParameterIndex; }
-        TypeVariable<?>[] typeParameters = clazz.getTypeParameters();
+    /**
+     * Get type parameter index corresponding to the target interface parameter index.
+     *
+     * <p>The type must be assignable to target type.
+     *
+     * @param type type
+     * @param targetType target superclass
+     * @param targetTypeParameterIndex target type parameter index
+     * @return type parameter index, or {@code -1} if there is no correspondence
+     */
+    private static int getTypeParameterIndexForSuperclass(
+            Class<?> type, Class<?> targetType, int targetTypeParameterIndex) {
+        int typeParametersLength = type.getTypeParameters().length;
+        for (int typeParameterIndex = 0; typeParameterIndex < typeParametersLength; typeParameterIndex++) {
+            if (checkTypeParameterForSuperclass(type, typeParameterIndex, targetType, targetTypeParameterIndex)) {
+                return typeParameterIndex;
+            }
+        }
+        return -1;
+    }
+
+    /**
+     * Check the specified type parameter index.
+     *
+     * <p>The type must be assignable to target type.
+     *
+     * @param type type
+     * @param typeParameterIndex type parameter index
+     * @param targetType target interface
+     * @param targetTypeParameterIndex target type parameter index
+     * @return type parameter index, or {@code -1} if there is no correspondence
+     */
+    private static boolean checkTypeParameterIndexForInterface(
+            Class<?> type, int typeParameterIndex, Class<?> targetType, int targetTypeParameterIndex) {
+        if (type == targetType) { return typeParameterIndex == targetTypeParameterIndex; }
+        TypeVariable<?>[] typeParameters = type.getTypeParameters();
         if (typeParameters.length <= typeParameterIndex) { return false; }
         TypeVariable<?> typeParameter = typeParameters[typeParameterIndex];
-        Type genericSuperclass = clazz.getGenericSuperclass();
+        for (Type genericInterface : type.getGenericInterfaces()) {
+            if (!(genericInterface instanceof ParameterizedType)) { return false; }
+            ParameterizedType parameterizedInterface = (ParameterizedType) genericInterface;
+            Class<?> interfaceClass = (Class<?>) parameterizedInterface.getRawType();
+            if (!targetType.isAssignableFrom(interfaceClass)) { continue; }
+            Type[] actualTypeArguments = parameterizedInterface.getActualTypeArguments();
+            for (int i = 0; i < actualTypeArguments.length; i++) {
+                Type actualTypeArgument = actualTypeArguments[i];
+                if (actualTypeArgument == typeParameter
+                        && checkTypeParameterIndexForInterface(
+                        interfaceClass, i, targetType, targetTypeParameterIndex)) {
+                    return true;
+                }
+            }
+        }
+        Class<?> superclass = type.getSuperclass();
+        int index = getTypeParameterIndexForInterface(superclass, targetType, targetTypeParameterIndex);
+        return (index != -1) && checkTypeParameterForSuperclass(type, typeParameterIndex, superclass, index);
+    }
+
+    /**
+     * Check the specified type parameter index.
+     *
+     * <p>The type must be assignable to target type.
+     *
+     * @param type type
+     * @param typeParameterIndex type parameter index
+     * @param targetType target interface
+     * @param targetTypeParameterIndex target type parameter index
+     * @return type parameter index, or {@code -1} if there is no correspondence
+     */
+    private static boolean checkTypeParameterForSuperclass(
+            Class<?> type, int typeParameterIndex, Class<?> targetType, int targetTypeParameterIndex) {
+        if (type == targetType) { return typeParameterIndex == targetTypeParameterIndex; }
+        TypeVariable<?>[] typeParameters = type.getTypeParameters();
+        if (typeParameters.length <= typeParameterIndex) { return false; }
+        TypeVariable<?> typeParameter = typeParameters[typeParameterIndex];
+        Type genericSuperclass = type.getGenericSuperclass();
         if (!(genericSuperclass instanceof ParameterizedType)) { return false; }
         ParameterizedType parameterizedSuperclass = (ParameterizedType) genericSuperclass;
         Class<?> superclass = (Class<?>) parameterizedSuperclass.getRawType();
@@ -223,49 +343,11 @@ public class TypeUtils {
         for (int i = 0; i < actualTypeArguments.length; i++) {
             Type actualTypeArgument = actualTypeArguments[i];
             if (actualTypeArgument == typeParameter
-                    && checkTypeParameterForSuperclass(superclass, i, targetClass, targetTypeParameterIndex)) {
+                    && checkTypeParameterForSuperclass(superclass, i, targetType, targetTypeParameterIndex)) {
                 return true;
             }
         }
         return false;
-    }
-
-    private static int getTypeParameterIndexForInterface(
-            Class<?> clazz, Class<?> targetInterface, int targetTypeParameterIndex) {
-        int typeParametersLength = clazz.getTypeParameters().length;
-        for (int typeParameterIndex = 0; typeParameterIndex < typeParametersLength; typeParameterIndex++) {
-            if (checkTypeParameterIndexForInterface(clazz, typeParameterIndex, targetInterface,
-                    targetTypeParameterIndex)) {
-                return typeParameterIndex;
-            }
-        }
-        return -1;
-    }
-
-    private static boolean checkTypeParameterIndexForInterface(
-            Class<?> clazz, int typeParameterIndex, Class<?> targetInterface, int targetTypeParameterIndex) {
-        if (clazz == targetInterface) { return typeParameterIndex == targetTypeParameterIndex; }
-        TypeVariable<?>[] typeParameters = clazz.getTypeParameters();
-        if (typeParameters.length <= typeParameterIndex) { return false; }
-        TypeVariable<?> typeParameter = typeParameters[typeParameterIndex];
-        for (Type genericInterface : clazz.getGenericInterfaces()) {
-            if (!(genericInterface instanceof ParameterizedType)) { return false; }
-            ParameterizedType parameterizedInterface = (ParameterizedType) genericInterface;
-            Class<?> interfaceClass = (Class<?>) parameterizedInterface.getRawType();
-            if (!targetInterface.isAssignableFrom(interfaceClass)) { continue; }
-            Type[] actualTypeArguments = parameterizedInterface.getActualTypeArguments();
-            for (int i = 0; i < actualTypeArguments.length; i++) {
-                Type actualTypeArgument = actualTypeArguments[i];
-                if (actualTypeArgument == typeParameter
-                        && checkTypeParameterIndexForInterface(interfaceClass, i, targetInterface,
-                        targetTypeParameterIndex)) {
-                    return true;
-                }
-            }
-        }
-        Class<?> superclass = clazz.getSuperclass();
-        int index = getTypeParameterIndexForInterface(superclass, targetInterface, targetTypeParameterIndex);
-        return checkTypeParameterForSuperclass(clazz, typeParameterIndex, superclass, index);
     }
 
 }

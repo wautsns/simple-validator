@@ -23,7 +23,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 
 /**
- * Abstract float criterion factory.
+ * Criterion factory for {@code float} type.
  *
  * @author wautsns
  * @since Mar 11, 2020

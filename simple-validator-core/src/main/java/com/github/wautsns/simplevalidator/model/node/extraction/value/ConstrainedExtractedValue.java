@@ -43,7 +43,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Constrained extracted value.
+ * The constrained extracted value.
  *
  * @author wautsns
  * @since Mar 21, 2020
@@ -51,12 +51,15 @@ import java.util.List;
 @Getter
 public class ConstrainedExtractedValue extends ConstrainedNode {
 
+    /** parent */
     private final ConstrainedNode parent;
+    /** value extractor */
     private final ValueExtractor valueExtractor;
+    /** criterion wrapper */
     private final Criterion.Wrapper criterionWrapper;
 
     @Override
-    public List<? extends ConstrainedNode> getChildList() {
+    public List<? extends ConstrainedNode> getChildren() {
         return Collections.emptyList();
     }
 
@@ -65,8 +68,15 @@ public class ConstrainedExtractedValue extends ConstrainedNode {
         return criterionWrapper;
     }
 
-    // -------------------- constructor -------------------------------------------------
+    // #################### constructor #################################################
 
+    /**
+     * Construct a constrained extracted value.
+     *
+     * @param parent parent
+     * @param valueExtractor value extractor
+     * @param constraints constraints
+     */
     public ConstrainedExtractedValue(
             ConstrainedNode parent, ValueExtractor valueExtractor, List<Constraint<?>> constraints) {
         super(new Location(parent, valueExtractor.getName()), valueExtractor.getExtractedValueType(), constraints);
@@ -75,8 +85,14 @@ public class ConstrainedExtractedValue extends ConstrainedNode {
         this.criterionWrapper = generateCriterionWrapper(valueExtractor);
     }
 
-    // -------------------- internal utils -----------------------------------------------
+    // #################### metadata ####################################################
 
+    /**
+     * Generate criterion wrapper.
+     *
+     * @param valueExtractor value extractor
+     * @return criterion wrapper.
+     */
     private static Criterion.Wrapper generateCriterionWrapper(ValueExtractor valueExtractor) {
         if (valueExtractor instanceof TCriterion) {
             return new Criterion.Wrapper() {

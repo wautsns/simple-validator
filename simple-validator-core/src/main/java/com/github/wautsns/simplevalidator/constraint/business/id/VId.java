@@ -30,18 +30,32 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @VPositive
 public @interface VId {
 
-    List<CriterionFactory<VId, ?, ?>> CRITERION_FACTORY_LIST = new LinkedList<>(Collections.singletonList(
-            new VIdIntegerLongBigIntegerCriterionFactory()
-    ));
-
+    /**
+     * Message(template).
+     *
+     * @return message(template)
+     */
     String message() default "[`VId`]";
 
+    /**
+     * Order of the constraint.
+     *
+     * @return order of the constraint
+     */
     int order() default 0;
 
     boolean unsigned() default false;
 
-    // ------------------------- variables -----------------------------------------
+    // #################### extra #######################################################
 
+    /** built-in criterion factories */
+    List<CriterionFactory<VId, ?, ?>> CRITERION_FACTORIES = new LinkedList<>(Collections.singletonList(
+            VIdIntegerLongBigIntegerCriterionFactory.INSTANCE
+    ));
+
+    // ==================== variables ===================================================
+
+    /** variables: {@linkplain #unsigned() unsigned} */
     Variable<Boolean> UNSIGNED = new Variable<>("unsigned");
 
 }

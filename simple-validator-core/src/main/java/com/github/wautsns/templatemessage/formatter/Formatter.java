@@ -38,10 +38,11 @@ public interface Formatter<T> extends Serializable {
     }
 
     /**
-     * Format the value with specific locale.
+     * Format the value with specified locale.
      *
      * @param value value
      * @param locale locale
+     * @return value in string format
      */
     String format(T value, Locale locale);
 

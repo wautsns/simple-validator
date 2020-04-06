@@ -52,7 +52,7 @@ import java.util.stream.Collectors;
 /**
  * Constraint.
  *
- * @param <A> constraint type
+ * @param <A> type of constraint
  * @author wautsns
  * @since Mar 21, 2020
  */
@@ -65,8 +65,8 @@ public class Constraint<A extends Annotation> {
     private final A origin;
     /** attribute value map */
     private final Map<String, Object> attributeValueMap;
-    /** combined constraint list */
-    private final List<Constraint<?>> combinedConstraintList;
+    /** combined constraints */
+    private final List<Constraint<?>> combinedConstraints;
     /** variable value map */
     private final VariableValueMap variableValueMap;
     /** criterion processor */
@@ -84,10 +84,7 @@ public class Constraint<A extends Annotation> {
     /**
      * Get message.
      *
-     * <p>If the message is {@code null}, the constraint must be a constraint used only to combine other constraints,
-     * and each combined constraint uses its own message and variables.
-     *
-     * @return message, or {@code null} if the constraint is not defined message
+     * @return message, or {@code null} if message is not declared
      */
     public String getMessage() {
         return getValue(ConstraintMetadata.Attributes.MESSAGE);
@@ -96,7 +93,7 @@ public class Constraint<A extends Annotation> {
     /**
      * Get order.
      *
-     * @return order, or {@code null} if the constraint is not defined order
+     * @return order, or {@code null} if order is not declared
      */
     public Integer getOrder() {
         return getValue(ConstraintMetadata.Attributes.ORDER);
@@ -107,7 +104,7 @@ public class Constraint<A extends Annotation> {
      *
      * @param name attribute name
      * @return attribute value
-     * @throws ConstraintAnalysisException if the attribute does not exist
+     * @throws ConstraintAnalysisException if the attribute is not declared
      */
     public <T> T requireValue(String name) {
         metadata.requireAttribute(name);
@@ -119,7 +116,7 @@ public class Constraint<A extends Annotation> {
      *
      * @param name attribute name
      * @param <T> type of value
-     * @return attribute value, or {@code null} if the attribute does not exist
+     * @return attribute value, or {@code null} if the attribute is not declared
      */
     @SuppressWarnings("unchecked")
     public <T> T getValue(String name) {
@@ -132,7 +129,7 @@ public class Constraint<A extends Annotation> {
      * @param name attribute name
      * @param defaultValue default value
      * @param <T> type of value
-     * @return attribute value, or default value if the attribute does not exist
+     * @return attribute value, or default value if the attribute is not declared
      */
     @SuppressWarnings("unchecked")
     public <T> T getValue(String name, T defaultValue) {
@@ -140,37 +137,38 @@ public class Constraint<A extends Annotation> {
     }
 
     /**
-     * Whether the constraint applies to the type(ignore value extractor).
+     * Whether the constraint applies to the specified type(<strong>ignore value extractors</strong>).
      *
      * @param type type
-     * @return {@code true} if the constraint applies to the type(ignore value extractor), otherwise {@code false}
+     * @return {@code true} if the constraint applies to the specified type(<strong>ignore value extractors</strong>),
+     * otherwise {@code false}
      */
     public boolean appliesTo(Type type) {
         if (metadata.isOnlyUsedToCombineOtherConstraints()) {
-            return combinedConstraintList.stream()
+            return combinedConstraints.stream()
                     .allMatch(constraint -> constraint.appliesTo(type));
         } else {
-            return metadata.getCriterionFactoryList().stream()
+            return metadata.getCriterionFactories().stream()
                     .anyMatch(criterionFactory -> criterionFactory.appliesTo(type, origin));
         }
     }
 
     /**
-     * Require applicable value extractor for the type.
+     * Require the value extractor suitable for the specified type.
      *
      * @param type type
-     * @return applicable value extractor
-     * @throws ConstraintAnalysisException if there is no value extractor for the type
+     * @return the value extractor suitable for the specified type
+     * @throws ConstraintAnalysisException if no value extractor applies to the specified type
      */
     public ValueExtractor requireApplicableValueExtractor(Type type) {
-        ValueExtractor applicableValueExtractor = metadata.getValueExtractorList().stream()
+        ValueExtractor applicableValueExtractor = metadata.getValueExtractors().stream()
                 .filter(valueExtractor -> valueExtractor.appliesTo(type))
                 .findFirst()
                 .orElse(null);
         if (applicableValueExtractor != null) { return applicableValueExtractor; }
         if (metadata.isOnlyUsedToCombineOtherConstraints()) {
-            ValueExtractor ref = combinedConstraintList.get(0).requireApplicableValueExtractor(type);
-            boolean allMatch = combinedConstraintList.stream()
+            ValueExtractor ref = combinedConstraints.get(0).requireApplicableValueExtractor(type);
+            boolean allMatch = combinedConstraints.stream()
                     .skip(1)
                     .map(constraint -> constraint.requireApplicableValueExtractor(type))
                     .allMatch(ref::equals);
@@ -189,14 +187,15 @@ public class Constraint<A extends Annotation> {
      * Get {@code Constraint} instance.
      *
      * @param constraint constraint
-     * @param <A> constraint type
+     * @param <A> type of constraint
      * @return {@code Constraint} instance
      */
     @SuppressWarnings("unchecked")
     public static <A extends Annotation> Constraint<A> getInstance(Annotation constraint) {
         Class<? extends Annotation> constraintType = constraint.annotationType();
         Map<String, Object> attributeValues = getAttributeValueMap(constraint);
-        return INSTANCE_MAP.computeIfAbsent(constraintType, i -> new ConcurrentHashMap<>())
+        return INSTANCE_MAP
+                .computeIfAbsent(constraintType, i -> new ConcurrentHashMap<>())
                 .computeIfAbsent(attributeValues, i -> new Constraint<>(constraint));
     }
 
@@ -212,22 +211,22 @@ public class Constraint<A extends Annotation> {
         this.metadata = ConstraintMetadata.getInstance((Class<A>) constraint.annotationType());
         this.origin = constraint;
         this.attributeValueMap = getAttributeValueMap(constraint);
-        this.combinedConstraintList = initCombinedConstraints(this);
+        this.combinedConstraints = initCombinedConstraints(this);
         this.variableValueMap = getVariableValueMap(constraint);
         this.criterionProcessor = new CriterionProcessor();
     }
 
     /**
-     * Initialize combinedConstraints.
+     * Initialize combined constraints.
      *
      * @param constraint constraint
-     * @return combinedConstraints
+     * @return combined constraints
      */
     @SuppressWarnings({"rawtypes", "unchecked"})
     private static List<Constraint<?>> initCombinedConstraints(Constraint<?> constraint) {
         ConstraintMetadata<?> metadata = ConstraintMetadata.getInstance(constraint.metadata.getConstraintType());
         List<Constraint<?>> combinedConstraints = new LinkedList<>();
-        combinedConstraints.addAll(metadata.getFixedCombinedConstraintList());
+        combinedConstraints.addAll(metadata.getFixedCombinedConstraints());
         metadata.getDynamicCombinedConstraintMetadataList().forEach(
                 dccMetadata -> combinedConstraints.add(dccMetadata.generate((Constraint) constraint)));
         combinedConstraints.sort((c1, c2) -> ORDER_COMPARATOR.compare(c1.getOrder(), c2.getOrder()));
@@ -248,23 +247,23 @@ public class Constraint<A extends Annotation> {
     // ==================== constraint ==================================================
 
     /**
-     * Filter out constraint list.
+     * Filter out constraints.
      *
      * @param annotations annotations
-     * @return constraint list(unmodified)
+     * @return constraints(unmodified)
      */
-    public static List<Constraint<?>> filterOutConstraintList(Annotation[] annotations) {
-        return filterOutConstraintList(Arrays.asList(annotations));
+    public static List<Constraint<?>> filterOutConstraints(Annotation[] annotations) {
+        return filterOutConstraints(Arrays.asList(annotations));
     }
 
     /**
-     * Filter out constraint list.
+     * Filter out constraints.
      *
-     * @param annotationList annotation list
-     * @return constraint list(unmodified)
+     * @param annotations annotation list
+     * @return constraints(unmodified)
      */
-    public static List<Constraint<?>> filterOutConstraintList(List<Annotation> annotationList) {
-        List<Constraint<?>> constraints = annotationList.stream()
+    public static List<Constraint<?>> filterOutConstraints(List<Annotation> annotations) {
+        List<Constraint<?>> constraints = annotations.stream()
                 .filter(annotation -> ConstraintMetadata.isConstraintType(annotation.annotationType()))
                 .map(Constraint::getInstance)
                 .distinct()
@@ -278,15 +277,15 @@ public class Constraint<A extends Annotation> {
      * @param annotatedType annotated type
      * @return constraint list(unmodified)
      */
-    public static List<Constraint<?>> filterOutConstraintList(AnnotatedType annotatedType) {
+    public static List<Constraint<?>> filterOutConstraints(AnnotatedType annotatedType) {
         List<Constraint<?>> constraints = new LinkedList<>();
-        constraints.addAll(filterOutConstraintList(annotatedType.getDeclaredAnnotations()));
+        constraints.addAll(filterOutConstraints(annotatedType.getDeclaredAnnotations()));
         Type type = annotatedType.getType();
         if (type instanceof TypeVariable) {
             TypeVariable<?> typeVariable = (TypeVariable<?>) type;
-            constraints.addAll(filterOutConstraintList(typeVariable.getDeclaredAnnotations()));
+            constraints.addAll(0, filterOutConstraints(typeVariable.getDeclaredAnnotations()));
             for (AnnotatedType annotatedBound : typeVariable.getAnnotatedBounds()) {
-                constraints.addAll(0, filterOutConstraintList(annotatedBound));
+                constraints.addAll(0, filterOutConstraints(annotatedBound));
             }
         }
         return CollectionUtils.unmodifiableList(constraints.stream()
@@ -309,9 +308,7 @@ public class Constraint<A extends Annotation> {
          */
         public void process(ConstrainedNode node, Criteria wip) {
             String message = getMessage();
-            if (message == null) {
-                processWithoutVariables(node, wip);
-            } else {
+            if (message != null) {
                 Criteria tmp = Criteria.newInstance(node.getType());
                 processWithoutVariables(node, tmp);
                 Criterion criterion = tmp.simplify();
@@ -321,18 +318,25 @@ public class Constraint<A extends Annotation> {
                 vvm.put(ValidationFailure.Variables.TARGET, node.getLocation());
                 criterion = criterion.enhanceFailure(failure -> failure.setMessageTemplate(message).put(vvm));
                 wip.add(criterion);
+            } else if (metadata.isOnlyUsedToCombineOtherConstraints()) {
+                combinedConstraints.forEach(constraint -> constraint.criterionProcessor.process(node, wip));
+            } else {
+                // e.g. VNullable
+                processWithoutVariables(node, wip);
             }
         }
 
         /**
          * Process criteria wip without variables.
          *
+         * <p>Runtime variables will still be added.
+         *
          * @param node node
          * @param wip criteria wip
          */
         public void processWithoutVariables(ConstrainedNode node, Criteria wip) {
             int order = metadata.getOrder();
-            Iterator<Constraint<?>> iterator = combinedConstraintList.iterator();
+            Iterator<Constraint<?>> iterator = combinedConstraints.iterator();
             Constraint<?> current = null;
             while (iterator.hasNext()) {
                 current = iterator.next();
@@ -343,19 +347,19 @@ public class Constraint<A extends Annotation> {
                     current = null;
                 }
             }
-            if (!metadata.isOnlyUsedToCombineOtherConstraints()) { processWithCriterionFactoryList(node, wip); }
+            if (!metadata.isOnlyUsedToCombineOtherConstraints()) { processByCriterionFactories(node, wip); }
             if (current != null) { current.criterionProcessor.processWithoutVariables(node, wip); }
             while (iterator.hasNext()) { iterator.next().criterionProcessor.processWithoutVariables(node, wip); }
         }
 
         /**
-         * Process criteria wip with criterion factory list.
+         * Process criteria wip by criterion factories.
          *
          * @param node node
          * @param wip criteria wip
          */
-        private void processWithCriterionFactoryList(ConstrainedNode node, Criteria wip) {
-            for (CriterionFactory criterionFactory : metadata.getCriterionFactoryList()) {
+        private void processByCriterionFactories(ConstrainedNode node, Criteria wip) {
+            for (CriterionFactory criterionFactory : metadata.getCriterionFactories()) {
                 if (criterionFactory.appliesTo(node.getType(), origin)) {
                     criterionFactory.process(node, origin, wip);
                     return;
@@ -371,10 +375,10 @@ public class Constraint<A extends Annotation> {
     // ==================== attribute value =============================================
 
     /**
-     * Get the attribute value map(unmodified) of the specific constraint.
+     * Get the attribute value map(unmodified) of the specified constraint.
      *
      * @param constraint constraint
-     * @return the attribute value map(unmodified) of the specific constraint
+     * @return the attribute value map(unmodified) of the specified constraint
      */
     private static Map<String, Object> getAttributeValueMap(Annotation constraint) {
         InvocationHandler h = Proxy.getInvocationHandler(constraint);
@@ -386,25 +390,23 @@ public class Constraint<A extends Annotation> {
     // ==================== variable value map ==========================================
 
     /**
-     * Get variable value map defined in the constraint.
+     * Get variable value map declared in the constraint.
      *
      * @param constraint constraint
-     * @return variable value map defined in the constraint
+     * @return variable value map declared in the constraint
      */
     @SuppressWarnings({"rawtypes", "unchecked"})
     private static VariableValueMap getVariableValueMap(Annotation constraint) {
         VariableValueMap variableValueMap = new VariableValueMap();
         ConstraintMetadata<?> metadata = ConstraintMetadata.getInstance(constraint.annotationType());
-        Arrays.stream(metadata.getConstraintType().getFields())
-                .filter(field -> Variable.class.isAssignableFrom(field.getType()))
-                .forEach(variableField -> {
-                    Variable variable = ReflectionUtils.getValue(null, variableField);
-                    AVariableAlias variableAlias = variableField.getAnnotation(AVariableAlias.class);
-                    String attributeName = (variableAlias == null) ? variable.getName() : variableAlias.value();
-                    Method attribute = metadata.getAttribute(attributeName);
-                    if (attribute == null) { return; }
-                    variableValueMap.put(variable, ReflectionUtils.invoke(constraint, attribute));
-                });
+        for (Field field : metadata.getConstraintType().getFields()) {
+            if (!Variable.class.isAssignableFrom(field.getType())) { continue;}
+            Variable variable = ReflectionUtils.getValue(null, field);
+            AVariableAlias variableAlias = field.getAnnotation(AVariableAlias.class);
+            String attributeName = (variableAlias == null) ? variable.getName() : variableAlias.value();
+            Method attribute = metadata.getAttribute(attributeName);
+            if (attribute != null) { variableValueMap.put(variable, ReflectionUtils.invoke(constraint, attribute)); }
+        }
         return variableValueMap;
     }
 

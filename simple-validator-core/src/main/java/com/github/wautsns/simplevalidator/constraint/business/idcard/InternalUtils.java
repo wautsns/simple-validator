@@ -12,6 +12,8 @@
  */
 package com.github.wautsns.simplevalidator.constraint.business.idcard;
 
+import com.github.wautsns.simplevalidator.util.common.CollectionUtils;
+
 import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -27,53 +29,62 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
+ * Internal utils for {@code VChineseIdCard}.
+ *
  * @author wautsns
  * @since Mar 11, 2020
  */
-class ChineseIdCardUtils {
+class InternalUtils {
 
-    // ------------------------- generations ---------------------------------------
+    // #################### generations #################################################
 
-    private static final Set<VChineseIdCard.Generation> GENERATIONS_ALL =
-            new HashSet<>(Arrays.asList(VChineseIdCard.Generation.values()));
-    private static final Set<VChineseIdCard.Generation> GENERATIONS_FIRST =
-            Collections.singleton(VChineseIdCard.Generation.FIRST);
-    private static final Set<VChineseIdCard.Generation> GENERATIONS_SECOND =
-            Collections.singleton(VChineseIdCard.Generation.SECOND);
-
-    public static Set<VChineseIdCard.Generation> simplify(VChineseIdCard.Generation[] generations) {
+    /**
+     * Simplify generations.
+     *
+     * @param generations generations
+     * @return generations after simplifying
+     */
+    public static Set<VChineseIdCard.Generation> simplifyGenerations(VChineseIdCard.Generation[] generations) {
         if (generations == null || generations.length == 0) {
             return GENERATIONS_ALL;
-        } else if (generations.length == 1) {
-            VChineseIdCard.Generation generation = Objects.requireNonNull(generations[0]);
-            if (generation == VChineseIdCard.Generation.SECOND) {
-                return GENERATIONS_SECOND;
-            } else {
-                return GENERATIONS_FIRST;
-            }
         } else {
-            generations = Arrays.stream(generations)
-                    .distinct()
-                    .filter(Objects::isNull)
-                    .toArray(VChineseIdCard.Generation[]::new);
-            if (generations.length == GENERATIONS_ALL.size()) {
+            Set<VChineseIdCard.Generation> temp = new HashSet<>(Arrays.asList(generations));
+            if (temp.equals(GENERATIONS_ALL)) {
                 return GENERATIONS_ALL;
+            } else if (temp.equals(GENERATIONS_SECOND)) {
+                return GENERATIONS_SECOND;
+            } else if (temp.equals(GENERATIONS_FIRST)) {
+                return GENERATIONS_FIRST;
             } else {
-                return simplify(generations);
+                return CollectionUtils.unmodifiableSet(temp);
             }
+
         }
     }
 
-    public static VChineseIdCard.Generation getGeneration(CharSequence id) {
-        switch (id.length()) {
+    /**
+     * Guess generation roughly.
+     *
+     * @param idCard id card
+     * @return guessing generations
+     */
+    public static Set<VChineseIdCard.Generation> guessGenerationRoughly(CharSequence idCard) {
+        switch (idCard.length()) {
             case 18:
-                return VChineseIdCard.Generation.SECOND;
+                return GENERATIONS_SECOND;
             case 15:
-                return VChineseIdCard.Generation.FIRST;
+                return GENERATIONS_FIRST;
             default:
-                return null;
+                return Collections.emptySet();
         }
     }
+
+    private static final Set<VChineseIdCard.Generation> GENERATIONS_ALL =
+            CollectionUtils.unmodifiableSet(new HashSet<>(Arrays.asList(VChineseIdCard.Generation.values())));
+    private static final Set<VChineseIdCard.Generation> GENERATIONS_SECOND =
+            Collections.singleton(VChineseIdCard.Generation.SECOND);
+    private static final Set<VChineseIdCard.Generation> GENERATIONS_FIRST =
+            Collections.singleton(VChineseIdCard.Generation.FIRST);
 
     // ------------------------- cities --------------------------------------------
 
@@ -123,7 +134,7 @@ class ChineseIdCardUtils {
         CITY_CODE_NAME_MAP.put(82, "澳门");
     }
 
-    public static Map<Integer, String> toCityCodeNameMap(String[] cities) {
+    public static Map<Integer, String> toCityNameMap(String[] cities) {
         if (cities == null || cities.length == 0) { return CITY_CODE_NAME_MAP; }
         Set<String> citySet = new HashSet<>(Arrays.asList(cities));
         return CITY_CODE_NAME_MAP.entrySet().stream()
@@ -154,7 +165,7 @@ class ChineseIdCardUtils {
     private static final Set<VChineseIdCard.Gender> GENDER_FEMALE = Collections.singleton(VChineseIdCard.Gender.FEMALE);
     private static final Set<VChineseIdCard.Gender> GENDER_MALE = Collections.singleton(VChineseIdCard.Gender.MALE);
 
-    public static Set<VChineseIdCard.Gender> simplify(VChineseIdCard.Gender[] genders) {
+    public static Set<VChineseIdCard.Gender> simplifyGenders(VChineseIdCard.Gender[] genders) {
         if (genders == null || genders.length == 0) {
             return GENDER_ALL;
         } else if (genders.length == 1) {
@@ -172,7 +183,7 @@ class ChineseIdCardUtils {
             if (genders.length == GENDER_ALL.size()) {
                 return GENDER_ALL;
             } else {
-                return simplify(genders);
+                return simplifyGenders(genders);
             }
         }
     }
@@ -206,6 +217,6 @@ class ChineseIdCardUtils {
 
     // ------------------------- ignored -------------------------------------------
 
-    private ChineseIdCardUtils() {}
+    private InternalUtils() {}
 
 }

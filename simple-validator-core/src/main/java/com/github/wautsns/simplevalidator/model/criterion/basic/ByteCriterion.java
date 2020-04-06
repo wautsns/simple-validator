@@ -28,9 +28,9 @@ import java.util.function.UnaryOperator;
 public interface ByteCriterion extends PrimitiveCriterion<Byte> {
 
     /**
-     * Test value.
+     * Test {@code byte} value.
      *
-     * @param value value
+     * @param value {@code byte} value
      * @return validation failure, or {@code null} if the validation is passed.
      */
     ValidationFailure test(byte value);

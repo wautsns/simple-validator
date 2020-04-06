@@ -17,11 +17,15 @@ package com.github.wautsns.templatemessage.variable;
 
 import com.github.wautsns.templatemessage.formatter.Formatter;
 import com.github.wautsns.templatemessage.formatter.common.ObjectFormatter;
+import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 
 import java.io.Serializable;
-import java.util.Objects;
 
 /**
  * Variable.
@@ -31,41 +35,23 @@ import java.util.Objects;
  * @since Mar 10, 2020
  */
 @Getter
+@Setter
+@Accessors(chain = true)
 @EqualsAndHashCode(of = "name")
+@RequiredArgsConstructor
+@AllArgsConstructor
 public class Variable<T> implements Serializable {
 
-    private static final long serialVersionUID = 2161734187241083633L;
+    private static final long serialVersionUID = -2997879737757537621L;
 
-    /** name of variable */
-    private final String name;
-    /** formatter of value of variable */
-    private final Formatter<? super T> formatter;
+    /** variable name */
+    private final @NonNull String name;
+    /** formatter for variable value, default is {@link ObjectFormatter#DEFAULT} */
+    private @NonNull Formatter<? super T> formatter = ObjectFormatter.DEFAULT;
 
     @Override
     public String toString() {
         return name;
-    }
-
-    // #################### constructor ##################################################
-
-    /**
-     * Construct a variable with {@linkplain ObjectFormatter#DEFAULT default formatter}.
-     *
-     * @param name name of variable
-     */
-    public Variable(String name) {
-        this(name, ObjectFormatter.DEFAULT);
-    }
-
-    /**
-     * Construct a variable.
-     *
-     * @param name variable name
-     * @param formatter value formatter
-     */
-    public Variable(String name, Formatter<? super T> formatter) {
-        this.name = Objects.requireNonNull(name);
-        this.formatter = Objects.requireNonNull(formatter);
     }
 
 }

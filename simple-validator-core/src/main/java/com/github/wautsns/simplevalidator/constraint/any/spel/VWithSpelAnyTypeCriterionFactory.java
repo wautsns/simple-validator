@@ -18,9 +18,11 @@ package com.github.wautsns.simplevalidator.constraint.any.spel;
 import com.github.wautsns.simplevalidator.model.criterion.basic.Criteria;
 import com.github.wautsns.simplevalidator.model.criterion.basic.Criterion;
 import com.github.wautsns.simplevalidator.model.criterion.basic.TCriterion;
-import com.github.wautsns.simplevalidator.model.criterion.factory.special.AbstractAnyTypeCriterionFactory;
+import com.github.wautsns.simplevalidator.model.criterion.factory.special.AnyTypeCriterionFactory;
 import com.github.wautsns.simplevalidator.model.failure.ValidationFailure;
 import com.github.wautsns.simplevalidator.model.node.ConstrainedNode;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.springframework.expression.Expression;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 
@@ -28,16 +30,18 @@ import org.springframework.expression.spel.standard.SpelExpressionParser;
  * @author wautsns
  * @since Mar 15, 2020
  */
-public class VWithSpelAnyTypeCriterionFactory extends AbstractAnyTypeCriterionFactory<VWithSpel> {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public class VWithSpelAnyTypeCriterionFactory extends AnyTypeCriterionFactory<VWithSpel> {
 
-    private static final SpelExpressionParser PARSER = new SpelExpressionParser();
+    /** {@code VWithSpelAnyTypeCriterionFactory} instance */
+    public static final VWithSpelAnyTypeCriterionFactory INSTANCE = new VWithSpelAnyTypeCriterionFactory();
 
     @Override
     public void process(ConstrainedNode node, VWithSpel constraint, Criteria<Criterion> wip) {
         wip.add(produce(constraint));
     }
 
-    // ------------------------- criterion -----------------------------------------
+    // #################### criterion ###################################################
 
     protected static TCriterion<?> produce(VWithSpel constraint) {
         String expr = constraint.expr();
@@ -45,5 +49,7 @@ public class VWithSpelAnyTypeCriterionFactory extends AbstractAnyTypeCriterionFa
         return value -> Boolean.TRUE.equals(expression.getValue(value, boolean.class)) ? null
                 : new ValidationFailure(value);
     }
+
+    private static final SpelExpressionParser PARSER = new SpelExpressionParser();
 
 }

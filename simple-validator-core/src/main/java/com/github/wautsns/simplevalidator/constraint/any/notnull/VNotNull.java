@@ -42,12 +42,25 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @AConstraint
 public @interface VNotNull {
 
-    List<CriterionFactory<VNotNull, ?, ?>> CRITERION_FACTORY_LIST = new LinkedList<>(Collections.singletonList(
-            new VNotNullNonPrimitiveCriterionFactory()
-    ));
-
+    /**
+     * Message(template).
+     *
+     * @return message(template)
+     */
     String message() default "[`VNonNull`]";
 
+    /**
+     * Order of the constraint.
+     *
+     * @return order of the constraint
+     */
     int order() default 0;
+
+    // #################### extra #######################################################
+
+    /** built-in criterion factories */
+    List<CriterionFactory<VNotNull, ?, ?>> CRITERION_FACTORIES = new LinkedList<>(Collections.singletonList(
+            VNotNullNonPrimitiveCriterionFactory.INSTANCE
+    ));
 
 }

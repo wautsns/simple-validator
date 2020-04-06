@@ -15,24 +15,25 @@
  */
 package com.github.wautsns.simplevalidator.model.criterion.factory.special;
 
-import com.github.wautsns.simplevalidator.model.criterion.factory.TCriterionFactory;
-import com.github.wautsns.simplevalidator.util.common.TypeUtils;
+import com.github.wautsns.simplevalidator.model.criterion.basic.Criteria;
+import com.github.wautsns.simplevalidator.model.criterion.basic.Criterion;
+import com.github.wautsns.simplevalidator.model.criterion.factory.CriterionFactory;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 
 /**
- * Abstract non-primitive criterion factory.
+ * Criterion factory for any type.
  *
  * @author wautsns
  * @since Mar 11, 2020
  */
-public abstract class AbstractNonPrimitiveCriterionFactory<A extends Annotation>
-        implements TCriterionFactory<A, Object> {
+public abstract class AnyTypeCriterionFactory<A extends Annotation>
+        implements CriterionFactory<A, Criteria<Criterion>, Criterion> {
 
     @Override
     public boolean appliesTo(Type type, A constraint) {
-        return !TypeUtils.isPrimitive(type);
+        return true;
     }
 
 }

@@ -37,10 +37,10 @@ import java.util.stream.Collectors;
 @Getter
 public class ConstrainedClass extends ConstrainedNode {
 
-    /** field list */
-    private final List<ConstrainedField> fieldList;
-    /** getter list */
-    private final List<ConstrainedGetter> getterList;
+    /** fields */
+    private final List<ConstrainedField> fields;
+    /** getters */
+    private final List<ConstrainedGetter> getters;
 
     /**
      * The {@code ConstrainedClass} is <strong>root</strong>.
@@ -60,10 +60,7 @@ public class ConstrainedClass extends ConstrainedNode {
      * @see ConstrainedField#generateName(Field)
      */
     public ConstrainedField getField(String name) {
-        return fieldList.stream()
-                .filter(field -> field.getLocation().getSimpleName().equals(name))
-                .findFirst()
-                .orElse(null);
+        return getNode(fields, name);
     }
 
     /**
@@ -74,27 +71,24 @@ public class ConstrainedClass extends ConstrainedNode {
      * @see ConstrainedGetter#generateName(Method)
      */
     public ConstrainedGetter getGetter(String name) {
-        return getterList.stream()
-                .filter(getter -> getter.getLocation().getSimpleName().equals(name))
-                .findFirst()
-                .orElse(null);
+        return getNode(getters, name);
     }
 
     @Override
-    public List<? extends ConstrainedNode> getChildList() {
-        List<? extends ConstrainedNode> superChildList = super.getChildList();
-        if (superChildList.isEmpty()) {
-            if (getterList.isEmpty()) {
-                return fieldList;
-            } else if (fieldList.isEmpty()) {
-                return getterList;
+    public List<? extends ConstrainedNode> getChildren() {
+        List<? extends ConstrainedNode> superChildren = super.getChildren();
+        if (superChildren.isEmpty()) {
+            if (getters.isEmpty()) {
+                return fields;
+            } else if (fields.isEmpty()) {
+                return getters;
             }
         }
-        List<ConstrainedNode> childList = new LinkedList<>();
-        childList.addAll(superChildList);
-        childList.addAll(fieldList);
-        childList.addAll(getterList);
-        return CollectionUtils.unmodifiableList(childList);
+        List<ConstrainedNode> children = new LinkedList<>();
+        children.addAll(superChildren);
+        children.addAll(fields);
+        children.addAll(getters);
+        return CollectionUtils.unmodifiableList(children);
     }
 
     /**
@@ -113,16 +107,16 @@ public class ConstrainedClass extends ConstrainedNode {
     private static final Map<Class<?>, ConstrainedClass> INSTANCE_MAP = new ConcurrentHashMap<>(64);
 
     /**
-     * Get {@code ConstrainedNode} instance for the specific class.
+     * Get {@code ConstrainedNode} instance for the specified class.
      *
      * @param clazz class
-     * @return {@code ConstrainedNode} instance for the specific class
+     * @return {@code ConstrainedNode} instance for the specified class
      */
     public static ConstrainedClass getInstance(Class<?> clazz) {
         return INSTANCE_MAP.computeIfAbsent(clazz, ConstrainedClass::new);
     }
 
-    // -------------------- constructor -------------------------------------------------
+    // ==================== constructor =================================================
 
     /**
      * Construct a constrained class.
@@ -131,11 +125,11 @@ public class ConstrainedClass extends ConstrainedNode {
      */
     private ConstrainedClass(Class<?> clazz) {
         super(clazz.getName(), clazz, clazz.getDeclaredAnnotations());
-        this.fieldList = initFields(this);
-        this.getterList = initGetters(this);
+        this.fields = initFields(this);
+        this.getters = initGetters(this);
     }
 
-    // -------------------- internal utils -----------------------------------------------
+    // #################### internal utils ##############################################
 
     /**
      * Initialize fields.

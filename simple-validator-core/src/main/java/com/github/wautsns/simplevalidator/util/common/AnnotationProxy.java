@@ -15,6 +15,8 @@
  */
 package com.github.wautsns.simplevalidator.util.common;
 
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.experimental.UtilityClass;
 
 import java.lang.annotation.Annotation;
@@ -35,11 +37,11 @@ import java.util.stream.Collectors;
 public class AnnotationProxy {
 
     /**
-     * Proxy an annotation.
+     * Proxy an annotation of specified type and attributes.
      *
      * @param annotationType annotation type
-     * @param memberValues member values
-     * @param <A> annotation type
+     * @param memberValues attributes
+     * @param <A> type of annotation
      * @return annotation
      */
     @SuppressWarnings("unchecked")
@@ -51,24 +53,13 @@ public class AnnotationProxy {
     }
 
     /** constraint annotation invocation handler */
+    @RequiredArgsConstructor
     private static class ConstraintAnnotationInvocationHandler implements InvocationHandler {
 
         /** constraint type */
-        private final Class<? extends Annotation> annotationType;
+        private final @NonNull Class<? extends Annotation> annotationType;
         /** constraint attributes values */
-        private final LinkedHashMap<String, Object> memberValues;
-
-        /**
-         * Construct a constraint annotation invocation handler.
-         *
-         * @param annotationType annotation type
-         * @param memberValues member values
-         */
-        public ConstraintAnnotationInvocationHandler(
-                Class<? extends Annotation> annotationType, LinkedHashMap<String, Object> memberValues) {
-            this.annotationType = annotationType;
-            this.memberValues = memberValues;
-        }
+        private final @NonNull LinkedHashMap<String, Object> memberValues;
 
         @Override
         public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {

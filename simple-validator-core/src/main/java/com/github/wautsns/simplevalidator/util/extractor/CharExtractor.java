@@ -20,7 +20,7 @@ import java.lang.reflect.Type;
 /**
  * The {@code char} value extractor.
  *
- * @param <T> applicable type
+ * @param <T> type of target value
  * @author wautsns
  * @since Mar 20, 2020
  */
@@ -32,9 +32,9 @@ public interface CharExtractor<T> extends ValueExtractor {
     }
 
     /**
-     * Extract {@code char} value from the given source.
+     * Extract {@code char} value from the target value.
      *
-     * @param target target
+     * @param target target value
      * @return extracted {@code char} value
      */
     char extract(T target);

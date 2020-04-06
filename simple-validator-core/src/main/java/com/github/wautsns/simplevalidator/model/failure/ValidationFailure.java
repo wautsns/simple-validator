@@ -19,6 +19,8 @@ import com.github.wautsns.simplevalidator.model.node.ConstrainedNode;
 import com.github.wautsns.templatemessage.kernel.TemplateMessage;
 import com.github.wautsns.templatemessage.variable.Variable;
 import com.github.wautsns.templatemessage.variable.VariableValueMap;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -33,10 +35,22 @@ public class ValidationFailure extends TemplateMessage {
 
     private static final long serialVersionUID = -1530223882847018052L;
 
+    /**
+     * Construct a validation failure with {@link Variables#VALUE default value variable} and specified value.
+     *
+     * @param value value
+     */
     public ValidationFailure(Object value) {
         this(Variables.VALUE, value);
     }
 
+    /**
+     * Construct a validation failure with specified valueVariable and value.
+     *
+     * @param valueVariable value variable
+     * @param value value
+     * @param <T> type of value
+     */
     public <T> ValidationFailure(Variable<T> valueVariable, T value) {
         put(valueVariable, value);
     }
@@ -64,8 +78,8 @@ public class ValidationFailure extends TemplateMessage {
     }
 
     @Override
-    public ValidationFailure put(VariableValueMap another) {
-        return (ValidationFailure) super.put(another);
+    public ValidationFailure put(VariableValueMap variableValueMap) {
+        return (ValidationFailure) super.put(variableValueMap);
     }
 
     @Override
@@ -79,6 +93,7 @@ public class ValidationFailure extends TemplateMessage {
     }
 
     /** Variables. */
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
     public static class Variables {
 
         /** variable: value */
@@ -87,8 +102,6 @@ public class ValidationFailure extends TemplateMessage {
         public static final Variable<ConstrainedNode.Location> TARGET = new Variable<>("target");
         /** variable: indicators */
         public static final Variable<List<Object>> INDICATORS = new Variable<>("indicators");
-
-        private Variables() {}
 
     }
 

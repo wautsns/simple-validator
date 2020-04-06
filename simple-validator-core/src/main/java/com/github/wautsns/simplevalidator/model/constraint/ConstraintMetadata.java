@@ -41,7 +41,7 @@ import java.util.stream.Collectors;
 /**
  * Constraint metadata.
  *
- * @param <A> constraint type
+ * @param <A> type of constraint
  * @author wautsns
  * @since Mar 21, 2020
  */
@@ -63,44 +63,44 @@ public class ConstraintMetadata<A extends Annotation> {
     private final Class<A> constraintType;
     /** order(only used to control the execution order of <strong>combined</strong> constraints) */
     private final int order;
-    /** supported criterion factory list */
-    private final List<CriterionFactory<A, ?, ?>> criterionFactoryList;
-    /** supported value extractor list */
-    private final List<ValueExtractor> valueExtractorList;
-    /** fixed combined constraint list */
-    private final List<Constraint<?>> fixedCombinedConstraintList;
+    /** supported criterion factories */
+    private final List<CriterionFactory<A, ?, ?>> criterionFactories;
+    /** supported value extractors */
+    private final List<ValueExtractor> valueExtractors;
+    /** fixed combined constraints */
+    private final List<Constraint<?>> fixedCombinedConstraints;
     /** dynamic combined constraint metadata list */
     private final List<DynamicCombinedConstraintMetadata<A, ?>> dynamicCombinedConstraintMetadataList;
     /** name -> attribute map */
     private final Map<String, Method> attributeMap;
 
     /**
-     * Whether the constraint type is only used to combine other constraints.
+     * Whether the constraint is only used to combine other constraints.
      *
-     * @return {@code true} if the constraint type is only used to combine other constraints, otherwise false
+     * @return {@code true} if the constraint type is only used to combine other constraints, otherwise {@code false}
      */
     public boolean isOnlyUsedToCombineOtherConstraints() {
-        return criterionFactoryList == null;
+        return criterionFactories == null;
     }
 
     /**
-     * Require the attribute of the specific name.
+     * Require the attribute of the specified name.
      *
      * @param name attribute name
      * @return attribute
-     * @throws ConstraintAnalysisException if the attribute does not exist
+     * @throws ConstraintAnalysisException if the attribute is not declared
      */
     public Method requireAttribute(String name) {
         Method attribute = attributeMap.get(name);
         if (attribute != null) { return attribute; }
-        throw new ConstraintAnalysisException("%s requires an attribute[%s].", constraintType, name);
+        throw new ConstraintAnalysisException("[%s] requires an attribute[%s].", constraintType, name);
     }
 
     /**
-     * Get the attribute of the specific name.
+     * Get the attribute of the specified name.
      *
      * @param name attribute name
-     * @return attribute, or {@code null} if the attribute does not exist
+     * @return attribute, or {@code null} if the attribute is not declared
      */
     public Method getAttribute(String name) {
         return attributeMap.get(name);
@@ -116,7 +116,7 @@ public class ConstraintMetadata<A extends Annotation> {
      * Get the {@code ConstraintMetadata} instance of the specified constraint type.
      *
      * @param constraintType constraint type
-     * @param <A> constraint type
+     * @param <A> type of constraint
      * @return the {@code ConstraintMetadata} instance of the specified constraint type
      */
     @SuppressWarnings("unchecked")
@@ -135,9 +135,9 @@ public class ConstraintMetadata<A extends Annotation> {
         AConstraint aConstraint = requireAConstraint(constraintType);
         this.constraintType = constraintType;
         this.order = aConstraint.order();
-        this.criterionFactoryList = getCriterionFactoryList(constraintType);
-        this.valueExtractorList = getValueExtractorList(constraintType);
-        this.fixedCombinedConstraintList = Constraint.filterOutConstraintList(constraintType.getDeclaredAnnotations());
+        this.criterionFactories = getCriterionFactories(constraintType);
+        this.valueExtractors = getValueExtractors(constraintType);
+        this.fixedCombinedConstraints = Constraint.filterOutConstraints(constraintType.getDeclaredAnnotations());
         this.dynamicCombinedConstraintMetadataList = initDynamicCombinedConstraintMetadataList(
                 constraintType, aConstraint);
         this.attributeMap = getAttributeMap(constraintType);
@@ -148,14 +148,15 @@ public class ConstraintMetadata<A extends Annotation> {
      * Initialize dynamicCombinedConstraintMetadataList.
      *
      * @param aConstraint AConstraint
-     * @param <A> constraint type annotated the {@code AConstraint}.
+     * @param <A> type of constraint
      * @return dynamicCombinedConstraintMetadataList
      */
     private static <A extends Annotation> List<DynamicCombinedConstraintMetadata<A, ?>> initDynamicCombinedConstraintMetadataList(
             Class<A> targetConstraintType, AConstraint aConstraint) {
-        return CollectionUtils.unmodifiableList(Arrays.stream(aConstraint.combines())
+        List<DynamicCombinedConstraintMetadata<A, ?>> tmp = Arrays.stream(aConstraint.combines())
                 .map(aCombine -> new DynamicCombinedConstraintMetadata<>(targetConstraintType, aCombine))
-                .collect(Collectors.toCollection(LinkedList::new)));
+                .collect(Collectors.toCollection(LinkedList::new));
+        return CollectionUtils.unmodifiableList(tmp);
     }
 
     /**
@@ -165,12 +166,11 @@ public class ConstraintMetadata<A extends Annotation> {
      * @throws ConstraintAnalysisException if the metadata is illegal
      */
     private static void check(ConstraintMetadata<?> metadata) {
-        if (metadata.isOnlyUsedToCombineOtherConstraints()) {
-            if (metadata.fixedCombinedConstraintList.isEmpty()
-                    && metadata.dynamicCombinedConstraintMetadataList.isEmpty()) {
-                throw new ConstraintAnalysisException(
-                        "%s has neither criterionFactories nor combined constraints.", metadata.constraintType);
-            }
+        if (metadata.isOnlyUsedToCombineOtherConstraints()
+                && metadata.fixedCombinedConstraints.isEmpty()
+                && metadata.dynamicCombinedConstraintMetadataList.isEmpty()) {
+            throw new ConstraintAnalysisException(
+                    "[%s] has neither criterionFactories nor combined constraints.", metadata.constraintType);
         }
     }
 
@@ -179,10 +179,10 @@ public class ConstraintMetadata<A extends Annotation> {
     // ==================== AConstraint =================================================
 
     /**
-     * Whether the annotation type is constraint type(i.e. an annotation type annotated with {@link AConstraint}).
+     * Whether the annotation type is a constraint type(i.e. an annotation type annotated with {@link AConstraint}).
      *
      * @param annotationType annotation type
-     * @return {@code true} if the annotation type is constraint type, otherwise {@code false}
+     * @return {@code true} if the annotation type is a constraint type, otherwise {@code false}
      */
     public static boolean isConstraintType(Class<? extends Annotation> annotationType) {
         return annotationType.isAnnotationPresent(AConstraint.class);
@@ -193,7 +193,7 @@ public class ConstraintMetadata<A extends Annotation> {
     // ==================== AConstraint =================================================
 
     /**
-     * Require {@link AConstraint} on the annotation type.
+     * Require the {@link AConstraint} on the annotation type.
      *
      * @param annotationType annotation type
      * @return {@link AConstraint} on the annotation class
@@ -202,7 +202,7 @@ public class ConstraintMetadata<A extends Annotation> {
     private static AConstraint requireAConstraint(Class<? extends Annotation> annotationType) {
         AConstraint aConstraint = annotationType.getAnnotation(AConstraint.class);
         if (aConstraint != null) { return aConstraint; }
-        throw new ConstraintAnalysisException("%s is not annotated with %s", annotationType, AConstraint.class);
+        throw new ConstraintAnalysisException("[%s] is not annotated with [%s]", annotationType, AConstraint.class);
     }
 
     // ==================== attribute ===================================================
@@ -223,32 +223,32 @@ public class ConstraintMetadata<A extends Annotation> {
                 .collect(Collectors.toMap(Method::getName, Function.identity())));
     }
 
-    // ==================== criterion factory list ======================================
+    // ==================== criterion factories =========================================
 
     /**
-     * Get criterion factory list for the specified constraint type.
+     * Get criterion factories for the specified constraint type.
      *
      * @param constraintType constraint type
      * @param <A> type of the constraint
-     * @return criterion factory list for the specified constraint type, or {@code null} if the constraint is constraint
+     * @return criterion factories for the specified constraint type, or {@code null} if the constraint is a constraint
      * used only to combine other constraints
      */
-    private static <A extends Annotation> List<CriterionFactory<A, ?, ?>> getCriterionFactoryList(
+    private static <A extends Annotation> List<CriterionFactory<A, ?, ?>> getCriterionFactories(
             Class<A> constraintType) {
-        Field field = ReflectionUtils.getDeclaredField(constraintType, "CRITERION_FACTORY_LIST");
+        Field field = ReflectionUtils.getDeclaredField(constraintType, "CRITERION_FACTORIES");
         return (field == null) ? null : ReflectionUtils.getValue(null, field);
     }
 
-    // ==================== value extractor list ========================================
+    // ==================== value extractors ============================================
 
     /**
-     * Get value extractor list for the specified constraint type.
+     * Get value extractors for the specified constraint type.
      *
      * @param constraintType constraint type
-     * @return value extractor list for the specified constraint type
+     * @return value extractors for the specified constraint type
      */
-    private static List<ValueExtractor> getValueExtractorList(Class<? extends Annotation> constraintType) {
-        Field field = ReflectionUtils.getDeclaredField(constraintType, "VALUE_EXTRACTOR_LIST");
+    private static List<ValueExtractor> getValueExtractors(Class<? extends Annotation> constraintType) {
+        Field field = ReflectionUtils.getDeclaredField(constraintType, "VALUE_EXTRACTORS");
         return (field == null) ? new LinkedList<>() : ReflectionUtils.getValue(null, field);
     }
 

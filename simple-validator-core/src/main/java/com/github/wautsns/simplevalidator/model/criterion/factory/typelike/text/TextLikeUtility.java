@@ -41,11 +41,11 @@ public abstract class TextLikeUtility<T> extends TypeLikeUtility<T> {
     public abstract int length(T text);
 
     /**
-     * Return the char value at the specific index.
+     * Return the char value at the specified index.
      *
      * @param text text value
      * @param index the index of the char value
-     * @return the char value at the specific index.
+     * @return the char value at the specified index.
      */
     public abstract char charAt(T text, int index);
 

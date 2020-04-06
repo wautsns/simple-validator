@@ -25,8 +25,18 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @VLuhn
 public @interface VBankCard {
 
+    /**
+     * Message(template).
+     *
+     * @return message(template)
+     */
     String message() default "[`VBankCard`]";
 
+    /**
+     * Order of the constraint.
+     *
+     * @return order of the constraint
+     */
     int order() default 0;
 
 }

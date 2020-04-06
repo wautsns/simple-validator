@@ -18,6 +18,8 @@ import com.github.wautsns.simplevalidator.model.criterion.factory.TCriterionFact
 import com.github.wautsns.simplevalidator.model.failure.ValidationFailure;
 import com.github.wautsns.simplevalidator.model.node.ConstrainedNode;
 import com.github.wautsns.simplevalidator.util.common.TypeUtils;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 import java.lang.reflect.Type;
 import java.util.Map;
@@ -26,7 +28,11 @@ import java.util.Map;
  * @author wautsns
  * @since Mar 11, 2020
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class VSizeMapCriterionFactory implements TCriterionFactory<VSize, Map<?, ?>> {
+
+    /** {@code VSizeMapCriterionFactory} instance */
+    public static final VSizeMapCriterionFactory INSTANCE = new VSizeMapCriterionFactory();
 
     @Override
     public boolean appliesTo(Type type, VSize constraint) {
@@ -38,8 +44,14 @@ public class VSizeMapCriterionFactory implements TCriterionFactory<VSize, Map<?,
         wip.add(produce(constraint));
     }
 
-    // ------------------------- criterion -----------------------------------------
+    // #################### criterion ###################################################
 
+    /**
+     * Produce criterion.
+     *
+     * @param constraint constraint
+     * @return criterion
+     */
     protected TCriterion<Map<?, ?>> produce(VSize constraint) {
         int min = constraint.min();
         int max = constraint.max();

@@ -26,17 +26,17 @@ import java.lang.reflect.Type;
 public interface ValueExtractor {
 
     /**
-     * Whether the extractor applies to the type.
+     * Whether the extractor applies to the specified type.
      *
      * @param type type
-     * @return {@code true} if the extractor applies to the type, otherwise {@code false}
+     * @return {@code true} if the extractor applies to the specified type, otherwise {@code false}
      */
     boolean appliesTo(Type type);
 
     /**
-     * Get extracted value name.
+     * Get name of the extracted value.
      *
-     * @return extracted value name
+     * @return name of the extracted value
      */
     String getName();
 

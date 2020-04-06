@@ -28,9 +28,9 @@ import java.util.function.UnaryOperator;
 public interface DoubleCriterion extends PrimitiveCriterion<Double> {
 
     /**
-     * Test value.
+     * Test {@code double} value.
      *
-     * @param value value
+     * @param value {@code double} value
      * @return validation failure, or {@code null} if the validation is passed.
      */
     ValidationFailure test(double value);

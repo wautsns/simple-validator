@@ -21,19 +21,24 @@ import com.github.wautsns.simplevalidator.model.criterion.factory.primitive.Floa
 import com.github.wautsns.simplevalidator.model.failure.ValidationFailure;
 import com.github.wautsns.simplevalidator.model.node.ConstrainedNode;
 import com.github.wautsns.simplevalidator.util.function.FloatPredicate;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 /**
  * @author wautsns
  * @since Mar 11, 2020
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class VDomainFloatCriterionFactory extends FloatCriterionFactory<VDomain> {
+
+    public static final VDomainFloatCriterionFactory INSTANCE = new VDomainFloatCriterionFactory();
 
     @Override
     public void process(ConstrainedNode node, VDomain constraint, FloatCriteria wip) {
         wip.add(produce(constraint));
     }
 
-    // ------------------------- criterion -----------------------------------------
+    // #################### criterion ###################################################
 
     protected static FloatCriterion produce(VDomain constraint) {
         FloatPredicate predicate = DomainUtils.init(constraint.value()).forFloat();

@@ -42,10 +42,20 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @AConstraint
 public @interface VInDepth {
 
-    List<CriterionFactory<VInDepth, ?, ?>> CRITERION_FACTORY_LIST = new LinkedList<>(Collections.singletonList(
-            new VInDepthNonPrimitiveCriterionFactory()
-    ));
-
+    /**
+     * Order of the constraint.
+     *
+     * @return order of the constraint
+     */
     int order() default 0;
+
+    boolean dynamic() default true;
+
+    // #################### extra #######################################################
+
+    /** built-in criterion factories */
+    List<CriterionFactory<VInDepth, ?, ?>> CRITERION_FACTORIES = new LinkedList<>(Collections.singletonList(
+            VInDepthNonPrimitiveCriterionFactory.INSTANCE
+    ));
 
 }

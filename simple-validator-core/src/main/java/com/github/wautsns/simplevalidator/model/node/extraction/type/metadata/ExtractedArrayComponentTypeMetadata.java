@@ -34,7 +34,7 @@ import java.lang.reflect.AnnotatedArrayType;
 import java.lang.reflect.AnnotatedType;
 
 /**
- * Extracted array component type metadata.
+ * The extracted array component type metadata.
  *
  * @author wautsns
  * @since Mar 18, 2020
@@ -60,7 +60,7 @@ public class ExtractedArrayComponentTypeMetadata extends ConstrainedExtractedTyp
         return CRITERION_WRAPPER;
     }
 
-    // -------------------- internal utils ----------------------------------------------
+    // #################### internal utils ##############################################
 
     /** criterion wrapper */
     private static final Criterion.Wrapper CRITERION_WRAPPER = new Criterion.Wrapper() {

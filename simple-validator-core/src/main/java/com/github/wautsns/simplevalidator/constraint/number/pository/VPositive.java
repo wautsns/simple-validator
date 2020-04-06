@@ -40,8 +40,18 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @VDomain("(0,~)")
 public @interface VPositive {
 
+    /**
+     * Message(template).
+     *
+     * @return message(template)
+     */
     String message() default "[`VPositive`]";
 
+    /**
+     * Order of the constraint.
+     *
+     * @return order of the constraint
+     */
     int order() default 0;
 
 }

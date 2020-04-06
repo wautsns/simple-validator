@@ -22,10 +22,12 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 
 /**
+ * Criterion factory for {@code Comparable} type.
+ *
  * @author wautsns
  * @since Mar 15, 2020
  */
-public abstract class AbstractComparableCriterionFactory<A extends Annotation, T>
+public abstract class ComparableCriterionFactory<A extends Annotation, T>
         implements TCriterionFactory<A, Comparable<T>> {
 
     @Override
@@ -33,7 +35,7 @@ public abstract class AbstractComparableCriterionFactory<A extends Annotation, T
         return TypeUtils.isAssignableTo(type, Comparable.class);
     }
 
-    // ------------------------- utils ---------------------------------------------
+    // #################### utils #######################################################
 
     public static <T> boolean eq(Comparable<T> valueA, T valueB) {
         return valueA.compareTo(valueB) == 0;

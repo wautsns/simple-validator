@@ -40,8 +40,18 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @VSize(min = 1, max = Integer.MAX_VALUE)
 public @interface VNotEmpty {
 
+    /**
+     * Message(template).
+     *
+     * @return message(template)
+     */
     String message() default "[`VNotEmpty`]";
 
+    /**
+     * Order of the constraint.
+     *
+     * @return order of the constraint
+     */
     int order() default 0;
 
 }

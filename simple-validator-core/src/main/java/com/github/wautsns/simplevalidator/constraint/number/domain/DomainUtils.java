@@ -203,7 +203,7 @@ public class DomainUtils {
         public <T extends Number & Comparable<T>> Predicate<T> forComparableNumber(
                 Class<T> clazz) {
             List<T> refs = Arrays.stream(data)
-                    .map(text -> NumericTextParser.parse(text, clazz))
+                    .map(text -> NumericTextParser.parse(clazz, text))
                     .sorted()
                     .collect(Collectors.toCollection(LinkedList::new));
             return value -> (Collections.binarySearch(refs, value) >= 0);
@@ -298,7 +298,7 @@ public class DomainUtils {
         @Override
         public <T extends Number & Comparable<T>> Predicate<T> forComparableNumber(
                 Class<T> clazz) {
-            T ref = NumericTextParser.parse(data, clazz);
+            T ref = NumericTextParser.parse(clazz, data);
             boolean inclusive = this.inclusive;
             boolean left = this.left;
             return value -> {

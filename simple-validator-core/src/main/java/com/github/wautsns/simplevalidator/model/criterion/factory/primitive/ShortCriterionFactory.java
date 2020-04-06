@@ -23,7 +23,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 
 /**
- * Abstract short criterion factory.
+ * Criterion factory for {@code short} type.
  *
  * @author wautsns
  * @since Mar 11, 2020

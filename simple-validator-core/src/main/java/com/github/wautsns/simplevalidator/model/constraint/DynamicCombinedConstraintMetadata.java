@@ -20,6 +20,8 @@ import com.github.wautsns.simplevalidator.constraint.ACombine;
 import com.github.wautsns.simplevalidator.exception.analysis.ConstraintAnalysisException;
 import com.github.wautsns.simplevalidator.util.common.AnnotationProxy;
 import com.github.wautsns.simplevalidator.util.common.ReflectionUtils;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.springframework.expression.EvaluationContext;
 import org.springframework.expression.Expression;
 import org.springframework.expression.ExpressionParser;
@@ -42,8 +44,8 @@ import java.util.stream.Collectors;
 /**
  * Dynamic combined constraint metadata.
  *
- * @param <A> target constraint type
- * @param <C> combined constraint type
+ * @param <A> type of target constraint
+ * @param <C> type of combined constraint
  * @author wautsns
  * @since Mar 21, 2020
  */
@@ -101,7 +103,7 @@ public class DynamicCombinedConstraintMetadata<A extends Annotation, C extends A
      * @param aCombine ACombine
      * @param fixedAttributeValueMap fixed attribute value map
      * @param dynamicAttributeValueMap dynamic attribute value map
-     * @param <A> constraint type
+     * @param <A> type of constraint
      */
     private static <A extends Annotation> void initAttributeValueMap(
             ACombine aCombine,
@@ -132,7 +134,7 @@ public class DynamicCombinedConstraintMetadata<A extends Annotation, C extends A
      * @param attribute attribute
      * @param fixedAttributeValueMap fixed attribute value map
      * @param dynamicAttributeValueMap dynamic attribute value map
-     * @param <A> constraint type
+     * @param <A> type of constraint
      */
     private static <A extends Annotation> void processAAttribute(
             AAttribute aAttribute, Method attribute,
@@ -142,17 +144,11 @@ public class DynamicCombinedConstraintMetadata<A extends Annotation, C extends A
         String spel = aAttribute.spel();
         String[] values = aAttribute.values();
         String ref = aAttribute.ref();
+        Class<?> type = attribute.getReturnType();
         if (!AAttribute.LOOK_VALUE.equals(spel)) {
-            Expression expr = SPEL_PARSER.parseExpression(spel);
-            dynamicAttributeValueMap.put(name, constraint -> {
-                SimpleEvaluationContext ctx = SimpleEvaluationContext
-                        .forPropertyAccessors(PROPERTY_ACCESSORS)
-                        .withRootObject(constraint.getAttributeValueMap())
-                        .build();
-                return expr.getValue(ctx, attribute.getReturnType());
-            });
+            dynamicAttributeValueMap.put(name, parseValueSpel(type, spel));
         } else if (!(values.length == 1 && AAttribute.LOOK_REF.equals(values[0]))) {
-            fixedAttributeValueMap.put(name, parseValueStrings(attribute.getReturnType(), values, 0));
+            fixedAttributeValueMap.put(name, parseValueStrings(type, values, 0));
         } else if (AAttribute.DEFAULT.equals(ref)) {
             fixedAttributeValueMap.put(name, attribute.getDefaultValue());
         } else if (ref.isEmpty()) {
@@ -174,73 +170,94 @@ public class DynamicCombinedConstraintMetadata<A extends Annotation, C extends A
         for (Map.Entry<String, Object> entry : attributeValueMap.entrySet()) {
             if (entry.getValue() == null) {
                 throw new ConstraintAnalysisException(
-                        "Attribute[%s] value of combined constraint[%s] defined in [%s] is null.",
+                        "Value of attribute[%s] of combined constraint[%s] defined in [%s] is null.",
                         entry.getKey(), aCombine, targetConstraintType);
             }
         }
     }
 
-    // #################### value ##############################################
+    // #################### value utils #################################################
 
     // ==================== value strings ===============================================
 
     /**
-     * Parse value string.
+     * Parse value strings.
      *
-     * @param valueClass target class
+     * @param type target type
      * @param valueStrings value strings.
-     * @param index current index
+     * @param index index(only valid when type is not array)
      * @return value
      */
-    private static Object parseValueStrings(Class<?> valueClass, String[] valueStrings, int index) {
-        if (valueClass.isArray()) {
-            Class<?> componentType = valueClass.getComponentType();
+    private static Object parseValueStrings(Class<?> type, String[] valueStrings, int index) {
+        if (type.isArray()) {
+            Class<?> componentType = type.getComponentType();
             Object array = Array.newInstance(componentType, valueStrings.length);
             for (int i = 0; i < valueStrings.length; i++) {
-                Object value = parseValueStrings(valueClass, valueStrings, i);
+                Object value = parseValueStrings(type, valueStrings, i);
                 Array.set(array, i, value);
             }
             return array;
-        } else if (valueClass == String.class) {
+        } else if (type == String.class) {
             return valueStrings[index];
-        } else if (valueClass == int.class) {
+        } else if (type == int.class) {
             return Integer.valueOf(valueStrings[index]);
-        } else if (valueClass == boolean.class) {
+        } else if (type == boolean.class) {
             return Boolean.valueOf(valueStrings[index]);
-        } else if (valueClass == Class.class) {
+        } else if (type == Class.class) {
             return ReflectionUtils.requireClass(valueStrings[index]);
-        } else if (valueClass == long.class) {
+        } else if (type == long.class) {
             return Long.valueOf(valueStrings[index]);
-        } else if (valueClass == byte.class) {
+        } else if (type == byte.class) {
             return Byte.valueOf(valueStrings[index]);
-        } else if (valueClass == char.class) {
+        } else if (type == char.class) {
             return valueStrings[index].charAt(0);
-        } else if (valueClass == short.class) {
+        } else if (type == short.class) {
             return Short.valueOf(valueStrings[index]);
-        } else if (valueClass == double.class) {
+        } else if (type == double.class) {
             return Double.valueOf(valueStrings[index]);
-        } else if (valueClass == float.class) {
+        } else if (type == float.class) {
             return Float.valueOf(valueStrings[index]);
         } else {
             throw new IllegalStateException();
         }
     }
 
-    // ==================== value spel ===============================================
+    // ==================== value spel ==================================================
+
+    /**
+     * Parse value spel.
+     *
+     * @param type target type
+     * @param spel spel
+     * @param <A> type of target constraint
+     * @return value producer
+     */
+    private static <A extends Annotation> Function<Constraint<A>, Object> parseValueSpel(Class<?> type, String spel) {
+        Expression expr = SPEL_PARSER.parseExpression(spel);
+        return constraint -> {
+            SimpleEvaluationContext ctx = SimpleEvaluationContext
+                    .forPropertyAccessors(PROPERTY_ACCESSORS)
+                    .withRootObject(constraint.getAttributeValueMap())
+                    .build();
+            return expr.getValue(ctx, type);
+        };
+    }
 
     /** spel parser */
     private static final ExpressionParser SPEL_PARSER = new SpelExpressionParser();
 
     /** property accessors */
     private static final PropertyAccessor[] PROPERTY_ACCESSORS = new PropertyAccessor[]{
-            new MapAccessor(), DataBindingPropertyAccessor.forReadOnlyAccess()};
+            MapAccessor.INSTANCE, DataBindingPropertyAccessor.forReadOnlyAccess()};
 
     /** map accessor */
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
     private static class MapAccessor implements PropertyAccessor {
 
-        private static final Class<?>[] SPECIFIC_TARGET_CLASSES = new Class[]{Map.class};
+        public static final MapAccessor INSTANCE = new MapAccessor();
 
-        private MapAccessor() {}
+        /** specific target classes */
+        private static final Class<?>[] SPECIFIC_TARGET_CLASSES = new Class[]{Map.class};
 
         @Override
         public Class<?>[] getSpecificTargetClasses() {

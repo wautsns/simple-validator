@@ -24,10 +24,12 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
+ * Criterion factory for time-like.
+ *
  * @author wautsns
  * @since Mar 11, 2020
  */
-public abstract class AbstractTimeLikeCriterionFactory<A extends Annotation>
+public abstract class TimeLikeCriterionFactory<A extends Annotation>
         extends TypeLikeCriterionFactory<A, TimeLikeUtility<?>> {
 
     @Override

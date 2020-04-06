@@ -40,8 +40,8 @@ public class TemplateMessage extends VariableValueMap {
     private String messageTemplate;
 
     @Override
-    public TemplateMessage put(VariableValueMap another) {
-        return (TemplateMessage) super.put(another);
+    public TemplateMessage put(VariableValueMap variableValueMap) {
+        return (TemplateMessage) super.put(variableValueMap);
     }
 
     @Override

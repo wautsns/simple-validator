@@ -15,25 +15,24 @@
  */
 package com.github.wautsns.simplevalidator.model.criterion.factory.special;
 
-import com.github.wautsns.simplevalidator.model.criterion.basic.Criteria;
-import com.github.wautsns.simplevalidator.model.criterion.basic.Criterion;
-import com.github.wautsns.simplevalidator.model.criterion.factory.CriterionFactory;
+import com.github.wautsns.simplevalidator.model.criterion.factory.TCriterionFactory;
+import com.github.wautsns.simplevalidator.util.common.TypeUtils;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 
 /**
- * Abstract any type criterion factory.
+ * Criterion factory for {@code CharSequence} type.
  *
  * @author wautsns
  * @since Mar 11, 2020
  */
-public abstract class AbstractAnyTypeCriterionFactory<A extends Annotation>
-        implements CriterionFactory<A, Criteria<Criterion>, Criterion> {
+public abstract class CharSequenceCriterionFactory<A extends Annotation>
+        implements TCriterionFactory<A, CharSequence> {
 
     @Override
     public boolean appliesTo(Type type, A constraint) {
-        return true;
+        return TypeUtils.isAssignableTo(type, CharSequence.class);
     }
 
 }

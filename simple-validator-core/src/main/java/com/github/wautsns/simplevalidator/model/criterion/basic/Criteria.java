@@ -24,7 +24,7 @@ import java.util.List;
 /**
  * Criteria.
  *
- * @param <C> specific type of {@code Criterion}
+ * @param <C> type of {@code Criterion}
  * @author wautsns
  * @since Mar 11, 2020
  */
@@ -67,10 +67,10 @@ public abstract class Criteria<C extends Criterion> implements Criterion {
     }
 
     /**
-     * New criteria for the type.
+     * New criteria for the specified type.
      *
      * @param type type of value
-     * @return criteria for the type.
+     * @return criteria for the specified type.
      */
     public static Criteria<?> newInstance(Type type) {
         if (!TypeUtils.isPrimitive(type)) {

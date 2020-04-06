@@ -23,7 +23,7 @@ import java.lang.reflect.Type;
 import java.util.OptionalDouble;
 
 /**
- * {@code DoubleExtractor} for {@code OptionalDouble}.
+ * The {@code DoubleExtractor} for {@code OptionalDouble}.
  *
  * @author wautsns
  * @since Mar 21, 2020

@@ -22,7 +22,10 @@ import com.github.wautsns.simplevalidator.model.criterion.basic.Criterion;
 import com.github.wautsns.simplevalidator.model.node.extraction.value.ConstrainedExtractedValue;
 import com.github.wautsns.simplevalidator.util.common.CollectionUtils;
 import com.github.wautsns.simplevalidator.util.extractor.ValueExtractor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
@@ -33,7 +36,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -43,16 +45,17 @@ import java.util.stream.Collectors;
  * @since Mar 18, 2020
  */
 @Getter
+@RequiredArgsConstructor
 public abstract class ConstrainedNode {
 
     /** location */
-    protected final Location location;
+    protected final @NonNull Location location;
     /** type */
-    protected final Type type;
-    /** constraint list */
-    protected final List<Constraint<?>> constraintList;
-    /** extracted value list */
-    protected final List<ConstrainedExtractedValue> extractedValueList;
+    protected final @NonNull Type type;
+    /** constraints */
+    protected final @NonNull List<Constraint<?>> constraints;
+    /** extracted values */
+    protected final @NonNull List<ConstrainedExtractedValue> extractedValues;
 
     /**
      * Get parent.
@@ -62,51 +65,45 @@ public abstract class ConstrainedNode {
     public abstract ConstrainedNode getParent();
 
     /**
-     * Get child list.
+     * Get children.
      *
-     * @return child list(unmodified)
+     * @return children(unmodified)
      */
-    public List<? extends ConstrainedNode> getChildList() {
-        return extractedValueList;
+    public List<? extends ConstrainedNode> getChildren() {
+        return extractedValues;
     }
 
     /**
-     * Require the child named the specified name.
+     * Require the child with the specified name.
      *
      * @param name child name
      * @return child
-     * @throws IllegalArgumentException if there is no child named the specified name
+     * @throws IllegalArgumentException if there is no child with the specified name
      */
     public ConstrainedNode requireChild(String name) {
         ConstrainedNode child = getChild(name);
         if (child != null) { return child; }
-        throw new IllegalArgumentException(String.format("There is no child named '%s' in %s", name, location));
+        throw new IllegalArgumentException(String.format("There is no child named [%s] in [%s]", name, location));
     }
 
     /**
-     * Get the child named the specified name.
+     * Get the child with the specified name.
      *
      * @param name child name
-     * @return child, or {@code null} if there is no child named the specified name
+     * @return child, or {@code null} if there is no child with the specified name
      */
     public ConstrainedNode getChild(String name) {
-        return getChildList().stream()
-                .filter(child -> child.location.getSimpleName().equals(name))
-                .findFirst()
-                .orElse(null);
+        return getNode(getChildren(), name);
     }
 
     /**
-     * Get the extracted value named the specified name.
+     * Get the extracted value with the specified name.
      *
      * @param name child name
-     * @return child, or {@code null} if there is no child named the specified name
+     * @return child, or {@code null} if there is no child with the specified name
      */
     public ConstrainedExtractedValue getExtractedValue(String name) {
-        return extractedValueList.stream()
-                .filter(extractedValue -> extractedValue.location.getSimpleName().equals(name))
-                .findFirst()
-                .orElse(null);
+        return getNode(extractedValues, name);
     }
 
     /**
@@ -145,7 +142,7 @@ public abstract class ConstrainedNode {
      * @param annotations annotations
      */
     public ConstrainedNode(String name, Type type, Annotation[] annotations) {
-        this(new Location(name), type, Constraint.filterOutConstraintList(annotations));
+        this(new Location(name), type, Constraint.filterOutConstraints(annotations));
     }
 
     /**
@@ -166,7 +163,7 @@ public abstract class ConstrainedNode {
      * @param annotatedType annotated type
      */
     public ConstrainedNode(Location location, AnnotatedType annotatedType) {
-        this(location, annotatedType.getType(), Constraint.filterOutConstraintList(annotatedType));
+        this(location, annotatedType.getType(), Constraint.filterOutConstraints(annotatedType));
     }
 
     /**
@@ -174,21 +171,21 @@ public abstract class ConstrainedNode {
      *
      * @param location node location
      * @param type type
-     * @param constraintList constraint list
+     * @param constraints constraints
      */
-    public ConstrainedNode(Location location, Type type, List<Constraint<?>> constraintList) {
+    public ConstrainedNode(Location location, Type type, List<Constraint<?>> constraints) {
         this.location = location;
         this.type = type;
-        List<Constraint<?>> constraintsAppliedToTheNode = constraintList.stream()
+        List<Constraint<?>> constraintsAppliedToTheNode = constraints.stream()
                 .filter(constraint -> constraint.appliesTo(type))
                 .collect(Collectors.toCollection(LinkedList::new));
-        if (constraintsAppliedToTheNode.size() == constraintList.size()) {
-            this.constraintList = CollectionUtils.unmodifiableList(constraintList);
-            this.extractedValueList = Collections.emptyList();
+        if (constraintsAppliedToTheNode.size() == constraints.size()) {
+            this.constraints = CollectionUtils.unmodifiableList(constraints);
+            this.extractedValues = Collections.emptyList();
         } else {
-            this.constraintList = CollectionUtils.unmodifiableList(constraintsAppliedToTheNode);
+            this.constraints = CollectionUtils.unmodifiableList(constraintsAppliedToTheNode);
             Map<ValueExtractor, List<Constraint<?>>> tmp = new HashMap<>();
-            constraintList.stream()
+            constraints.stream()
                     .filter(constraint -> !constraintsAppliedToTheNode.contains(constraint))
                     .forEach(constraint -> {
                         try {
@@ -198,19 +195,10 @@ public abstract class ConstrainedNode {
                             throw new IllegalConstrainedNodeException(e, location, constraint.getOrigin());
                         }
                     });
-            this.extractedValueList = CollectionUtils.unmodifiableList(tmp.entrySet().stream()
+            this.extractedValues = CollectionUtils.unmodifiableList(tmp.entrySet().stream()
                     .map(entry -> new ConstrainedExtractedValue(this, entry.getKey(), entry.getValue()))
                     .collect(Collectors.toCollection(LinkedList::new)));
         }
-    }
-
-    public ConstrainedNode(
-            Location location, Type type, List<Constraint<?>> constraintList,
-            List<ConstrainedExtractedValue> extractedValueList) {
-        this.location = Objects.requireNonNull(location);
-        this.type = Objects.requireNonNull(type);
-        this.constraintList = Objects.requireNonNull(constraintList);
-        this.extractedValueList = Objects.requireNonNull(extractedValueList);
     }
 
     // #################### utils #######################################################
@@ -218,6 +206,7 @@ public abstract class ConstrainedNode {
     // ==================== location ====================================================
 
     /** node location */
+    @EqualsAndHashCode(of = "names")
     public static class Location implements Serializable {
 
         private static final long serialVersionUID = 6613571499661573545L;
@@ -254,20 +243,6 @@ public abstract class ConstrainedNode {
             return names.getLast();
         }
 
-        @Override
-        public int hashCode() {
-            return names.hashCode();
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            if (obj == this) { return true; }
-            if (obj == null) { return false; }
-            if (this.getClass() != obj.getClass()) { return false; }
-            Location that = (Location) obj;
-            return this.names.equals(that.names);
-        }
-
         /**
          * Returns a string representation of the location.
          *
@@ -283,6 +258,21 @@ public abstract class ConstrainedNode {
     // #################### internal utils ##############################################
 
     /**
+     * Get node with the specified name.
+     *
+     * @param nodes nodes
+     * @param name name
+     * @param <N> type of node
+     * @return node with the specified name, or {@code null} if there is no node with the specified name
+     */
+    protected static <N extends ConstrainedNode> N getNode(List<N> nodes, String name) {
+        return nodes.stream()
+                .filter(node -> node.location.getSimpleName().equals(name))
+                .findFirst()
+                .orElse(null);
+    }
+
+    /**
      * Clear unconstrained node list.
      *
      * @param nodeList node list
@@ -291,7 +281,7 @@ public abstract class ConstrainedNode {
      */
     protected static <N extends ConstrainedNode> List<N> clear(List<N> nodeList) {
         List<N> tmp = nodeList.stream()
-                .filter(node -> !node.getChildList().isEmpty() || !node.getConstraintList().isEmpty())
+                .filter(node -> !node.getChildren().isEmpty() || !node.getConstraints().isEmpty())
                 .collect(Collectors.toCollection(LinkedList::new));
         if (tmp.size() == nodeList.size()) { tmp = nodeList; }
         return CollectionUtils.unmodifiableList(tmp);

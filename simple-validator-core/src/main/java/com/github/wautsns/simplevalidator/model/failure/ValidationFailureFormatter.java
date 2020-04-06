@@ -16,9 +16,9 @@
 package com.github.wautsns.simplevalidator.model.failure;
 
 import com.github.wautsns.templatemessage.kernel.TemplateMessageFormatter;
-import com.github.wautsns.templatemessage.kernel.processor.PropertiesFormattingProcessor;
 import com.github.wautsns.templatemessage.kernel.processor.SpelFormattingProcessor;
 import com.github.wautsns.templatemessage.kernel.processor.VariableFormattingProcessor;
+import com.github.wautsns.templatemessage.kernel.processor.messagesource.ReloadableResourceFormattingProcessor;
 
 /**
  * Validation failure formatter.
@@ -30,38 +30,56 @@ public class ValidationFailureFormatter extends TemplateMessageFormatter {
 
     private static final long serialVersionUID = -6637627708711439692L;
 
+    /** the left delimiter for variable processor */
     public static final String LEFT_DELIMITER_VARIABLE = "{{";
+    /** the right delimiter for variable processor */
     public static final String RIGHT_DELIMITER_VARIABLE = "}}";
-    public static final String LEFT_DELIMITER_PROPERTIES = "[`";
-    public static final String RIGHT_DELIMITER_PROPERTIES = "`]";
+    /** the left delimiter for resource processor */
+    public static final String LEFT_DELIMITER_RESOURCE = "[`";
+    /** the right delimiter for resource processor */
+    public static final String RIGHT_DELIMITER_RESOURCE = "`]";
+    /** the left delimiter for spel processor */
     public static final String LEFT_DELIMITER_SPEL = "#{";
+    /** the right delimiter for spel processor */
     public static final String RIGHT_DELIMITER_SPEL = "}#";
 
-    private final PropertiesFormattingProcessor propertiesFormattingProcessor;
+    /** built-in messages base name */
+    private static final String BUILT_IN_MESSAGES_BASE_NAME = "simple-validator/messages/messages";
 
+    /** reloadable resource formatting processor */
+    private final ReloadableResourceFormattingProcessor reloadableResourceFormattingProcessor;
+
+    /**
+     * Construct a validation failure formatter.
+     *
+     * <ul>
+     * default processors are as followers:
+     * <li>{@link VariableFormattingProcessor}</li>
+     * <li>{@link ReloadableResourceFormattingProcessor}</li>
+     * <li>{@link SpelFormattingProcessor}</li>
+     * </ul>
+     */
     public ValidationFailureFormatter() {
-        // dynamic variable format
+        // variable formatting processor
         addProcessor(0, new VariableFormattingProcessor(LEFT_DELIMITER_VARIABLE, RIGHT_DELIMITER_VARIABLE));
-        // properties variable format
-        propertiesFormattingProcessor =
-                new PropertiesFormattingProcessor(LEFT_DELIMITER_PROPERTIES, RIGHT_DELIMITER_PROPERTIES)
-                        .load("simple-validator/messages/", "messages");
-        addProcessor(100, propertiesFormattingProcessor);
-        // spel variable format
+        // reloadable resource formatting processor
+        reloadableResourceFormattingProcessor = new ReloadableResourceFormattingProcessor(
+                LEFT_DELIMITER_RESOURCE, RIGHT_DELIMITER_RESOURCE);
+        loadResources(BUILT_IN_MESSAGES_BASE_NAME);
+        addProcessor(100, reloadableResourceFormattingProcessor);
+        // spel formatting processor
         addProcessor(200, new SpelFormattingProcessor(LEFT_DELIMITER_SPEL, RIGHT_DELIMITER_SPEL));
     }
 
     /**
-     * Load properties.
+     * Load resources.
      *
-     * <p>eg. load("/i18n", "messages") -> /i18n/messages_zh.properties; /i18n/messages_en.properties
-     *
-     * @param folderPath folder path
-     * @param baseName base name of properties
+     * @param baseNames base names
      * @return self reference
+     * @see ReloadableResourceFormattingProcessor#loadResources(String...)
      */
-    public ValidationFailureFormatter loadProperties(String folderPath, String baseName) {
-        propertiesFormattingProcessor.load(folderPath, baseName);
+    public ValidationFailureFormatter loadResources(String... baseNames) {
+        reloadableResourceFormattingProcessor.loadResources(baseNames);
         return this;
     }
 

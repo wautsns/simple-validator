@@ -25,10 +25,20 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @VPattern(regex = VEmail.REGEX)
 public @interface VEmail {
 
+    String REGEX = "[a-zA-Z0-9-]+@[a-zA-z0-9-]+([.][a-zA-z0-9-]+)+";
+
+    /**
+     * Message(template).
+     *
+     * @return message(template)
+     */
     String message() default "[`VEmail`]";
 
+    /**
+     * Order of the constraint.
+     *
+     * @return order of the constraint
+     */
     int order() default 0;
-
-    String REGEX = "[a-zA-Z0-9-]+@[a-zA-z0-9-]+([.][a-zA-z0-9-]+)+";
 
 }

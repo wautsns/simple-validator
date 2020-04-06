@@ -85,7 +85,7 @@ class NodeCriterionProducer {
             Map<ConstrainedNode, Criteria> nodeCriteriaMap,
             Map<ConstrainedNode, List<Constraint<?>.CriterionProcessor>> nodeCriterionProcessorMap) {
         nodeCriterionProcessorMap.forEach((node, processorList) -> {
-            if (node.getConstraintList().isEmpty()) { return; }
+            if (node.getConstraints().isEmpty()) { return; }
             Criteria wip = nodeCriteriaMap.computeIfAbsent(node, n -> Criteria.newInstance(n.getType()));
             processorList.forEach(processor -> processor.process(node, wip));
         });
@@ -110,8 +110,8 @@ class NodeCriterionProducer {
      * @param node constrained node
      */
     private void add(ConstrainedNode node) {
-        node.getConstraintList().forEach(constraint -> add(node, constraint));
-        node.getChildList().forEach(this::add);
+        node.getConstraints().forEach(constraint -> add(node, constraint));
+        node.getChildren().forEach(this::add);
     }
 
     /**
@@ -132,7 +132,7 @@ class NodeCriterionProducer {
     }
 
     /**
-     * Simplify the ordered node criterion processor map. eg.
+     * Simplify the ordered node criterion processor map. e.g.
      *
      * <pre>
      * public class Human {

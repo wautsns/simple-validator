@@ -20,7 +20,7 @@ import java.lang.reflect.Type;
 /**
  * The {@code boolean} value extractor.
  *
- * @param <T> applicable type
+ * @param <T> type of target value
  * @author wautsns
  * @since Mar 20, 2020
  */
@@ -32,9 +32,9 @@ public interface BooleanExtractor<T> extends ValueExtractor {
     }
 
     /**
-     * Extract {@code boolean} value from the given source.
+     * Extract {@code boolean} value from target value.
      *
-     * @param target target
+     * @param target target value
      * @return extracted {@code boolean} value
      */
     boolean extract(T target);

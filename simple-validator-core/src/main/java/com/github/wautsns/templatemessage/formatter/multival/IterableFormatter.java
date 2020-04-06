@@ -39,10 +39,10 @@ import java.util.Locale;
 @EqualsAndHashCode
 public class IterableFormatter<E> implements Formatter<Iterable<E>> {
 
-    /** the default {@code IterableFormatter}, eg. [1, 2, 3] */
+    /** the default {@code IterableFormatter}, e.g. [1, 2, 3] */
     public static final Formatter<Iterable<Object>> DEFAULT = new IterableFormatter<>();
 
-    private static final long serialVersionUID = 9215356454938186580L;
+    private static final long serialVersionUID = -6989595378363386988L;
 
     /** string format of {@code null}, default is {@code "null"} */
     private @NonNull String stringFormatOfNull = "null";

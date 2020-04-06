@@ -17,22 +17,27 @@ package com.github.wautsns.simplevalidator.constraint.text.notblank;
 
 import com.github.wautsns.simplevalidator.model.criterion.basic.TCriteria;
 import com.github.wautsns.simplevalidator.model.criterion.basic.TCriterion;
-import com.github.wautsns.simplevalidator.model.criterion.factory.special.AbstractCharSequenceCriterionFactory;
+import com.github.wautsns.simplevalidator.model.criterion.factory.special.CharSequenceCriterionFactory;
 import com.github.wautsns.simplevalidator.model.failure.ValidationFailure;
 import com.github.wautsns.simplevalidator.model.node.ConstrainedNode;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 /**
  * @author wautsns
  * @since Mar 11, 2020
  */
-public class VNotBlankTextLikeCriterionFactory extends AbstractCharSequenceCriterionFactory<VNotBlank> {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public class VNotBlankTextLikeCriterionFactory extends CharSequenceCriterionFactory<VNotBlank> {
+
+    public static final VNotBlankTextLikeCriterionFactory INSTANCE = new VNotBlankTextLikeCriterionFactory();
 
     @Override
     public void process(ConstrainedNode node, VNotBlank constraint, TCriteria<CharSequence> wip) {
         wip.add(CRITERION);
     }
 
-    // ------------------------- criterion -----------------------------------------
+    // #################### criterion ###################################################
 
     private static final TCriterion<CharSequence> CRITERION = text -> {
         for (int i = 0; i < text.length(); i++) {

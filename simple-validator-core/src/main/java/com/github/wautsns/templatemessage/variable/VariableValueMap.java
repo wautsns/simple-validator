@@ -36,46 +36,46 @@ public class VariableValueMap implements Serializable {
 
     private static final long serialVersionUID = 155772768719651061L;
 
-    /** serializable value map */
+    /** variable -> serializable value map */
     private Map<Variable<?>, Serializable> serializableValueMap = Collections.emptyMap();
-    /** non-serializable value map */
+    /** variable -> non-serializable value map */
     private transient Map<Variable<?>, Object> nonSerializableValueMap = Collections.emptyMap();
 
     /**
-     * Whether the variable value map is empty.
+     * Whether the variableValueMap is empty.
      *
-     * @return {@code true} if the variable value map is empty, otherwise {@code false}
+     * @return {@code true} if the variableValueMap is empty, otherwise {@code false}
      */
     public boolean isEmpty() {
         return serializableValueMap.isEmpty() && nonSerializableValueMap.isEmpty();
     }
 
     /**
-     * Whether the variable value map contains the variable.
+     * Whether the variableValueMap contains the variable.
      *
      * @param variable variable
-     * @return {@code true} if the variable value map contains the variable, otherwise {@code false}
+     * @return {@code true} if the variableValueMap contains the variable, otherwise {@code false}
      */
     public boolean containsVariable(Variable<?> variable) {
         return serializableValueMap.containsKey(variable) || nonSerializableValueMap.containsKey(variable);
     }
 
     /**
-     * Return size of the variable value map.
+     * Return size of the variableValueMap.
      *
-     * @return size of the variable value map
+     * @return size of the variableValueMap
      */
     public int size() {
         return serializableValueMap.size() + nonSerializableValueMap.size();
     }
 
     /**
-     * Get the variable with the specific name.
+     * Get the variable with the specified name.
      *
      * @param name name
      * @param <T> type of value of variable
-     * @return the variable with the specific name, or {@code null} if the variable value map contains no variable with
-     * the specific name
+     * @return the variable with the specified name, or {@code null} if the variableValueMap contains no variable with
+     * the specified name
      */
     @SuppressWarnings("unchecked")
     public <T> Variable<T> getVariable(String name) {
@@ -87,11 +87,11 @@ public class VariableValueMap implements Serializable {
     }
 
     /**
-     * Get the value of the specific variable.
+     * Get the value of the specified variable.
      *
      * @param variable variable
      * @param <T> type of value
-     * @return the value of the specific variable, or {@code null} if the variable does not exist in the variable value
+     * @return the value of the specified variable, or {@code null} if the variable does not exist in the variable value
      * map, or the value of variable is {@code null}
      */
     public <T> T getValue(Variable<T> variable) {
@@ -99,12 +99,12 @@ public class VariableValueMap implements Serializable {
     }
 
     /**
-     * Get the value of the specific variable.
+     * Get the value of the specified variable.
      *
      * @param variable variable
      * @param defaultValue default value
      * @param <T> type of value
-     * @return the value of the specific variable, or {@code null} if the value of variable is {@code null}, or default
+     * @return the value of the specified variable, or {@code null} if the value of variable is {@code null}, or default
      * value if the variable does not exist in the variable value
      */
     @SuppressWarnings("unchecked")
@@ -119,9 +119,9 @@ public class VariableValueMap implements Serializable {
     }
 
     /**
-     * Return entry stream of the variable value map.
+     * Return entry stream of the variableValueMap.
      *
-     * @return entry stream of the variable value map
+     * @return entry stream of the variableValueMap
      */
     @SuppressWarnings({"rawtypes", "unchecked"})
     public Stream<Map.Entry<Variable, Object>> entryStream() {
@@ -150,13 +150,13 @@ public class VariableValueMap implements Serializable {
     }
 
     /**
-     * Put variable value map.
+     * Copy all variables and values from the specified variableValueMap to this variableValueMap.
      *
-     * @param another another variable value map
+     * @param variableValueMap another variableValueMap
      * @return self reference
      */
-    public VariableValueMap put(VariableValueMap another) {
-        another.forEach(this::put);
+    public VariableValueMap put(VariableValueMap variableValueMap) {
+        variableValueMap.forEach(this::put);
         return this;
     }
 
@@ -181,14 +181,14 @@ public class VariableValueMap implements Serializable {
         return this;
     }
 
-    /** Clear the map. */
+    /** Clear the variableValueMap. */
     public void clear() {
         serializableValueMap.clear();
         nonSerializableValueMap.clear();
     }
 
     /**
-     * Remove the value associated with the variable
+     * Remove the value of the specified variable.
      *
      * @param variable variable
      * @return self reference
@@ -200,24 +200,23 @@ public class VariableValueMap implements Serializable {
     }
 
     /**
-     * Remove and return the value associated with the variable.
+     * Remove and return the value of specified variable.
      *
      * @param variable variable
      * @param <T> type of value
-     * @return value associated with the variable, or {@code null} if the map contains no mapping for the variable
+     * @return the value of specified variable, or {@code null} if the map contains no mapping for the variable
      */
     public <T> T removeAndGet(Variable<T> variable) {
         return removeAndGet(variable, null);
     }
 
     /**
-     * Remove and return the value associated with the variable.
+     * Remove and return the value of specified variable.
      *
      * @param variable variable
      * @param defaultValue default value
      * @param <T> type of value
-     * @return value associated with the variable, or {@code defaultValue} if the map contains no mapping for the
-     * variable
+     * @return the value of specified variable, or default value if the map contains no mapping for the variable
      */
     @SuppressWarnings("unchecked")
     public <T> T removeAndGet(Variable<T> variable, T defaultValue) {
@@ -246,7 +245,7 @@ public class VariableValueMap implements Serializable {
         return result.toString();
     }
 
-    /** empty variable value map */
+    /** empty variableValueMap */
     public static final VariableValueMap EMPTY = new VariableValueMap() {
 
         /** serialVersionUID */

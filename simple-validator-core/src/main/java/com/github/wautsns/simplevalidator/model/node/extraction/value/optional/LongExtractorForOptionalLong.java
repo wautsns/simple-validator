@@ -23,7 +23,7 @@ import java.lang.reflect.Type;
 import java.util.OptionalLong;
 
 /**
- * {@code LongExtractor} for {@code OptionalLong}.
+ * The {@code LongExtractor} for {@code OptionalLong}.
  *
  * @author wautsns
  * @since Mar 21, 2020

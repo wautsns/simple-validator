@@ -25,7 +25,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  *
  * <p>Used to specify attribute in {@linkplain ACombine @ACombine}.
  *
- * <p>Priority: {@linkplain #spel() spel}, {@linkplain #values() value}, {@linkplain #ref() ref}.
+ * <p>Value priority: {@linkplain #spel() spel}, {@linkplain #values() value}, {@linkplain #ref() ref}.
  *
  * @author wautsns
  * @see ACombine
@@ -35,38 +35,49 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Retention(RUNTIME)
 public @interface AAttribute {
 
-    String LOOK_VALUE = "LOOK_VALUE##AAttribute.constraint.simple-validator.wautsns.github.com";
-
-    String LOOK_REF = "LOOK_REF#AAttribute.constraint.simple-validator.wautsns.github.com";
-
-    String DEFAULT = "DEFAULT#AAttribute.constraint.simple-validator.wautsns.github.com";
-
     /**
-     * Get name of the attribute.
+     * Name of the attribute.
      *
-     * @return name of the attribute
+     * @return name of the target attribute
      */
     String name();
 
     /**
-     * Set value by spel.
+     * Value spel, default is {@code LOOK_VALUE}.
      *
-     * @return set value by spel
+     * <p>Use {@link #LOOK_VALUE} to look {@link #values()}.
+     *
+     * @return value spel
      */
     String spel() default LOOK_VALUE;
 
     /**
-     * Set value by strings
+     * Values(in string format), default is <code>{LOOK_REF}</code>.
      *
-     * @return set value by strings
+     * <p>Use {@link #LOOK_REF} to look {@link #ref()}.
+     *
+     * @return values(in string format)
      */
     String[] values() default {LOOK_REF};
 
     /**
-     * Set value by a ref.
+     * Value ref, default is {@code ""}.
      *
-     * @return set value by a ref
+     * <p>Use {@code ""} if the ref is equal to {@link #name()}.
+     *
+     * @return value ref
      */
     String ref() default "";
+
+    // #################### special values ##############################################
+
+    /** look value, is used for {@link #spel()} */
+    String LOOK_VALUE = "LOOK_VALUE##AAttribute.constraint.simple-validator.wautsns.github.com";
+
+    /** look ref, is used for {@link #values()} */
+    String LOOK_REF = "LOOK_REF#AAttribute.constraint.simple-validator.wautsns.github.com";
+
+    /** use default value, is used for {@link #values()} */
+    String DEFAULT = "DEFAULT#AAttribute.constraint.simple-validator.wautsns.github.com";
 
 }

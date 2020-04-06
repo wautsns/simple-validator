@@ -33,15 +33,15 @@ import java.util.concurrent.ConcurrentHashMap;
 public class TypeLikeUtilityVariableCache<U extends TypeLikeUtility> {
 
     /** cache */
-    private final @NonNull Map<U, Variable> cache = new ConcurrentHashMap<>(8);
+    private final Map<U, Variable> cache = new ConcurrentHashMap<>(8);
     /** name of variable */
     private final @NonNull String name;
 
     /**
-     * Get variable associated with the utility.
+     * Get variable associated with the specified utility.
      *
      * @param utility utility
-     * @return variable associated with the utility
+     * @return variable associated with the specified utility
      */
     @SuppressWarnings("unchecked")
     public <T> Variable<T> get(U utility) {

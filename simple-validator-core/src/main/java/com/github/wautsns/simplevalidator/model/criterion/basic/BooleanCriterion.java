@@ -28,9 +28,9 @@ import java.util.function.UnaryOperator;
 public interface BooleanCriterion extends PrimitiveCriterion<Boolean> {
 
     /**
-     * Test value.
+     * Test {@code boolean} value.
      *
-     * @param value value
+     * @param value {@code boolean} value
      * @return validation failure, or {@code null} if the validation is passed.
      */
     ValidationFailure test(boolean value);

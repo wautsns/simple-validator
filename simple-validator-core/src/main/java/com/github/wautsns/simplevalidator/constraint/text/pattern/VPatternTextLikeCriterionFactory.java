@@ -14,9 +14,11 @@ package com.github.wautsns.simplevalidator.constraint.text.pattern;
 
 import com.github.wautsns.simplevalidator.model.criterion.basic.TCriteria;
 import com.github.wautsns.simplevalidator.model.criterion.basic.TCriterion;
-import com.github.wautsns.simplevalidator.model.criterion.factory.special.AbstractCharSequenceCriterionFactory;
+import com.github.wautsns.simplevalidator.model.criterion.factory.special.CharSequenceCriterionFactory;
 import com.github.wautsns.simplevalidator.model.failure.ValidationFailure;
 import com.github.wautsns.simplevalidator.model.node.ConstrainedNode;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 import java.util.regex.Pattern;
 
@@ -24,13 +26,16 @@ import java.util.regex.Pattern;
  * @author wautsns
  * @since Mar 11, 2020
  */
-public class VPatternTextLikeCriterionFactory extends AbstractCharSequenceCriterionFactory<VPattern> {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public class VPatternTextLikeCriterionFactory extends CharSequenceCriterionFactory<VPattern> {
+
+    public static final VPatternTextLikeCriterionFactory INSTANCE = new VPatternTextLikeCriterionFactory();
 
     @Override
     public void process(ConstrainedNode node, VPattern constraint, TCriteria<CharSequence> wip) {
         wip.add(produce(constraint));
     }
-    // ------------------------- criterion -----------------------------------------
+    // #################### criterion ###################################################
 
     protected static TCriterion<CharSequence> produce(VPattern constraint) {
         Pattern pattern = Pattern.compile(constraint.regex());

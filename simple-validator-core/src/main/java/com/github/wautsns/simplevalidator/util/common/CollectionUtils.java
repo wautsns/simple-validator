@@ -20,6 +20,7 @@ import lombok.experimental.UtilityClass;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Collection utils.
@@ -52,6 +53,31 @@ public class CollectionUtils {
             return list;
         } else {
             return Collections.singletonList(list.get(0));
+        }
+    }
+
+    /**
+     * Wrap the set into unmodifiable set.
+     *
+     * <p>If the set is unmodifiable, the original set will be returned.
+     *
+     * @param set set
+     * @param <E> type of element
+     * @return unmodifiable set
+     */
+    public static <E> Set<E> unmodifiableSet(Set<E> set) {
+        if (set.size() > 1) {
+            if (CLASS_UNMODIFIABLE_COLLECTION.isInstance(set)) {
+                return set;
+            } else {
+                return Collections.unmodifiableSet(set);
+            }
+        } else if (set.isEmpty()) {
+            return Collections.emptySet();
+        } else if (CLASS_SINGLETON_SET.isInstance(set)) {
+            return set;
+        } else {
+            return Collections.singleton(set.iterator().next());
         }
     }
 
@@ -90,6 +116,9 @@ public class CollectionUtils {
     /** class: Collections$SingletonList */
     private static final Class<?> CLASS_SINGLETON_LIST = ReflectionUtils.requireClass(
             "java.util.Collections$SingletonList");
+    /** class: Collections$SingletonSet */
+    private static final Class<?> CLASS_SINGLETON_SET = ReflectionUtils.requireClass(
+            "java.util.Collections$SingletonSet");
     /** class: Collections$UnmodifiableMap */
     private static final Class<?> CLASS_UNMODIFIABLE_MAP = ReflectionUtils.requireClass(
             "java.util.Collections$UnmodifiableMap");

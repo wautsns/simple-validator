@@ -14,9 +14,11 @@ package com.github.wautsns.simplevalidator.constraint.number.domain;
 
 import com.github.wautsns.simplevalidator.model.criterion.basic.TCriteria;
 import com.github.wautsns.simplevalidator.model.criterion.basic.TCriterion;
-import com.github.wautsns.simplevalidator.model.criterion.factory.special.AbstractCharSequenceCriterionFactory;
+import com.github.wautsns.simplevalidator.model.criterion.factory.special.CharSequenceCriterionFactory;
 import com.github.wautsns.simplevalidator.model.failure.ValidationFailure;
 import com.github.wautsns.simplevalidator.model.node.ConstrainedNode;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 import java.util.function.Predicate;
 
@@ -24,14 +26,17 @@ import java.util.function.Predicate;
  * @author wautsns
  * @since Mar 11, 2020
  */
-public class VDomainNumericTextCriterionFactory extends AbstractCharSequenceCriterionFactory<VDomain> {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public class VDomainNumericTextCriterionFactory extends CharSequenceCriterionFactory<VDomain> {
+
+    public static final VDomainNumericTextCriterionFactory INSTANCE = new VDomainNumericTextCriterionFactory();
 
     @Override
     public void process(ConstrainedNode node, VDomain constraint, TCriteria<CharSequence> wip) {
         wip.add(produce(constraint));
     }
 
-    // ------------------------- criterion -----------------------------------------
+    // #################### criterion ###################################################
 
     protected static TCriterion<CharSequence> produce(VDomain constraint) {
         Predicate<CharSequence> predicate = DomainUtils.init(constraint.value()).forNumericText();

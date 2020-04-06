@@ -39,9 +39,6 @@ public class SpelFormattingProcessor extends TemplateMessageFormatter.Processor 
     /** serialVersionUID */
     private static final long serialVersionUID = 4480932903559439109L;
 
-    /** spel expression parser */
-    private static final ExpressionParser parser = new SpelExpressionParser();
-
     public SpelFormattingProcessor(String leftDelimiter, String rightDelimiter) {
         super(leftDelimiter, rightDelimiter);
     }
@@ -51,7 +48,7 @@ public class SpelFormattingProcessor extends TemplateMessageFormatter.Processor 
     @Override
     public String process(String text, VariableValueMap variableValueMap, Locale locale) {
         try {
-            Expression expr = parser.parseExpression(text);
+            Expression expr = SPEL_PARSER.parseExpression(text);
             SimpleEvaluationContext ctx = SimpleEvaluationContext
                     .forPropertyAccessors(PROPERTY_ACCESSORS)
                     .withRootObject(variableValueMap)
@@ -63,6 +60,9 @@ public class SpelFormattingProcessor extends TemplateMessageFormatter.Processor 
     }
 
     // #################### internal utils ##############################################
+
+    /** spel expression parser */
+    private static final ExpressionParser SPEL_PARSER = new SpelExpressionParser();
 
     /** property accessors */
     private static final PropertyAccessor[] PROPERTY_ACCESSORS = new PropertyAccessor[]{

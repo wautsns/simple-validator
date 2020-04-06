@@ -46,33 +46,46 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @AConstraint
 public @interface VDomain {
 
+    /**
+     * Message(template).
+     *
+     * @return message(template)
+     */
     String message() default "[`VDomain`]";
 
+    /**
+     * Order of the constraint.
+     *
+     * @return order of the constraint
+     */
     int order() default 0;
 
     String[] value();
 
-    // -------------------- metadata ----------------------------------------------------
+    // #################### extra #######################################################
 
-    List<CriterionFactory<VDomain, ?, ?>> CRITERION_FACTORY_LIST = new LinkedList<>(Arrays.asList(
-            new VDomainComparableNumberCriterionFactory(),
-            new VDomainNumericTextCriterionFactory(),
-            new VDomainIntCriterionFactory(),
-            new VDomainLongCriterionFactory(),
-            new VDomainDoubleCriterionFactory(),
-            new VDomainByteCriterionFactory(),
-            new VDomainShortCriterionFactory(),
-            new VDomainFloatCriterionFactory()
+    /** built-in criterion factories */
+    List<CriterionFactory<VDomain, ?, ?>> CRITERION_FACTORIES = new LinkedList<>(Arrays.asList(
+            VDomainComparableNumberCriterionFactory.INSTANCE,
+            VDomainNumericTextCriterionFactory.INSTANCE,
+            VDomainIntCriterionFactory.INSTANCE,
+            VDomainLongCriterionFactory.INSTANCE,
+            VDomainDoubleCriterionFactory.INSTANCE,
+            VDomainByteCriterionFactory.INSTANCE,
+            VDomainShortCriterionFactory.INSTANCE,
+            VDomainFloatCriterionFactory.INSTANCE
     ));
 
-    List<ValueExtractor> VALUE_EXTRACTOR_LIST = new LinkedList<>(Arrays.asList(
+    /** built-in value extractors */
+    List<ValueExtractor> VALUE_EXTRACTORS = new LinkedList<>(Arrays.asList(
             IntExtractorForOptionalInt.INSTANCE,
             LongExtractorForOptionalLong.INSTANCE,
             DoubleExtractorForOptionalDouble.INSTANCE
     ));
 
-    // ------------------------- variables -----------------------------------------
+    // ==================== variables ===================================================
 
+    /** variables: {@linkplain #value() domain} */
     @AVariableAlias("value")
     Variable<String[]> DOMAIN = new Variable<>(
             "domain", new ArrayFormatter<>().setPrefix("").setSuffix("").setDelimiter("∪"));

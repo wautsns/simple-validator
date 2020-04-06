@@ -24,7 +24,7 @@ import lombok.NoArgsConstructor;
 import java.util.Optional;
 
 /**
- * Extracted optional value type metadata.
+ * The extracted optional value type metadata.
  *
  * @author wautsns
  * @since Mar 18, 2020
@@ -50,7 +50,7 @@ public class ExtractedOptionalValueTypeMetadata extends ConstrainedExtractedType
         return CRITERION_WRAPPER;
     }
 
-    // -------------------- internal utils ----------------------------------------------
+    // #################### internal utils ##############################################
 
     /** type parameter metadata */
     private static final TypeParameterMetadata TYPE_PARAMETER_METADATA = new TypeParameterMetadata() {

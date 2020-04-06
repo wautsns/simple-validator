@@ -29,12 +29,18 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @AConstraint
 public @interface VFuture {
 
-    List<CriterionFactory<VFuture, ?, ?>> CRITERION_FACTORY_LIST = new LinkedList<>(Collections.singletonList(
-            new VFutureTimeLikeCriterionFactory()
-    ));
-
+    /**
+     * Message(template).
+     *
+     * @return message(template)
+     */
     String message() default "[`VFuture`]";
 
+    /**
+     * Order of the constraint.
+     *
+     * @return order of the constraint
+     */
     int order() default 0;
 
     long years() default 0;
@@ -51,6 +57,16 @@ public @interface VFuture {
 
     long milliseconds() default 0;
 
+    // #################### extra #######################################################
+
+    /** built-in criterion factories */
+    List<CriterionFactory<VFuture, ?, ?>> CRITERION_FACTORIES = new LinkedList<>(Collections.singletonList(
+            VFutureTimeLikeCriterionFactory.INSTANCE
+    ));
+
+    // ==================== variables ===================================================
+
+    /** variables: ref */
     TypeLikeUtilityVariableCache<TimeLikeUtility<?>> REF = new TypeLikeUtilityVariableCache<>("ref");
 
 }

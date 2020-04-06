@@ -15,13 +15,11 @@
  */
 package com.github.wautsns.templatemessage.kernel;
 
-import com.github.wautsns.templatemessage.formatter.Formatter;
 import com.github.wautsns.templatemessage.variable.VariableValueMap;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-import java.io.Serializable;
 import java.util.Collection;
 import java.util.Locale;
 import java.util.Map;
@@ -29,15 +27,12 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ConcurrentSkipListMap;
 
 /**
- * Formatter for {@code TemplateMessageFormatter} value.
+ * {@code TemplateMessageFormatter} formatter.
  *
  * @author wautsns
  * @since Mar 10, 2020
  */
-@EqualsAndHashCode
-public class TemplateMessageFormatter implements Formatter<TemplateMessage> {
-
-    private static final long serialVersionUID = -316723311454568554L;
+public class TemplateMessageFormatter {
 
     /** order -> processors map */
     private final Map<Integer, Collection<Processor>> orderedProcessorsMap = new ConcurrentSkipListMap<>();
@@ -60,9 +55,25 @@ public class TemplateMessageFormatter implements Formatter<TemplateMessage> {
 
     // #################### format ######################################################
 
-    @Override
-    public String format(TemplateMessage value, Locale locale) {
-        return process(value.getMessageTemplate(), value, locale);
+    /**
+     * Format the template message with {@linkplain Locale#getDefault() default locale}.
+     *
+     * @param templateMessage template message
+     * @return value in string format
+     */
+    public String format(TemplateMessage templateMessage) {
+        return format(templateMessage, Locale.getDefault());
+    }
+
+    /**
+     * Format the template message with {@linkplain Locale#getDefault() default locale}.
+     *
+     * @param templateMessage template message
+     * @param locale locale
+     * @return value in string format
+     */
+    public String format(TemplateMessage templateMessage, Locale locale) {
+        return process(templateMessage.getMessageTemplate(), templateMessage, locale);
     }
 
     /**
@@ -75,7 +86,9 @@ public class TemplateMessageFormatter implements Formatter<TemplateMessage> {
      */
     private String process(CharSequence wip, VariableValueMap variableValueMap, Locale locale) {
         StringBuilder tmp = new StringBuilder(wip);
-        orderedProcessorsMap.forEach((order, ps) -> ps.forEach(p -> process(tmp, p, variableValueMap, locale)));
+        orderedProcessorsMap.forEach(
+                (order, processors) -> processors.forEach(
+                        processor -> process(tmp, processor, variableValueMap, locale)));
         if (tmp.length() != wip.length()) {
             return process(tmp, variableValueMap, locale);
         } else {
@@ -89,7 +102,7 @@ public class TemplateMessageFormatter implements Formatter<TemplateMessage> {
     }
 
     /**
-     * Process the wip of the message with the specific processor.
+     * Process the wip of the message with the specified processor.
      *
      * @param wip wip of the message
      * @param processor processor
@@ -128,9 +141,7 @@ public class TemplateMessageFormatter implements Formatter<TemplateMessage> {
     @Getter
     @EqualsAndHashCode
     @RequiredArgsConstructor
-    public abstract static class Processor implements Serializable {
-
-        private static final long serialVersionUID = -5793432939078583151L;
+    public abstract static class Processor {
 
         /** left delimiter */
         private final String leftDelimiter;

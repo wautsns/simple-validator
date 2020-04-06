@@ -51,22 +51,22 @@ public class CriterionUtils {
     private static final Map<ConstrainedNode, Criterion> CACHE = new ConcurrentHashMap<>(128);
 
     /**
-     * Get criterion for the specific type.
+     * Get criterion for the specified type.
      *
      * @param type type
      * @param <C> type of criterion
-     * @return criterion for the specific type
+     * @return criterion for the specified type
      */
     public static <C extends Criterion> C forType(Class<?> type) {
         return forNode(ConstrainedClass.getInstance(type));
     }
 
     /**
-     * Get criterion for the specific node.
+     * Get criterion for the specified node.
      *
      * @param node node
      * @param <C> type of criterion
-     * @return criterion for the specific node
+     * @return criterion for the specified node
      */
     @SuppressWarnings("unchecked")
     public static <C extends Criterion> C forNode(ConstrainedNode node) {
@@ -74,11 +74,11 @@ public class CriterionUtils {
     }
 
     /**
-     * Create a criterion for the specific parameter.
+     * Create a criterion for the specified parameter.
      *
      * @param parameter parameter
      * @param <C> type of criterion
-     * @return criterion for the specific parameter
+     * @return criterion for the specified parameter
      */
     @SuppressWarnings("unchecked")
     public static <C extends Criterion> C forParameter(Parameter parameter) {
@@ -119,7 +119,7 @@ public class CriterionUtils {
      * Resolve node.
      *
      * @param node node
-     * @return criterion for the specific node
+     * @return criterion for the specified node
      */
     private static Criterion resolveNode(ConstrainedNode node) {
         Criterion criterion = produce(node);

@@ -14,10 +14,12 @@ package com.github.wautsns.simplevalidator.constraint.number.domain;
 
 import com.github.wautsns.simplevalidator.model.criterion.basic.TCriteria;
 import com.github.wautsns.simplevalidator.model.criterion.basic.TCriterion;
-import com.github.wautsns.simplevalidator.model.criterion.factory.special.AbstractComparableNumberCriterionFactory;
+import com.github.wautsns.simplevalidator.model.criterion.factory.special.ComparableNumberCriterionFactory;
 import com.github.wautsns.simplevalidator.model.failure.ValidationFailure;
 import com.github.wautsns.simplevalidator.model.node.ConstrainedNode;
 import com.github.wautsns.simplevalidator.util.common.TypeUtils;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 import java.util.function.Predicate;
 
@@ -25,15 +27,24 @@ import java.util.function.Predicate;
  * @author wautsns
  * @since Mar 11, 2020
  */
-public class VDomainComparableNumberCriterionFactory extends AbstractComparableNumberCriterionFactory<VDomain> {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public class VDomainComparableNumberCriterionFactory extends ComparableNumberCriterionFactory<VDomain> {
+
+    public static final VDomainComparableNumberCriterionFactory INSTANCE = new VDomainComparableNumberCriterionFactory();
 
     @Override
     public void process(ConstrainedNode node, VDomain constraint, TCriteria<Comparable<Number>> wip) {
         wip.add(produce(node, constraint));
     }
 
-    // ------------------------- criterion -----------------------------------------
+    // #################### criterion ###################################################
 
+    /**
+     * Produce criterion.
+     *
+     * @param constraint constraint
+     * @return criterion
+     */
     @SuppressWarnings({"rawtypes", "unchecked"})
     protected static TCriterion<Comparable<Number>> produce(
             ConstrainedNode node, VDomain constraint) {

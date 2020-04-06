@@ -23,7 +23,7 @@ import java.lang.reflect.Type;
 import java.util.OptionalInt;
 
 /**
- * {@code IntExtractor} for {@code OptionalInt}.
+ * The {@code IntExtractor} for {@code OptionalInt}.
  *
  * @author wautsns
  * @since Mar 21, 2020

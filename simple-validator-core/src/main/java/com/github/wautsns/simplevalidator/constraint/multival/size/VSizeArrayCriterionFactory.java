@@ -13,15 +13,21 @@
 package com.github.wautsns.simplevalidator.constraint.multival.size;
 
 import com.github.wautsns.simplevalidator.model.criterion.basic.TCriteria;
-import com.github.wautsns.simplevalidator.model.criterion.factory.special.AbstractArrayTypeCriterionFactory;
+import com.github.wautsns.simplevalidator.model.criterion.factory.special.ArrayTypeCriterionFactory;
 import com.github.wautsns.simplevalidator.model.failure.ValidationFailure;
 import com.github.wautsns.simplevalidator.model.node.ConstrainedNode;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 /**
  * @author wautsns
  * @since Mar 11, 2020
  */
-public class VSizeArrayCriterionFactory extends AbstractArrayTypeCriterionFactory<VSize> {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public class VSizeArrayCriterionFactory extends ArrayTypeCriterionFactory<VSize> {
+
+    /** {@code VSizeArrayCriterionFactory} instance */
+    public static final VSizeArrayCriterionFactory INSTANCE = new VSizeArrayCriterionFactory();
 
     @Override
     protected <T> void processTArray(ConstrainedNode node, VSize constraint, TCriteria<T[]> wip) {

@@ -20,7 +20,7 @@ import java.lang.reflect.Type;
 /**
  * The {@code short} value extractor.
  *
- * @param <T> applicable type
+ * @param <T> type of target value
  * @author wautsns
  * @since Mar 20, 2020
  */
@@ -32,11 +32,11 @@ public interface ShortExtractor<T> extends ValueExtractor {
     }
 
     /**
-     * Extract {@code short} value from the given source.
+     * Extract {@code short} value from the target value.
      *
-     * @param source source
+     * @param target target value
      * @return extracted {@code short} value
      */
-    short extract(T source);
+    short extract(T target);
 
 }

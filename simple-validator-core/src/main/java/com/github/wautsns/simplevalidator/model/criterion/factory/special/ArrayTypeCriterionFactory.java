@@ -24,12 +24,12 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 
 /**
- * Abstract array type criterion factory.
+ * Criterion factory for array type.
  *
  * @author wautsns
  * @since Mar 11, 2020
  */
-public abstract class AbstractArrayTypeCriterionFactory<A extends Annotation>
+public abstract class ArrayTypeCriterionFactory<A extends Annotation>
         implements TCriterionFactory<A, Object> {
 
     @Override

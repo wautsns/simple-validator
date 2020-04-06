@@ -32,19 +32,25 @@ public abstract class TypeLikeUtility<T> {
     /** variable for the type like value */
     private final Variable<? super T> valueVariable;
 
+    /** Construct a type like utility with {@link ValidationFailure.Variables#VALUE}. */
     public TypeLikeUtility() {
         this.valueVariable = ValidationFailure.Variables.VALUE;
     }
 
+    /**
+     * Construct a type like utility with specified value formatter.
+     *
+     * @param valueFormatter value formatter
+     */
     public TypeLikeUtility(Formatter<? super T> valueFormatter) {
         this.valueVariable = new Variable<>(ValidationFailure.Variables.VALUE.getName(), valueFormatter);
     }
 
     /**
-     * Whether the utility applies to the type.
+     * Whether the utility applies to the specified type.
      *
      * @param type type
-     * @return {@code true} if the utility applies to the type, otherwise {@code false}
+     * @return {@code true} if the utility applies to the specified type, otherwise {@code false}
      */
     public abstract boolean appliesTo(Type type);
 

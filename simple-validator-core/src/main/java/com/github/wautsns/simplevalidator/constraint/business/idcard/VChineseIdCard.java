@@ -29,15 +29,21 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @AConstraint
 public @interface VChineseIdCard {
 
-    List<CriterionFactory<VChineseIdCard, ?, ?>> CRITERION_FACTORY_LIST = new LinkedList<>(Collections.singletonList(
-            new VChineseIdCardCharSequenceCriterionFactory()
-    ));
-
+    /**
+     * Message(template).
+     *
+     * @return message(template)
+     */
     String message() default "[`VChineseIdCard`]";
 
+    /**
+     * Order of the constraint.
+     *
+     * @return order of the constraint
+     */
     int order() default 0;
 
-    Generation[] generations() default {};
+    Generation[] generations() default {Generation.SECOND};
 
     String[] cities() default {};
 
@@ -45,17 +51,26 @@ public @interface VChineseIdCard {
 
     Gender[] genders() default {};
 
-    // ------------------------- enum ----------------------------------------------
+    // #################### extra #######################################################
 
     enum Generation {FIRST, SECOND}
 
     enum Gender {MALE, FEMALE}
 
-    // ------------------------- variables -----------------------------------------
+    /** built-in criterion factories */
+    List<CriterionFactory<VChineseIdCard, ?, ?>> CRITERION_FACTORIES = new LinkedList<>(Collections.singletonList(
+            VChineseIdCardCharSequenceCriterionFactory.INSTANCE
+    ));
 
+    // ==================== variables ===================================================
+
+    /** variables: {@linkplain #generations() generations} */
     Variable<Generation[]> GENERATIONS = new Variable<>("generations", Formatters.ENUMS_PROPERTIES_NO_RESTRICTIONS);
+    /** variables: {@linkplain #cities() cities} */
     Variable<String[]> CITIES = new Variable<>("cities", Formatters.VALUES_NO_RESTRICTIONS);
+    /** variables: {@linkplain #ages()} () ages} */
     Variable<String[]> AGES = new Variable<>("ages", Formatters.VALUES_NO_RESTRICTIONS);
+    /** variables: {@linkplain #genders()} genders} */
     Variable<Gender[]> GENDERS = new Variable<>("genders", Formatters.ENUMS_PROPERTIES_NO_RESTRICTIONS);
 
 }

@@ -20,7 +20,7 @@ import java.lang.reflect.Type;
 /**
  * The {@code double} value extractor.
  *
- * @param <T> applicable type
+ * @param <T> type of target value
  * @author wautsns
  * @since Mar 20, 2020
  */
@@ -32,9 +32,9 @@ public interface DoubleExtractor<T> extends ValueExtractor {
     }
 
     /**
-     * Extract {@code double} value from the given source.
+     * Extract {@code double} value from the target value.
      *
-     * @param target target
+     * @param target target value
      * @return extracted {@code double} value
      */
     double extract(T target);

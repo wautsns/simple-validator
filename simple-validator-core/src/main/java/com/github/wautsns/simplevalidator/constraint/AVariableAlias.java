@@ -25,6 +25,19 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 /**
  * Annotation variable alias.
  *
+ * <pre>
+ * // example
+ * ...
+ * public @interface VMax {
+ *     ...
+ *     String value();
+ *     ...
+ *     // ===== variables ==============
+ *     &#64;AVariableAlias("value")
+ *     Variable&lt;String&gt; MAX = new Variable("max");
+ * }
+ * </pre>
+ *
  * @author wautsns
  * @since Mar 11, 2020
  */
@@ -34,7 +47,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 public @interface AVariableAlias {
 
     /**
-     * Get alias of variable.
+     * Alias of variable.
      *
      * @return alias of variable
      */

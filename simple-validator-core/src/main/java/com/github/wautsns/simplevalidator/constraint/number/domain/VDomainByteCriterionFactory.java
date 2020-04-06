@@ -21,19 +21,24 @@ import com.github.wautsns.simplevalidator.model.criterion.factory.primitive.Byte
 import com.github.wautsns.simplevalidator.model.failure.ValidationFailure;
 import com.github.wautsns.simplevalidator.model.node.ConstrainedNode;
 import com.github.wautsns.simplevalidator.util.function.BytePredicate;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 /**
  * @author wautsns
  * @since Mar 11, 2020
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class VDomainByteCriterionFactory extends ByteCriterionFactory<VDomain> {
+
+    public static final VDomainByteCriterionFactory INSTANCE = new VDomainByteCriterionFactory();
 
     @Override
     public void process(ConstrainedNode node, VDomain constraint, ByteCriteria wip) {
         wip.add(produce(constraint));
     }
 
-    // ------------------------- criterion -----------------------------------------
+    // #################### criterion ###################################################
 
     protected static ByteCriterion produce(VDomain constraint) {
         BytePredicate predicate = DomainUtils.init(constraint.value()).forByte();

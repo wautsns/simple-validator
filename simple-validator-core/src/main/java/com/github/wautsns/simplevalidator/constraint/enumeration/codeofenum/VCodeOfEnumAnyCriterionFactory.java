@@ -14,9 +14,11 @@ package com.github.wautsns.simplevalidator.constraint.enumeration.codeofenum;
 
 import com.github.wautsns.simplevalidator.model.criterion.basic.TCriteria;
 import com.github.wautsns.simplevalidator.model.criterion.basic.TCriterion;
-import com.github.wautsns.simplevalidator.model.criterion.factory.special.AbstractNonPrimitiveCriterionFactory;
+import com.github.wautsns.simplevalidator.model.criterion.factory.special.NonPrimitiveCriterionFactory;
 import com.github.wautsns.simplevalidator.model.failure.ValidationFailure;
 import com.github.wautsns.simplevalidator.model.node.ConstrainedNode;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -33,62 +35,99 @@ import java.util.stream.Stream;
  * @since Mar 11, 2020
  */
 @SuppressWarnings("unchecked")
-public class VCodeOfEnumAnyCriterionFactory extends AbstractNonPrimitiveCriterionFactory<VCodeOfEnum> {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public class VCodeOfEnumAnyCriterionFactory extends NonPrimitiveCriterionFactory<VCodeOfEnum> {
+
+    /** {@code VCodeOfEnumAnyCriterionFactory} instance */
+    public static final VCodeOfEnumAnyCriterionFactory INSTANCE = new VCodeOfEnumAnyCriterionFactory();
 
     @Override
     public void process(ConstrainedNode node, VCodeOfEnum constraint, TCriteria<Object> wip) {
         wip.add(produce(constraint));
     }
 
-    // ------------------------- criterion -----------------------------------------
+    // #################### criterion ###################################################
 
+    /**
+     * Produce criterion.
+     *
+     * @param constraint constraint
+     * @param <T> type of enumeration code
+     * @param <E> type of enumeration
+     * @return criterion
+     */
     protected static <T extends Enum<T> & CodableEnum<E>, E> TCriterion<Object> produce(VCodeOfEnum constraint) {
-        Class<T> codableEnumClass = (Class<T>) constraint.value();
+        Class<T> clazz = (Class<T>) constraint.value();
         String[] include = constraint.include();
         String[] exclude = constraint.exclude();
         if (include.length == 0 && exclude.length == 0) {
-            return CACHE.computeIfAbsent(codableEnumClass, VCodeOfEnumAnyCriterionFactory::initAll);
+            return CACHE.computeIfAbsent(clazz, VCodeOfEnumAnyCriterionFactory::initForAllEnums);
         } else {
-            return initSpecific(codableEnumClass, include, exclude);
+            return initForSpecifiedEnums(clazz, include, exclude);
         }
     }
 
+    /** codable enumeration type -> criterion cache */
+    private static final Map<Class<?>, TCriterion<Object>> CACHE = new ConcurrentHashMap<>();
+
+    /**
+     * Initialize a criterion for all enumerations.
+     *
+     * @param clazz codable enumeration class
+     * @param <T> type of enumeration code
+     * @param <E> type of enumeration
+     * @return criterion for all values
+     */
     @SuppressWarnings("rawtypes")
-    private static <T extends Enum<T> & CodableEnum<E>, E> TCriterion<Object> initAll(Class<?> codableEnumClass) {
-        Object[] enumConstants = codableEnumClass.getEnumConstants();
-        return init((List) Arrays.asList(enumConstants));
+    private static <T extends Enum<T> & CodableEnum<E>, E> TCriterion<Object> initForAllEnums(Class<?> clazz) {
+        Object[] enums = clazz.getEnumConstants();
+        return initForCodes((List) Arrays.asList(enums));
     }
 
-    private static <T extends Enum<T> & CodableEnum<E>, E> TCriterion<Object> initSpecific(
-            Class<T> codableEnumClass, String[] include, String[] exclude) {
+    /**
+     * Initialize a criterion for specified enumerations.
+     *
+     * @param clazz codable enumeration class
+     * @param <T> type of enumeration code
+     * @param <E> type of enumeration
+     * @return criterion for specified values
+     */
+    private static <T extends Enum<T> & CodableEnum<E>, E> TCriterion<Object> initForSpecifiedEnums(
+            Class<T> clazz, String[] include, String[] exclude) {
         Stream<T> stream;
         if (include.length == 0) {
-            stream = Arrays.stream(codableEnumClass.getEnumConstants());
+            stream = Arrays.stream(clazz.getEnumConstants());
         } else {
-            stream = Arrays.stream(include).map(name -> Enum.valueOf(codableEnumClass, name));
+            stream = Arrays.stream(include).map(name -> Enum.valueOf(clazz, name));
         }
         if (exclude.length > 0) {
             Set<String> namesExcluded = new HashSet<>(Arrays.asList(exclude));
             stream = stream.filter(codableEnum -> !namesExcluded.contains(codableEnum.name()));
         }
-        return init(stream.collect(Collectors.toCollection(LinkedList::new)));
+        return initForCodes(stream.collect(Collectors.toCollection(LinkedList::new)));
     }
 
-    private static <T extends Enum<T> & CodableEnum<E>, E> TCriterion<Object> init(List<T> codableEnums) {
-        Object[] optionalValues = codableEnums.stream()
-                // Don't convert to method reference!! (will cause LambdaConversionException)
+    /**
+     * Initialize a criterion for specified codes.
+     *
+     * @param codes codes
+     * @param <T> type of enumeration code
+     * @param <E> type of enumeration
+     * @return criterion for specified codes
+     */
+    private static <T extends Enum<T> & CodableEnum<E>, E> TCriterion<Object> initForCodes(List<T> codes) {
+        Object[] optionalValues = codes.stream()
+                // Don't replace with method reference!! (will cause LambdaConversionException)
                 .map(codableEnum -> codableEnum.getCode())
                 .toArray();
         return value -> {
-            for (T codableEnum : codableEnums) {
-                if (codableEnum.equalToCode((E) value)) {
+            for (T codableEnum : codes) {
+                if (codableEnum.equalsToCode((E) value)) {
                     return null;
                 }
             }
             return new ValidationFailure(value).put(VCodeOfEnum.OPTIONAL_VALUES, optionalValues);
         };
     }
-
-    private static final Map<Class<?>, TCriterion<Object>> CACHE = new ConcurrentHashMap<>();
 
 }

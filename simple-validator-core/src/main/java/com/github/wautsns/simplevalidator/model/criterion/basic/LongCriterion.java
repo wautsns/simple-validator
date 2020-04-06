@@ -28,9 +28,9 @@ import java.util.function.UnaryOperator;
 public interface LongCriterion extends PrimitiveCriterion<Long> {
 
     /**
-     * Test value.
+     * Test {@code long} value.
      *
-     * @param value value
+     * @param value {@code long} value
      * @return validation failure, or {@code null} if the validation is passed.
      */
     ValidationFailure test(long value);

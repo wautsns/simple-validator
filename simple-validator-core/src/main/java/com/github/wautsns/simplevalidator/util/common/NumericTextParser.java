@@ -21,7 +21,7 @@ import java.util.Map;
 import java.util.function.Function;
 
 /**
- * Numeric text utils.
+ * Numeric text parser.
  *
  * @author wautsns
  * @since Mar 11, 2020
@@ -29,32 +29,17 @@ import java.util.function.Function;
 @UtilityClass
 public class NumericTextParser {
 
-    /** numeric text parsers */
-    private static final Map<Class<?>, Function<String, ?>> NUMERIC_TEXT_PARSERS;
-
-    static {
-        NUMERIC_TEXT_PARSERS = new HashMap<>();
-        addParser(BigDecimal.class, BigDecimal::new);
-        addParser(BigInteger.class, BigInteger::new);
-        addParser(Double.class, Double::valueOf);
-        addParser(Float.class, Float::valueOf);
-        addParser(Long.class, Long::valueOf);
-        addParser(Integer.class, Integer::valueOf);
-        addParser(Short.class, Short::valueOf);
-        addParser(Byte.class, Byte::valueOf);
-    }
-
     /**
-     * Parse text into a numeric value of the specific type.
+     * Parse text into a numeric value of the specified type.
      *
-     * @param text text
      * @param type numeric value type
-     * @param <T> numeric value type
+     * @param text text
+     * @param <T> type of numeric value
      * @return numeric value
      */
     @SuppressWarnings("unchecked")
-    public static <T extends Number & Comparable<T>> T parse(String text, Class<T> type) {
-        return (T) NUMERIC_TEXT_PARSERS.get(type).apply(text);
+    public static <T extends Number & Comparable<T>> T parse(Class<T> type, String text) {
+        return (T) NUMERIC_TEXT_PARSER_MAP.get(type).apply(text);
     }
 
     /**
@@ -78,7 +63,24 @@ public class NumericTextParser {
      */
     @SuppressWarnings({"rawtypes", "unchecked"})
     public static <T extends Number & Comparable<T>> void addParser(Class<T> type, Function<String, T> parser) {
-        NUMERIC_TEXT_PARSERS.put(type, (Function) parser);
+        NUMERIC_TEXT_PARSER_MAP.put(type, (Function) parser);
+    }
+
+    // #################### internal utils ################################################
+
+    /** numeric text parsers */
+    private static final Map<Class<?>, Function<String, ?>> NUMERIC_TEXT_PARSER_MAP;
+
+    static {
+        NUMERIC_TEXT_PARSER_MAP = new HashMap<>();
+        addParser(BigDecimal.class, BigDecimal::new);
+        addParser(BigInteger.class, BigInteger::new);
+        addParser(Double.class, Double::valueOf);
+        addParser(Float.class, Float::valueOf);
+        addParser(Long.class, Long::valueOf);
+        addParser(Integer.class, Integer::valueOf);
+        addParser(Short.class, Short::valueOf);
+        addParser(Byte.class, Byte::valueOf);
     }
 
 }

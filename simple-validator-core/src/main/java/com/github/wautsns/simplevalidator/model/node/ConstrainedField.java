@@ -58,7 +58,7 @@ public class ConstrainedField extends ConstrainedTypeContainer {
         return getDeclaringClass();
     }
 
-    // -------------------- constructor -------------------------------------------------
+    // #################### constructor #################################################
 
     /**
      * Construct a constrained field.
@@ -74,7 +74,7 @@ public class ConstrainedField extends ConstrainedTypeContainer {
         this.criterionWrapper = new CriterionWrapper(field);
     }
 
-    // -------------------- utils -------------------------------------------------------
+    // #################### utils #######################################################
 
     /**
      * Generate field name like '#age'.
@@ -86,7 +86,7 @@ public class ConstrainedField extends ConstrainedTypeContainer {
         return '#' + field.getName();
     }
 
-    // -------------------- internal utils -----------------------------------------------
+    // ==================== internal utils ==============================================
 
     /** criterion wrapper */
     @RequiredArgsConstructor

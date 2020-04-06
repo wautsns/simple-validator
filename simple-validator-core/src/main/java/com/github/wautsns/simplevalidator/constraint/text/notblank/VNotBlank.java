@@ -39,12 +39,25 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @AConstraint
 public @interface VNotBlank {
 
-    List<CriterionFactory<VNotBlank, ?, ?>> CRITERION_FACTORY_LIST = new LinkedList<>(Collections.singletonList(
-            new VNotBlankTextLikeCriterionFactory()
-    ));
-
+    /**
+     * Message(template).
+     *
+     * @return message(template)
+     */
     String message() default "[`VNotBlank`]";
 
+    /**
+     * Order of the constraint.
+     *
+     * @return order of the constraint
+     */
     int order() default 0;
+
+    // #################### extra #######################################################
+
+    /** built-in criterion factories */
+    List<CriterionFactory<VNotBlank, ?, ?>> CRITERION_FACTORIES = new LinkedList<>(Collections.singletonList(
+            VNotBlankTextLikeCriterionFactory.INSTANCE
+    ));
 
 }

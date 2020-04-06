@@ -29,7 +29,7 @@ import java.lang.reflect.AnnotatedTypeVariable;
 import java.lang.reflect.AnnotatedWildcardType;
 
 /**
- * Constrained extracted type.
+ * The constrained extracted type.
  *
  * @author wautsns
  * @since Mar 18, 2020
@@ -53,7 +53,7 @@ public class ConstrainedExtractedType extends ConstrainedTypeContainer {
         return getTypeContainer();
     }
 
-    // -------------------- constructor -------------------------------------------------
+    // #################### constructor #################################################
 
     /**
      * Construct a constrained extracted type.
@@ -69,7 +69,7 @@ public class ConstrainedExtractedType extends ConstrainedTypeContainer {
         this.criterionWrapper = metadata.getCriterionWrapper();
     }
 
-    // -------------------- metadata ----------------------------------------------------
+    // #################### metadata ####################################################
 
     /** constrained extracted type metadata */
     public abstract static class Metadata {
@@ -79,7 +79,7 @@ public class ConstrainedExtractedType extends ConstrainedTypeContainer {
                 "sun.reflect.annotation.AnnotatedTypeFactory$AnnotatedTypeBaseImpl");
 
         /**
-         * Extracted annotated type from the specific annotated type.
+         * Extracted annotated type from the specified annotated type.
          *
          * @param target annotated type
          * @return extracted annotated type, or {@code null} if not supported
@@ -101,7 +101,7 @@ public class ConstrainedExtractedType extends ConstrainedTypeContainer {
         }
 
         /**
-         * Extracted annotated type from the annotated type base type(eg. List&lt;String&gt;...).
+         * Extracted annotated type from the annotated type base type(e.g. List&lt;String&gt;...).
          *
          * @param annotatedType annotated type
          * @return extracted annotated type, or {@code null} if not supported
@@ -111,7 +111,7 @@ public class ConstrainedExtractedType extends ConstrainedTypeContainer {
         }
 
         /**
-         * Extracted annotated type from the annotated parameterized type(eg. List&lt;String&gt;...).
+         * Extracted annotated type from the annotated parameterized type(e.g. List&lt;String&gt;...).
          *
          * @param annotatedType annotated type
          * @return extracted annotated type, or {@code null} if not supported
@@ -156,7 +156,7 @@ public class ConstrainedExtractedType extends ConstrainedTypeContainer {
         }
 
         /**
-         * Extracted annotated type from the annotated array type(eg. String[], int[]...).
+         * Extracted annotated type from the annotated array type(e.g. String[], int[]...).
          *
          * @param annotatedType annotated type
          * @return extracted annotated type, or {@code null} if not supported
@@ -166,7 +166,7 @@ public class ConstrainedExtractedType extends ConstrainedTypeContainer {
         }
 
         /**
-         * Extracted annotated type from the annotated type variable(eg. &lt;T&gt;...).
+         * Extracted annotated type from the annotated type variable(e.g. &lt;T&gt;...).
          *
          * @param annotatedType annotated type
          * @return extracted annotated type, or {@code null} if not supported
@@ -180,7 +180,7 @@ public class ConstrainedExtractedType extends ConstrainedTypeContainer {
         }
 
         /**
-         * Extracted annotated type from the annotated wildcard variable(eg. &lt;? extends Number&gt;...).
+         * Extracted annotated type from the annotated wildcard variable(e.g. &lt;? extends Number&gt;...).
          *
          * @param annotatedType annotated type
          * @return extracted annotated type, or {@code null} if not supported

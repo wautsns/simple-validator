@@ -22,7 +22,7 @@ import java.lang.reflect.Type;
 import java.util.List;
 
 /**
- * TypeLike(eg. text-like, time-like) Criterion factory.
+ * Criterion factory for type-like(e.g. text-like, time-like).
  *
  * @author wautsns
  * @since Mar 11, 2020

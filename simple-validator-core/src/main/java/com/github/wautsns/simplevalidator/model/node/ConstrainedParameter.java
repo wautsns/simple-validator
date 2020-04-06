@@ -58,7 +58,7 @@ public class ConstrainedParameter extends ConstrainedTypeContainer {
         return null;
     }
 
-    // -------------------- constructor -------------------------------------------------
+    // #################### constructor #################################################
 
     /**
      * Construct a constrained parameter.
@@ -70,7 +70,7 @@ public class ConstrainedParameter extends ConstrainedTypeContainer {
         this.origin = parameter;
     }
 
-    // -------------------- utils -------------------------------------------------------
+    // #################### internal utils ##############################################
 
     /**
      * parameter name generator

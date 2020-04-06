@@ -23,7 +23,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 /**
- * Extracted iterable element type metadata.
+ * The extracted iterable element type metadata.
  *
  * @author wautsns
  * @since Mar 18, 2020
@@ -49,7 +49,7 @@ public class ExtractedIterableElementTypeMetadata extends ConstrainedExtractedTy
         return CRITERION_WRAPPER;
     }
 
-    // -------------------- internal utils ----------------------------------------------
+    // #################### internal utils ##############################################
 
     /** type parameter metadata */
     private static final TypeParameterMetadata TYPE_PARAMETER_METADATA = new TypeParameterMetadata() {

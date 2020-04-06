@@ -46,17 +46,31 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 })
 public @interface VBetween {
 
+    /**
+     * Message(template).
+     *
+     * @return message(template)
+     */
     String message() default "[`VBetween`]";
 
+    /**
+     * Order of the constraint.
+     *
+     * @return order of the constraint
+     */
     int order() default 0;
 
     String min();
 
     String max();
 
-    // ------------------------- variables -----------------------------------------
+    // #################### extra #######################################################
 
+    // ==================== variables ===================================================
+
+    /** variables: {@linkplain #min() min} */
     Variable<String> MIN = new Variable<>("min");
+    /** variables: {@linkplain #max() max} */
     Variable<String> MAX = new Variable<>("max");
 
 }

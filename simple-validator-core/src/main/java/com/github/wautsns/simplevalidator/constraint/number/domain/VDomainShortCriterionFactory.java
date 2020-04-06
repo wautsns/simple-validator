@@ -18,19 +18,24 @@ import com.github.wautsns.simplevalidator.model.criterion.factory.primitive.Shor
 import com.github.wautsns.simplevalidator.model.failure.ValidationFailure;
 import com.github.wautsns.simplevalidator.model.node.ConstrainedNode;
 import com.github.wautsns.simplevalidator.util.function.ShortPredicate;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 /**
  * @author wautsns
  * @since Mar 11, 2020
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class VDomainShortCriterionFactory extends ShortCriterionFactory<VDomain> {
+
+    public static final VDomainShortCriterionFactory INSTANCE = new VDomainShortCriterionFactory();
 
     @Override
     public void process(ConstrainedNode node, VDomain constraint, ShortCriteria wip) {
         wip.add(produce(constraint));
     }
 
-    // ------------------------- criterion -----------------------------------------
+    // #################### criterion ###################################################
 
     protected static ShortCriterion produce(VDomain constraint) {
         ShortPredicate predicate = DomainUtils.init(constraint.value()).forShort();

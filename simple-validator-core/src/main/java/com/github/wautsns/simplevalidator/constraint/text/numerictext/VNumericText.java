@@ -37,8 +37,18 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @VPattern(regex = "[-+]?\\d+(?:[.]\\d+)?")
 public @interface VNumericText {
 
+    /**
+     * Message(template).
+     *
+     * @return message(template)
+     */
     String message() default "[`VNumericText`]";
 
+    /**
+     * Order of the constraint.
+     *
+     * @return order of the constraint
+     */
     int order() default 0;
 
 }

@@ -23,7 +23,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 
 /**
- * Abstract byte criterion factory.
+ * Criterion factory for {@code byte} type.
  *
  * @author wautsns
  * @since Mar 11, 2020

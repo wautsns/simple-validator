@@ -12,9 +12,6 @@
  */
 package com.github.wautsns.simplevalidator.springbootstarter;
 
-import com.github.wautsns.simplevalidator.model.failure.ValidationFailureFormatter;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
@@ -24,12 +21,4 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 @ComponentScan("com.github.wautsns.simplevalidator.springbootstarter.handler")
-public class SimpleValidatorAutoConfiguration {
-
-    @Bean
-    @ConditionalOnMissingBean
-    public ValidationFailureFormatter validationFailureFormatter() {
-        return new ValidationFailureFormatter();
-    }
-
-}
+public class SimpleValidatorAutoConfiguration {}

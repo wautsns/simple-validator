@@ -17,23 +17,32 @@ package com.github.wautsns.simplevalidator.constraint.any.notnull;
 
 import com.github.wautsns.simplevalidator.model.criterion.basic.TCriteria;
 import com.github.wautsns.simplevalidator.model.criterion.basic.TCriterion;
-import com.github.wautsns.simplevalidator.model.criterion.factory.special.AbstractNonPrimitiveCriterionFactory;
+import com.github.wautsns.simplevalidator.model.criterion.factory.special.NonPrimitiveCriterionFactory;
 import com.github.wautsns.simplevalidator.model.failure.ValidationFailure;
 import com.github.wautsns.simplevalidator.model.node.ConstrainedNode;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 /**
+ * Non-primitive criterion factory for not null.
+ *
  * @author wautsns
  * @since Mar 11, 2020
  */
-public class VNotNullNonPrimitiveCriterionFactory extends AbstractNonPrimitiveCriterionFactory<VNotNull> {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public class VNotNullNonPrimitiveCriterionFactory extends NonPrimitiveCriterionFactory<VNotNull> {
+
+    /** {@code VNotNullNonPrimitiveCriterionFactory} instance */
+    public static final VNotNullNonPrimitiveCriterionFactory INSTANCE = new VNotNullNonPrimitiveCriterionFactory();
 
     @Override
     public void process(ConstrainedNode node, VNotNull constraint, TCriteria<Object> wip) {
         wip.add(CRITERION);
     }
 
-    // ------------------------- criterion -----------------------------------------
+    // #################### criterion ###################################################
 
+    /** criterion for not-null */
     protected static final TCriterion<Object> CRITERION =
             value -> (value == null) ? new ValidationFailure(null) : null;
 

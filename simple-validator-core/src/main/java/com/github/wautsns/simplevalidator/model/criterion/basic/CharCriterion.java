@@ -28,9 +28,9 @@ import java.util.function.UnaryOperator;
 public interface CharCriterion extends PrimitiveCriterion<Character> {
 
     /**
-     * Test value.
+     * Test {@code char} value.
      *
-     * @param value value
+     * @param value {@code char} value
      * @return validation failure, or {@code null} if the validation is passed.
      */
     ValidationFailure test(char value);

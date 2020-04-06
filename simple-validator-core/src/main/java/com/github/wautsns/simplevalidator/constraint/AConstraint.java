@@ -34,14 +34,14 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 public @interface AConstraint {
 
     /**
-     * Get combined constraints.
+     * Combined constraints.
      *
      * @return combined constraints
      */
     ACombine[] combines() default {};
 
     /**
-     * Get order of the constraint.
+     * Order of the constraint.
      *
      * @return order of the constraint.
      */

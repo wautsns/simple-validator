@@ -47,18 +47,30 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 })
 public @interface VMax {
 
+    /**
+     * Message(template).
+     *
+     * @return message(template)
+     */
     String message() default "[`VMax`]";
 
+    /**
+     * Order of the constraint.
+     *
+     * @return order of the constraint
+     */
     int order() default 0;
 
     String value();
 
     boolean inclusive() default true;
 
-    // ------------------------- variables -----------------------------------------
+    // #################### extra #######################################################
 
+    /** variables: {@linkplain #value() max} */
     @AVariableAlias("value")
     Variable<String> MAX = new Variable<>("max");
+    /** variables: {@linkplain #inclusive() inclusive} */
     Variable<String> INCLUSIVE = new Variable<>("inclusive");
 
 }

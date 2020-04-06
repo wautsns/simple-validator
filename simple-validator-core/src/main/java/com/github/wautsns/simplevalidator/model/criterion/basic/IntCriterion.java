@@ -28,9 +28,9 @@ import java.util.function.UnaryOperator;
 public interface IntCriterion extends PrimitiveCriterion<Integer> {
 
     /**
-     * Test value.
+     * Test {@code int} value.
      *
-     * @param value value
+     * @param value {@code int} value
      * @return validation failure, or {@code null} if the validation is passed.
      */
     ValidationFailure test(int value);

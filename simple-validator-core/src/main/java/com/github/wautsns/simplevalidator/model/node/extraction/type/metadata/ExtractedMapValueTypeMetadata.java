@@ -25,7 +25,7 @@ import lombok.NoArgsConstructor;
 import java.util.Map;
 
 /**
- * Extracted map value type metadata.
+ * The extracted map value type metadata.
  *
  * @author wautsns
  * @since Mar 18, 2020
@@ -51,7 +51,7 @@ public class ExtractedMapValueTypeMetadata extends ConstrainedExtractedType.Meta
         return CRITERION_WRAPPER;
     }
 
-    // -------------------- internal utils ----------------------------------------------
+    // #################### internal utils ##############################################
 
     /** type parameter metadata */
     private static final TypeParameterMetadata TYPE_PARAMETER_METADATA = new TypeParameterMetadata() {

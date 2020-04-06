@@ -44,12 +44,18 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @AConstraint
 public @interface VNameOfEnum {
 
-    List<CriterionFactory<VNameOfEnum, ?, ?>> CRITERION_FACTORY_LIST = new LinkedList<>(Collections.singletonList(
-            new VNameOfEnumTypeExtendsCharSequenceCriterionFactory()
-    ));
-
+    /**
+     * Message(template).
+     *
+     * @return message(template)
+     */
     String message() default "[`VNameOfEnum`]";
 
+    /**
+     * Order of the constraint.
+     *
+     * @return order of the constraint
+     */
     int order() default 0;
 
     Class<? extends Enum<?>> value();
@@ -58,8 +64,16 @@ public @interface VNameOfEnum {
 
     String[] exclude() default {};
 
-    // ------------------------- variables -----------------------------------------
+    // #################### extra #######################################################
 
+    /** built-in criterion factories */
+    List<CriterionFactory<VNameOfEnum, ?, ?>> CRITERION_FACTORIES = new LinkedList<>(Collections.singletonList(
+            VNameOfEnumCharSequenceCriterionFactory.INSTANCE
+    ));
+
+    // ==================== variables ===================================================
+
+    /** variables: optionalValues */
     Variable<String[]> OPTIONAL_VALUES = new Variable<>("optionalValues", Formatters.VALUES_NO_OPTIONAL_VALUE);
 
 }

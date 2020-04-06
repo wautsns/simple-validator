@@ -19,6 +19,8 @@ import com.github.wautsns.simplevalidator.model.criterion.factory.TCriterionFact
 import com.github.wautsns.simplevalidator.model.failure.ValidationFailure;
 import com.github.wautsns.simplevalidator.model.node.ConstrainedNode;
 import com.github.wautsns.simplevalidator.util.common.TypeUtils;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 import java.lang.reflect.Type;
 import java.util.Arrays;
@@ -32,8 +34,11 @@ import java.util.stream.Stream;
  * @author wautsns
  * @since Mar 11, 2020
  */
-public class VNameOfEnumTypeExtendsCharSequenceCriterionFactory
-        implements TCriterionFactory<VNameOfEnum, CharSequence> {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public class VNameOfEnumCharSequenceCriterionFactory implements TCriterionFactory<VNameOfEnum, CharSequence> {
+
+    /** {@code VNameOfEnumCharSequenceCriterionFactory} instance */
+    public static final VNameOfEnumCharSequenceCriterionFactory INSTANCE = new VNameOfEnumCharSequenceCriterionFactory();
 
     @Override
     public boolean appliesTo(Type type, VNameOfEnum constraint) {
@@ -45,26 +50,47 @@ public class VNameOfEnumTypeExtendsCharSequenceCriterionFactory
         wip.add(produce(constraint));
     }
 
-    // ------------------------- criterion -----------------------------------------
+    // #################### criterion ###################################################
 
+    /**
+     * Produce criterion.
+     *
+     * @param constraint constraint
+     * @return criterion
+     */
     protected static TCriterion<CharSequence> produce(VNameOfEnum constraint) {
-        Class<?> enumClass = constraint.value();
+        Class<?> clazz = constraint.value();
         String[] include = constraint.include();
         String[] exclude = constraint.exclude();
         if (include.length == 0 && exclude.length == 0) {
-            return CACHE.computeIfAbsent(enumClass, VNameOfEnumTypeExtendsCharSequenceCriterionFactory::initAll);
+            return CACHE.computeIfAbsent(clazz, VNameOfEnumCharSequenceCriterionFactory::initForAllEnums);
         } else {
-            return initSpecific(enumClass, include, exclude);
+            return initForSpecifiedEnums(clazz, include, exclude);
         }
     }
 
-    private static TCriterion<CharSequence> initAll(Class<?> enumClass) {
-        Enum<?>[] enums = (Enum<?>[]) enumClass.getEnumConstants();
-        return init(Arrays.stream(enums).map(Enum::name).toArray(String[]::new));
+    /** enumeration type -> criterion cache */
+    private static final Map<Class<?>, TCriterion<CharSequence>> CACHE = new ConcurrentHashMap<>();
+
+    /**
+     * Initialize a criterion for all enumerations.
+     *
+     * @param clazz codable enumeration class
+     * @return criterion for all values
+     */
+    private static TCriterion<CharSequence> initForAllEnums(Class<?> clazz) {
+        Enum<?>[] enums = (Enum<?>[]) clazz.getEnumConstants();
+        return initForNames(Arrays.stream(enums).map(Enum::name).toArray(String[]::new));
     }
 
-    private static TCriterion<CharSequence> initSpecific(Class<?> enumClass, String[] include, String[] exclude) {
-        Enum<?>[] enums = (Enum<?>[]) enumClass.getEnumConstants();
+    /**
+     * Initialize a criterion for specified enumerations.
+     *
+     * @param clazz codable enumeration class
+     * @return criterion for specified values
+     */
+    private static TCriterion<CharSequence> initForSpecifiedEnums(Class<?> clazz, String[] include, String[] exclude) {
+        Enum<?>[] enums = (Enum<?>[]) clazz.getEnumConstants();
         Stream<String> optionalValuesStream = Arrays.stream(enums).map(Enum::name);
         if (include.length > 0) {
             Set<String> namesIncluded = new HashSet<>(Arrays.asList(include));
@@ -75,22 +101,26 @@ public class VNameOfEnumTypeExtendsCharSequenceCriterionFactory
             optionalValuesStream = optionalValuesStream.filter(name -> !namesExcluded.contains(name));
         }
         String[] optionalValues = optionalValuesStream.toArray(String[]::new);
-        return init(optionalValues);
+        return initForNames(optionalValues);
     }
 
-    private static TCriterion<CharSequence> init(String[] optionalValues) {
+    /**
+     * Initialize a criterion for specified names.
+     *
+     * @param names names
+     * @return criterion for specified names
+     */
+    private static TCriterion<CharSequence> initForNames(String[] names) {
         return value -> {
             if (value != null && value.length() > 0) {
-                for (String optionalValue : optionalValues) {
-                    if (optionalValue.contentEquals(value)) {
+                for (String name : names) {
+                    if (name.contentEquals(value)) {
                         return null;
                     }
                 }
             }
-            return new ValidationFailure(value).put(VCodeOfEnum.OPTIONAL_VALUES, optionalValues);
+            return new ValidationFailure(value).put(VCodeOfEnum.OPTIONAL_VALUES, names);
         };
     }
-
-    private static final Map<Class<?>, TCriterion<CharSequence>> CACHE = new ConcurrentHashMap<>();
 
 }

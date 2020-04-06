@@ -40,10 +40,10 @@ import java.util.Locale;
 @EqualsAndHashCode
 public class ArrayFormatter<A, C> implements Formatter<A> {
 
-    /** default {@code ArrayFormatter}, eg. [1, 2, 3] */
+    /** default {@code ArrayFormatter}, e.g. [1, 2, 3] */
     public static final ArrayFormatter<Object, Object> DEFAULT = new ArrayFormatter<>();
 
-    private static final long serialVersionUID = 1580600679331585336L;
+    private static final long serialVersionUID = -2410808790906328502L;
 
     /** string format of {@code null}, default is {@code "null"} */
     private @NonNull String stringFormatOfNull = "null";

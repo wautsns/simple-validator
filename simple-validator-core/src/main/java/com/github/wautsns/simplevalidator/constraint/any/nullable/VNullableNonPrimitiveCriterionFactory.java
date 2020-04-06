@@ -16,14 +16,20 @@
 package com.github.wautsns.simplevalidator.constraint.any.nullable;
 
 import com.github.wautsns.simplevalidator.model.criterion.basic.TCriteria;
-import com.github.wautsns.simplevalidator.model.criterion.factory.special.AbstractNonPrimitiveCriterionFactory;
+import com.github.wautsns.simplevalidator.model.criterion.factory.special.NonPrimitiveCriterionFactory;
 import com.github.wautsns.simplevalidator.model.node.ConstrainedNode;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 /**
  * @author wautsns
  * @since Mar 11, 2020
  */
-public class VNullableNonPrimitiveCriterionFactory extends AbstractNonPrimitiveCriterionFactory<VNullable> {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public class VNullableNonPrimitiveCriterionFactory extends NonPrimitiveCriterionFactory<VNullable> {
+
+    /** {@code VNullableNonPrimitiveCriterionFactory} instance */
+    public static final VNullableNonPrimitiveCriterionFactory INSTANCE = new VNullableNonPrimitiveCriterionFactory();
 
     @Override
     public void process(ConstrainedNode node, VNullable constraint, TCriteria<Object> wip) {

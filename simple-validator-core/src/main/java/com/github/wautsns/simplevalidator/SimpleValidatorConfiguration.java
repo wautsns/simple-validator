@@ -32,7 +32,7 @@ import java.util.Objects;
 import java.util.function.Function;
 
 /**
- * Simple validator configuration.
+ * Configuration of simple validator.
  *
  * @author wautsns
  * @since Mar 15, 2020
@@ -47,7 +47,7 @@ public class SimpleValidatorConfiguration {
      *
      * @param constraintType constraint class
      * @param criterionFactory criterion factory
-     * @param <A> constraint type
+     * @param <A> type of constraint
      */
     public static <A extends Annotation> void addCriterionFactory(
             Class<A> constraintType, CriterionFactory<A, ?, ?> criterionFactory) {
@@ -57,7 +57,7 @@ public class SimpleValidatorConfiguration {
                     "[%s] cannot add criterion factory, because it is only used to combine other constraints.",
                     constraintType);
         }
-        metadata.getCriterionFactoryList().add(Objects.requireNonNull(criterionFactory));
+        metadata.getCriterionFactories().add(Objects.requireNonNull(criterionFactory));
     }
 
     // #################### extracted type metadata #####################################
@@ -85,7 +85,7 @@ public class SimpleValidatorConfiguration {
         ConstrainedParameter.setParameterNameGenerator(parameterNameGenerator);
     }
 
-    // #################### value #######################################################
+    // #################### value handler ###############################################
 
     /**
      * Add value extractor.
@@ -94,7 +94,7 @@ public class SimpleValidatorConfiguration {
      * @param valueExtractor value extractor
      */
     public static void addValueExtractor(Class<? extends Annotation> constraintType, ValueExtractor valueExtractor) {
-        ConstraintMetadata.getInstance(constraintType).getValueExtractorList().add(valueExtractor);
+        ConstraintMetadata.getInstance(constraintType).getValueExtractors().add(valueExtractor);
     }
 
     /**

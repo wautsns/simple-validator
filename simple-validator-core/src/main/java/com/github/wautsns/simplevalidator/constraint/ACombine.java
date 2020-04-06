@@ -31,12 +31,32 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Retention(RUNTIME)
 public @interface ACombine {
 
+    /**
+     * Constraint type.
+     *
+     * @return constraint type
+     */
     Class<? extends Annotation> constraint();
 
+    /**
+     * Message(template).
+     *
+     * @return message(template)
+     */
     String message() default "";
 
+    /**
+     * Order of the {@code ACombine}.
+     *
+     * @return order of the {@code ACombine}
+     */
     int order() default 0;
 
+    /**
+     * Attributes of the constraint.
+     *
+     * @return attributes of the constraint
+     */
     AAttribute[] attributes() default {};
 
 }

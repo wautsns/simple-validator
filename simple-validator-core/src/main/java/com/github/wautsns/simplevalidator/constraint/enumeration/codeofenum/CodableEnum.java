@@ -18,15 +18,28 @@ package com.github.wautsns.simplevalidator.constraint.enumeration.codeofenum;
 import java.util.Objects;
 
 /**
+ * Codable enumeration.
+ *
+ * @param <T> type of code
  * @author wautsns
  * @since Mar 11, 2020
  */
 public interface CodableEnum<T> {
 
+    /***
+     * Get code.
+     * @return code
+     */
     T getCode();
 
-    default boolean equalToCode(T anotherCode) {
-        return Objects.deepEquals(getCode(), anotherCode);
+    /**
+     * Whether the specified code is code of the enumeration.
+     *
+     * @param code code
+     * @return {@code true} if the specified code is code of the enumeration, otherwise {@code false}
+     */
+    default boolean equalsToCode(T code) {
+        return Objects.deepEquals(getCode(), code);
     }
 
 }

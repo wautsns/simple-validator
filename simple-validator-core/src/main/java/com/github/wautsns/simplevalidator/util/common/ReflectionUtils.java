@@ -39,9 +39,9 @@ public class ReflectionUtils {
     // #################### class #######################################################
 
     /**
-     * Require class silently.
+     * Require class.
      *
-     * @param name name of the class
+     * @param name class name
      * @return class
      */
     @SneakyThrows
@@ -54,13 +54,13 @@ public class ReflectionUtils {
     /**
      * Require the declared field and set accessible to {@code true}.
      *
-     * @param clazz declaring class of field
-     * @param name name of field
+     * @param declaringClass declaring class of the field
+     * @param name field name
      * @return accessible field
      */
     @SneakyThrows
-    public static Field requireDeclaredField(Class<?> clazz, String name) {
-        Field field = clazz.getDeclaredField(name);
+    public static Field requireDeclaredField(Class<?> declaringClass, String name) {
+        Field field = declaringClass.getDeclaredField(name);
         field.setAccessible(true);
         return field;
     }
@@ -68,13 +68,13 @@ public class ReflectionUtils {
     /**
      * Get the declared field.
      *
-     * @param clazz declaring class of field
-     * @param name name of field
-     * @return accessible field, or {@code null} if field named the given name is not declared
+     * @param declaringClass declaring class of field
+     * @param name field name
+     * @return accessible field, or {@code null} if there is no field of the specified name in the specified class
      */
-    public static Field getDeclaredField(Class<?> clazz, String name) {
+    public static Field getDeclaredField(Class<?> declaringClass, String name) {
         try {
-            Field field = clazz.getDeclaredField(name);
+            Field field = declaringClass.getDeclaredField(name);
             field.setAccessible(true);
             return field;
         } catch (NoSuchFieldException e) {
@@ -85,11 +85,11 @@ public class ReflectionUtils {
     /**
      * List declared property fields and set accessible to {@code true}.
      *
-     * @param clazz declaring class of fields
+     * @param declaringClass declaring class of fields
      * @return accessible property fields
      */
-    public static List<Field> listDeclaredPropertyFields(Class<?> clazz) {
-        List<Field> fields = Arrays.stream(clazz.getDeclaredFields())
+    public static List<Field> listDeclaredPropertyFields(Class<?> declaringClass) {
+        List<Field> fields = Arrays.stream(declaringClass.getDeclaredFields())
                 .filter(field -> !Modifier.isStatic(field.getModifiers()))
                 .collect(Collectors.toCollection(LinkedList::new));
         fields.forEach(field -> field.setAccessible(true));
@@ -97,113 +97,113 @@ public class ReflectionUtils {
     }
 
     /**
-     * Get value of field of source object.
+     * Get value of field from target value.
      *
-     * @param source source object
+     * @param target target value
      * @param field field
      * @param <T> type of value
      * @return value
      */
     @SneakyThrows
     @SuppressWarnings("unchecked")
-    public static <T> T getValue(Object source, Field field) {
-        return (T) field.get(source);
+    public static <T> T getValue(Object target, Field field) {
+        return (T) field.get(target);
     }
 
     /**
-     * Get {@code boolean} value of field of source object.
+     * Get {@code boolean} value of field from target value.
      *
-     * @param source source object
+     * @param target target value
      * @param field field
      * @return {@code boolean} value
      */
     @SneakyThrows
-    public static boolean getBoolean(Object source, Field field) {
-        return field.getBoolean(source);
+    public static boolean getBoolean(Object target, Field field) {
+        return field.getBoolean(target);
     }
 
     /**
-     * Get {@code char} value of field of source object.
+     * Get {@code char} value of field from target value.
      *
-     * @param source source object
+     * @param target target value
      * @param field field
      * @return {@code char} value
      */
     @SneakyThrows
-    public static char getChar(Object source, Field field) {
-        return field.getChar(source);
+    public static char getChar(Object target, Field field) {
+        return field.getChar(target);
     }
 
     /**
-     * Get {@code byte} value of field of source object.
+     * Get {@code byte} value of field from target value.
      *
-     * @param source source object
+     * @param target target value
      * @param field field
      * @return {@code byte} value
      */
     @SneakyThrows
-    public static byte getByte(Object source, Field field) {
-        return field.getByte(source);
+    public static byte getByte(Object target, Field field) {
+        return field.getByte(target);
     }
 
     /**
-     * Get {@code short} value of field of source object.
+     * Get {@code short} value of field from target value.
      *
-     * @param source source object
+     * @param target target value
      * @param field field
      * @return {@code short} value
      */
     @SneakyThrows
-    public static short getShort(Object source, Field field) {
-        return field.getShort(source);
+    public static short getShort(Object target, Field field) {
+        return field.getShort(target);
     }
 
     /**
-     * Get {@code int} value of field of source object.
+     * Get {@code int} value of field from target value.
      *
-     * @param source source object
+     * @param target target value
      * @param field field
      * @return {@code int} value
      */
     @SneakyThrows
-    public static int getInt(Object source, Field field) {
-        return field.getInt(source);
+    public static int getInt(Object target, Field field) {
+        return field.getInt(target);
     }
 
     /**
-     * Get {@code long} value of field of source object.
+     * Get {@code long} value of field from target value.
      *
-     * @param source source object
+     * @param target target value
      * @param field field
      * @return {@code long} value
      */
     @SneakyThrows
-    public static long getLong(Object source, Field field) {
-        return field.getLong(source);
+    public static long getLong(Object target, Field field) {
+        return field.getLong(target);
     }
 
     /**
-     * Get {@code float} value of field of source object.
+     * Get {@code float} value of field from target value.
      *
-     * @param source source object
+     * @param target target value
      * @param field field
      * @return {@code float} value
      */
     @SneakyThrows
-    public static float getFloat(Object source, Field field) {
-        return field.getFloat(source);
+    public static float getFloat(Object target, Field field) {
+        return field.getFloat(target);
     }
 
     /**
-     * Get {@code double} value of field of source object.
+     * Get {@code double} value of field from target value.
      *
-     * @param source source object
+     * @param target target value
      * @param field field
      * @return {@code double} value
      */
     @SneakyThrows
-    public static double getDouble(Object source, Field field) {
-        return field.getDouble(source);
+    public static double getDouble(Object target, Field field) {
+        return field.getDouble(target);
     }
 
     // -------------------- methods -----------------------------------------------------
@@ -211,13 +211,13 @@ public class ReflectionUtils {
     /**
      * Require the declared method and set accessible to {@code true}.
      *
-     * @param clazz declaring class of method
-     * @param name name of method
+     * @param declaringClass declaring class of method
+     * @param name method name
      * @return accessible method
      */
     @SneakyThrows
-    public static Method requireDeclaredMethod(Class<?> clazz, String name) {
-        Method method = clazz.getDeclaredMethod(name, EMPTY_CLASS_ARRAY);
+    public static Method requireDeclaredMethod(Class<?> declaringClass, String name) {
+        Method method = declaringClass.getDeclaredMethod(name, EMPTY_CLASS_ARRAY);
         method.setAccessible(true);
         return method;
     }
@@ -225,13 +225,13 @@ public class ReflectionUtils {
     /**
      * Get the declared method and set accessible to {@code true}.
      *
-     * @param clazz declaring class of method
-     * @param name name of method
-     * @return accessible method, or {@code null} if method named the given name is not declared
+     * @param declaringClass declaring class of method
+     * @param name method name
+     * @return accessible method, or {@code null} if there is no method of the specified name in the specified class
      */
-    public static Method getDeclaredMethod(Class<?> clazz, String name) {
+    public static Method getDeclaredMethod(Class<?> declaringClass, String name) {
         try {
-            Method method = clazz.getDeclaredMethod(name, EMPTY_CLASS_ARRAY);
+            Method method = declaringClass.getDeclaredMethod(name, EMPTY_CLASS_ARRAY);
             method.setAccessible(true);
             return method;
         } catch (NoSuchMethodException e) {
@@ -240,47 +240,56 @@ public class ReflectionUtils {
     }
 
     /**
-     * Invoke the method with no-arg.
+     * Invoke the no-arg method.
      *
-     * @param source source object
+     * @param target target value
      * @param method method
-     * @param <T> type of return value
+     * @param <T> type of return value of the method
      * @return return value of the method
      */
-    public static <T> T invoke(Object source, Method method) {
-        return invoke(source, method, EMPTY_OBJECT_ARRAY);
+    public static <T> T invoke(Object target, Method method) {
+        return invoke(target, method, EMPTY_OBJECT_ARRAY);
     }
 
     /**
-     * Invoke the method with given args.
+     * Invoke the method with specified args.
      *
-     * @param source source object
+     * @param target target value
      * @param method method
      * @param args method arguments
-     * @param <T> type of return value
+     * @param <T> type of return value of the method
      * @return return value of the method
      */
     @SneakyThrows
     @SuppressWarnings("unchecked")
-    public static <T> T invoke(Object source, Method method, Object... args) {
-        return (T) method.invoke(source, args);
+    public static <T> T invoke(Object target, Method method, Object... args) {
+        return (T) method.invoke(target, args);
     }
 
-    /** getter prefixes */
-    private static final String[] GETTER_PREFIXES = {"get", "is"};
-
     /**
-     * Get property name of the method.
+     * Get the property name corresponding to the method.
      *
      * @param method method
-     * @return property name of the method, or {@code null} if the method is not a getter
+     * @return the property name corresponding to the method, or {@code null} if the method is not a getter/setter
      */
     public static String getPropertyName(Method method) {
-        if (method.getParameterCount() != 0) { return null; }
-        if (method.getReturnType() == void.class) { return null; }
+        String[] prefixes;
+        int parameterCount = method.getParameterCount();
+        Class<?> returnType = method.getReturnType();
+        if (parameterCount == 0) {
+            if (returnType == void.class) {
+                return null;
+            } else {
+                prefixes = GETTER_PREFIXES;
+            }
+        } else if (parameterCount == 1 && returnType != void.class) {
+            prefixes = SETTER_PREFIXES;
+        } else {
+            return null;
+        }
         String name = method.getName();
         int nameLength = name.length();
-        for (String prefix : GETTER_PREFIXES) {
+        for (String prefix : prefixes) {
             int prefixLength = prefix.length();
             if (name.startsWith(prefix) && (name.length() > prefixLength)) {
                 char first = name.charAt(prefixLength);
@@ -301,29 +310,34 @@ public class ReflectionUtils {
     /**
      * List declared property getters.
      *
-     * @param clazz declared class of getters
+     * @param declaredClass declared class of getters
      * @return declared property getters
      */
-    public static List<Method> listDeclaredPropertyGetters(Class<?> clazz) {
-        return Arrays.stream(clazz.getDeclaredMethods())
+    public static List<Method> listDeclaredPropertyGetters(Class<?> declaredClass) {
+        return Arrays.stream(declaredClass.getDeclaredMethods())
                 .filter(method -> Modifier.isPublic(method.getModifiers())
                         && !Modifier.isStatic(method.getModifiers())
                         && getPropertyName(method) != null)
                 .collect(Collectors.toCollection(LinkedList::new));
     }
 
-    // ------------------------- constructor ---------------------------------------
+    /** getter prefixes */
+    private static final String[] GETTER_PREFIXES = {"get", "is"};
+    /** setter prefixes */
+    private static final String[] SETTER_PREFIXES = {"set"};
+
+    // #################### constructor #################################################
 
     /**
      * New instance with no-arg constructor.
      *
-     * @param clazz class
-     * @param <T> type of class
-     * @return instance of the class
+     * @param type type
+     * @param <T> type of instance
+     * @return instance
      */
     @SneakyThrows
-    public static <T> T newInstance(Class<T> clazz) {
-        Constructor<T> constructor = clazz.getConstructor(EMPTY_CLASS_ARRAY);
+    public static <T> T newInstance(Class<T> type) {
+        Constructor<T> constructor = type.getConstructor(EMPTY_CLASS_ARRAY);
         constructor.setAccessible(true);
         return constructor.newInstance();
     }

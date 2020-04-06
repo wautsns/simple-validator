@@ -43,24 +43,39 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @AConstraint
 public @interface VSize {
 
-    List<CriterionFactory<VSize, ?, ?>> CRITERION_FACTORY_LIST = new LinkedList<>(Arrays.asList(
-            new VSizeCollectionCriterionFactory(),
-            new VSizeCharSequenceCriterionFactory(),
-            new VSizeMapCriterionFactory(),
-            new VSizeArrayCriterionFactory()
-    ));
-
+    /**
+     * Message(template).
+     *
+     * @return message(template)
+     */
     String message() default "[`VSize`]";
 
+    /**
+     * Order of the constraint.
+     *
+     * @return order of the constraint
+     */
     int order() default 0;
 
     int min() default 1;
 
     int max() default Integer.MAX_VALUE;
 
-    // ------------------------- variables -----------------------------------------
+    // #################### extra #######################################################
 
+    /** built-in criterion factories */
+    List<CriterionFactory<VSize, ?, ?>> CRITERION_FACTORIES = new LinkedList<>(Arrays.asList(
+            VSizeCollectionCriterionFactory.INSTANCE,
+            VSizeCharSequenceCriterionFactory.INSTANCE,
+            VSizeMapCriterionFactory.INSTANCE,
+            VSizeArrayCriterionFactory.INSTANCE
+    ));
+
+    // ==================== variables ===================================================
+
+    /** variables: {@linkplain #min()} min} */
     Variable<Integer> MIN = new Variable<>("min");
+    /** variables: {@linkplain #max() max} */
     Variable<Integer> MAX = new Variable<>("max");
 
 }

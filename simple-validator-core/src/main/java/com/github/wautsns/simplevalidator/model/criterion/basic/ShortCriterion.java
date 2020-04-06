@@ -28,9 +28,9 @@ import java.util.function.UnaryOperator;
 public interface ShortCriterion extends PrimitiveCriterion<Short> {
 
     /**
-     * Test value.
+     * Test {@code short} value.
      *
-     * @param value value
+     * @param value {@code short} value
      * @return validation failure, or {@code null} if the validation is passed.
      */
     ValidationFailure test(short value);

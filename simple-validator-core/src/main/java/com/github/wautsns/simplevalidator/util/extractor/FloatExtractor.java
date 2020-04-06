@@ -20,7 +20,7 @@ import java.lang.reflect.Type;
 /**
  * The {@code float} value extractor.
  *
- * @param <T> applicable type
+ * @param <T> type of target value
  * @author wautsns
  * @since Mar 20, 2020
  */
@@ -32,9 +32,9 @@ public interface FloatExtractor<T> extends ValueExtractor {
     }
 
     /**
-     * Extract {@code float} value from the given source.
+     * Extract {@code float} value from the target value.
      *
-     * @param target target
+     * @param target target value
      * @return extracted {@code float} value
      */
     float extract(T target);

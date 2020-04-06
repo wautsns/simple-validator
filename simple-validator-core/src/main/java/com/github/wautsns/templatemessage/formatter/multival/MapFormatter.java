@@ -40,11 +40,10 @@ import java.util.Map;
 @EqualsAndHashCode
 public class MapFormatter<K, V> implements Formatter<Map<K, V>> {
 
-    /** the default {@code MapFormatter}, eg. {a=1, b=2, c=3} */
+    /** the default {@code MapFormatter}, e.g. {a=1, b=2, c=3} */
     public static final Formatter<Map<Object, Object>> DEFAULT = new MapFormatter<>();
 
-    /** serialVersionUID */
-    private static final long serialVersionUID = -984612299189087446L;
+    private static final long serialVersionUID = 8176960908951658082L;
 
     /** string format of {@code null}, default is {@code "null"} */
     private @NonNull String stringFormatOfNull = "null";

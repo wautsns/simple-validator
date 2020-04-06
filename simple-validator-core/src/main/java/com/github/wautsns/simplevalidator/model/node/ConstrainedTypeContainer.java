@@ -21,6 +21,7 @@ import com.github.wautsns.simplevalidator.model.node.extraction.type.metadata.Ex
 import com.github.wautsns.simplevalidator.model.node.extraction.type.metadata.ExtractedMapKeyTypeMetadata;
 import com.github.wautsns.simplevalidator.model.node.extraction.type.metadata.ExtractedMapValueTypeMetadata;
 import com.github.wautsns.simplevalidator.model.node.extraction.type.metadata.ExtractedOptionalValueTypeMetadata;
+import com.github.wautsns.simplevalidator.util.common.CollectionUtils;
 import lombok.Getter;
 
 import java.lang.reflect.AnnotatedType;
@@ -41,24 +42,20 @@ public abstract class ConstrainedTypeContainer extends ConstrainedNode {
 
     /** annotated type */
     protected final AnnotatedType annotatedType;
-    /** constrained extracted type nodes */
+    /** constrained extracted types */
     protected final List<ConstrainedExtractedType> extractedTypes;
 
     @Override
-    public List<? extends ConstrainedNode> getChildList() {
-        if (extractedValueList.isEmpty()) {
-            return extractedTypes;
-        } else if (extractedTypes.isEmpty()) {
-            return extractedValueList;
-        } else {
-            List<ConstrainedNode> children = new LinkedList<>();
-            children.addAll(extractedValueList);
-            children.addAll(extractedTypes);
-            return children;
-        }
+    public List<? extends ConstrainedNode> getChildren() {
+        List<? extends ConstrainedNode> superChildren = super.getChildren();
+        if (superChildren.isEmpty()) { return extractedTypes; }
+        List<ConstrainedNode> children = new LinkedList<>();
+        children.addAll(superChildren);
+        children.addAll(extractedTypes);
+        return CollectionUtils.unmodifiableList(children);
     }
 
-    // -------------------- constructor -------------------------------------------------
+    // #################### constructor ##################################################
 
     /**
      * Construct a constrained type container.
@@ -93,7 +90,7 @@ public abstract class ConstrainedTypeContainer extends ConstrainedNode {
         this.extractedTypes = initExtractedTypes(this);
     }
 
-    // -------------------- utils -------------------------------------------------------
+    // #################### utils #######################################################
 
     /**
      * Initialize extracted types.
@@ -113,7 +110,7 @@ public abstract class ConstrainedTypeContainer extends ConstrainedNode {
         return clear(nodes);
     }
 
-    // -------------------- extracted type metadata -------------------------------------
+    // #################### extracted type metadata #####################################
 
     /** extracted type metadata cache */
     private static final TreeMap<Integer, List<ConstrainedExtractedType.Metadata>> METADATA = new TreeMap<>();
@@ -135,6 +132,7 @@ public abstract class ConstrainedTypeContainer extends ConstrainedNode {
      * <li>2000: {@link ExtractedMapKeyTypeMetadata#INSTANCE}</li>
      * <li>3000: {@link ExtractedMapValueTypeMetadata#INSTANCE}</li>
      * <li>4000: {@link ExtractedArrayComponentTypeMetadata#INSTANCE}</li>
+     * <li>5000: {@link ExtractedOptionalValueTypeMetadata#INSTANCE}</li>
      * </ul>
      *
      * @param order order

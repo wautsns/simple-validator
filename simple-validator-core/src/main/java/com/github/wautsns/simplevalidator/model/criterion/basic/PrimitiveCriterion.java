@@ -20,14 +20,14 @@ import com.github.wautsns.simplevalidator.model.failure.ValidationFailure;
 /**
  * Criterion for primitive value.
  *
- * @param <W> type of wrapped value(eg. Integer, Boolean...)
+ * @param <W> type of wrapped value(e.g. Integer, Boolean...)
  * @author wautsns
  * @since Mar 11, 2020
  */
 public interface PrimitiveCriterion<W> extends Criterion {
 
     /**
-     * Test wrapped value(eg. int -> {@link Integer}).
+     * Test wrapped value(e.g. int -> {@link Integer}).
      *
      * @param wrappedValue wrapped value
      * @return validation failure, or {@code null} if the validation is passed.

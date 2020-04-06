@@ -15,16 +15,21 @@ package com.github.wautsns.simplevalidator.constraint.time.future;
 import com.github.wautsns.simplevalidator.model.criterion.basic.TCriteria;
 import com.github.wautsns.simplevalidator.model.criterion.basic.TCriterion;
 import com.github.wautsns.simplevalidator.model.criterion.factory.typelike.TypeLikeUtilityCriterionCache;
-import com.github.wautsns.simplevalidator.model.criterion.factory.typelike.time.AbstractTimeLikeCriterionFactory;
+import com.github.wautsns.simplevalidator.model.criterion.factory.typelike.time.TimeLikeCriterionFactory;
 import com.github.wautsns.simplevalidator.model.criterion.factory.typelike.time.TimeLikeUtility;
 import com.github.wautsns.simplevalidator.model.failure.ValidationFailure;
 import com.github.wautsns.simplevalidator.model.node.ConstrainedNode;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 /**
  * @author wautsns
  * @since Mar 11, 2020
  */
-public class VFutureTimeLikeCriterionFactory extends AbstractTimeLikeCriterionFactory<VFuture> {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public class VFutureTimeLikeCriterionFactory extends TimeLikeCriterionFactory<VFuture> {
+
+    public static final VFutureTimeLikeCriterionFactory INSTANCE = new VFutureTimeLikeCriterionFactory();
 
     @Override
     protected <T> void process(
@@ -33,7 +38,7 @@ public class VFutureTimeLikeCriterionFactory extends AbstractTimeLikeCriterionFa
         wip.add(produce(utility, constraint));
     }
 
-    // ------------------------- criterion -----------------------------------------
+    // #################### criterion ###################################################
 
     protected static <T> TCriterion<T> produce(
             TimeLikeUtility<T> utility, VFuture constraint) {

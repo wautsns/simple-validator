@@ -40,7 +40,6 @@ import java.util.Arrays;
 public class SimpleMethodValidationPostProcessor extends AbstractBeanFactoryAwareAdvisingPostProcessor
         implements InitializingBean {
 
-    /** serialVersionUID */
     private static final long serialVersionUID = -8255787111281581563L;
 
     @Override

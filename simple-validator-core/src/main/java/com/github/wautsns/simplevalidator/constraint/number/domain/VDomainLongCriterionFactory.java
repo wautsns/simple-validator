@@ -20,6 +20,8 @@ import com.github.wautsns.simplevalidator.model.criterion.basic.LongCriterion;
 import com.github.wautsns.simplevalidator.model.criterion.factory.primitive.LongCriterionFactory;
 import com.github.wautsns.simplevalidator.model.failure.ValidationFailure;
 import com.github.wautsns.simplevalidator.model.node.ConstrainedNode;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 import java.util.function.LongPredicate;
 
@@ -27,14 +29,17 @@ import java.util.function.LongPredicate;
  * @author wautsns
  * @since Mar 11, 2020
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class VDomainLongCriterionFactory extends LongCriterionFactory<VDomain> {
+
+    public static final VDomainLongCriterionFactory INSTANCE = new VDomainLongCriterionFactory();
 
     @Override
     public void process(ConstrainedNode node, VDomain constraint, LongCriteria wip) {
         wip.add(produce(constraint));
     }
 
-    // ------------------------- criterion -----------------------------------------
+    // #################### criterion ###################################################
 
     protected static LongCriterion produce(VDomain constraint) {
         LongPredicate predicate = DomainUtils.init(constraint.value()).forLong();

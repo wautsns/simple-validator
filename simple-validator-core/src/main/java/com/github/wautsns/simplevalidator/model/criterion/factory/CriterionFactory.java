@@ -31,11 +31,11 @@ import java.lang.reflect.Type;
 public interface CriterionFactory<A extends Annotation, W extends Criteria<C>, C extends Criterion> {
 
     /**
-     * Whether the factory applies to the constraint on the node.
+     * Whether the factory applies to the type.
      *
      * @param type constrained type
      * @param constraint constraint
-     * @return {@code true} if the factory applies to the constraint on the node, otherwise {@code false}
+     * @return {@code true} if the factory applies to the type, otherwise {@code false}
      */
     boolean appliesTo(Type type, A constraint);
 

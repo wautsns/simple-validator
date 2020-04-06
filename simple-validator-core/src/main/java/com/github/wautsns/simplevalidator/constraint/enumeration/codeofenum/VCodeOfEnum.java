@@ -44,12 +44,18 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @AConstraint
 public @interface VCodeOfEnum {
 
-    List<CriterionFactory<VCodeOfEnum, ?, ?>> CRITERION_FACTORY_LIST = new LinkedList<>(Collections.singletonList(
-            new VCodeOfEnumAnyCriterionFactory()
-    ));
-
+    /**
+     * Message(template).
+     *
+     * @return message(template)
+     */
     String message() default "[`VCodeOfEnum`]";
 
+    /**
+     * Order of the constraint.
+     *
+     * @return order of the constraint
+     */
     int order() default 0;
 
     Class<? extends Enum<? extends CodableEnum<?>>> value();
@@ -58,8 +64,16 @@ public @interface VCodeOfEnum {
 
     String[] exclude() default {};
 
-    // ------------------------- variables -----------------------------------------
+    // #################### extra #######################################################
 
+    /** built-in criterion factories */
+    List<CriterionFactory<VCodeOfEnum, ?, ?>> CRITERION_FACTORIES = new LinkedList<>(Collections.singletonList(
+            VCodeOfEnumAnyCriterionFactory.INSTANCE
+    ));
+
+    // ==================== variables ===================================================
+
+    /** variables: optionalValues */
     Variable<Object[]> OPTIONAL_VALUES = new Variable<>("optionalValues", Formatters.VALUES_NO_OPTIONAL_VALUE);
 
 }

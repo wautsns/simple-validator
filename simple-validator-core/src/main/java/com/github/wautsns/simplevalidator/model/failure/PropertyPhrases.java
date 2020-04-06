@@ -15,21 +15,31 @@
  */
 package com.github.wautsns.simplevalidator.model.failure;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 /**
  * @author wautsns
  * @since Mar 11, 2020
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class PropertyPhrases {
 
+    /** no restrictions */
     public static final String NO_RESTRICTIONS = wrap("NO_RESTRICTIONS");
+    /** no optional value */
     public static final String NO_OPTIONAL_VALUE = wrap("NO_OPTIONAL_VALUE");
 
-    private static String wrap(String name) {
-        return ValidationFailureFormatter.LEFT_DELIMITER_PROPERTIES
-                + name
-                + ValidationFailureFormatter.RIGHT_DELIMITER_PROPERTIES;
+    /**
+     * Wrap the name with properties delimiters.
+     *
+     * @param phrase phrase
+     * @return property phrase
+     */
+    private static String wrap(String phrase) {
+        return ValidationFailureFormatter.LEFT_DELIMITER_RESOURCE
+                + phrase
+                + ValidationFailureFormatter.RIGHT_DELIMITER_RESOURCE;
     }
-
-    private PropertyPhrases() {}
 
 }

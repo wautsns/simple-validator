@@ -42,10 +42,11 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @AConstraint
 public @interface VRef {
 
-    List<CriterionFactory<VRef, ?, ?>> CRITERION_FACTORY_LIST = new LinkedList<>(Collections.singletonList(
-            new VRefAnyTypeCriterionFactory()
-    ));
-
+    /**
+     * Order of the constraint.
+     *
+     * @return order of the constraint
+     */
     int order() default 0;
 
     Class<?> value();
@@ -53,5 +54,12 @@ public @interface VRef {
     String property() default "";
 
     boolean useRefTarget() default true;
+
+    // #################### extra #######################################################
+
+    /** built-in criterion factories */
+    List<CriterionFactory<VRef, ?, ?>> CRITERION_FACTORIES = new LinkedList<>(Collections.singletonList(
+            VRefAnyTypeCriterionFactory.INSTANCE
+    ));
 
 }

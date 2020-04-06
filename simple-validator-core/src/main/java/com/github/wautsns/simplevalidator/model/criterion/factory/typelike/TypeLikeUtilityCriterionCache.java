@@ -34,15 +34,15 @@ import java.util.function.Function;
 public class TypeLikeUtilityCriterionCache<U extends TypeLikeUtility> {
 
     /** cache */
-    private final @NonNull Map<U, TCriterion> cache = new ConcurrentHashMap<>(8);
+    private final Map<U, TCriterion> cache = new ConcurrentHashMap<>(8);
     /** criterion initializer */
     private final @NonNull Function<U, TCriterion> initializer;
 
     /**
-     * Get criterion associated with the utility.
+     * Get criterion associated with the specified utility.
      *
      * @param utility utility
-     * @return criterion associated with the utility
+     * @return criterion associated with the specified utility
      */
     @SuppressWarnings("unchecked")
     public <T> TCriterion<T> get(U utility) {

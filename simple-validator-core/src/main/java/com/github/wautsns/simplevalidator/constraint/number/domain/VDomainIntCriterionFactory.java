@@ -20,6 +20,8 @@ import com.github.wautsns.simplevalidator.model.criterion.basic.IntCriterion;
 import com.github.wautsns.simplevalidator.model.criterion.factory.primitive.IntCriterionFactory;
 import com.github.wautsns.simplevalidator.model.failure.ValidationFailure;
 import com.github.wautsns.simplevalidator.model.node.ConstrainedNode;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 import java.util.function.IntPredicate;
 
@@ -27,14 +29,17 @@ import java.util.function.IntPredicate;
  * @author wautsns
  * @since Mar 11, 2020
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class VDomainIntCriterionFactory extends IntCriterionFactory<VDomain> {
+
+    public static final VDomainIntCriterionFactory INSTANCE = new VDomainIntCriterionFactory();
 
     @Override
     public void process(ConstrainedNode node, VDomain constraint, IntCriteria wip) {
         wip.add(produce(constraint));
     }
 
-    // ------------------------- criterion -----------------------------------------
+    // #################### criterion ###################################################
 
     protected static IntCriterion produce(VDomain constraint) {
         IntPredicate predicate = DomainUtils.init(constraint.value()).forInt();

@@ -40,18 +40,32 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @AConstraint
 public @interface VPattern {
 
-    List<CriterionFactory<VPattern, ?, ?>> CRITERION_FACTORY_LIST = new LinkedList<>(Collections.singletonList(
-            new VPatternTextLikeCriterionFactory()
-    ));
-
+    /**
+     * Message(template).
+     *
+     * @return message(template)
+     */
     String message() default "[`VPattern`]";
 
+    /**
+     * Order of the constraint.
+     *
+     * @return order of the constraint
+     */
     int order() default 0;
 
     String regex();
 
-    // ------------------------- variables -----------------------------------------
+    // #################### extra #######################################################
 
+    /** built-in criterion factories */
+    List<CriterionFactory<VPattern, ?, ?>> CRITERION_FACTORIES = new LinkedList<>(Collections.singletonList(
+            VPatternTextLikeCriterionFactory.INSTANCE
+    ));
+
+    // ==================== variables ===================================================
+
+    /** variables: {@linkplain #regex() regex} */
     Variable<String> REGEX = new Variable<>("regex");
 
 }

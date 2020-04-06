@@ -20,6 +20,8 @@ import com.github.wautsns.simplevalidator.model.criterion.basic.DoubleCriterion;
 import com.github.wautsns.simplevalidator.model.criterion.factory.primitive.DoubleCriterionFactory;
 import com.github.wautsns.simplevalidator.model.failure.ValidationFailure;
 import com.github.wautsns.simplevalidator.model.node.ConstrainedNode;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 import java.util.function.DoublePredicate;
 
@@ -27,14 +29,17 @@ import java.util.function.DoublePredicate;
  * @author wautsns
  * @since Mar 11, 2020
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class VDomainDoubleCriterionFactory extends DoubleCriterionFactory<VDomain> {
+
+    public static final VDomainDoubleCriterionFactory INSTANCE = new VDomainDoubleCriterionFactory();
 
     @Override
     public void process(ConstrainedNode node, VDomain constraint, DoubleCriteria wip) {
         wip.add(produce(constraint));
     }
 
-    // ------------------------- criterion -----------------------------------------
+    // #################### criterion ###################################################
 
     protected static DoubleCriterion produce(VDomain constraint) {
         DoublePredicate predicate = DomainUtils.init(constraint.value()).forDouble();

@@ -28,9 +28,9 @@ import java.util.function.UnaryOperator;
 public interface FloatCriterion extends PrimitiveCriterion<Float> {
 
     /**
-     * Test value.
+     * Test {@code float} value.
      *
-     * @param value value
+     * @param value {@code float} value
      * @return validation failure, or {@code null} if the validation is passed.
      */
     ValidationFailure test(float value);

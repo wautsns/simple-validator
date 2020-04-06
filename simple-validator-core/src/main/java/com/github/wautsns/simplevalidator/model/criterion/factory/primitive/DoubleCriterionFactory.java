@@ -23,7 +23,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 
 /**
- * Abstract double criterion factory.
+ * Criterion factory for {@code double} type.
  *
  * @author wautsns
  * @since Mar 11, 2020

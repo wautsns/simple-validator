@@ -39,8 +39,18 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @VNotBlank
 public @interface VNotNullOrBlank {
 
+    /**
+     * Message(template).
+     *
+     * @return message(template)
+     */
     String message() default "[`VNotNullOrBlank`]";
 
+    /**
+     * Order of the constraint.
+     *
+     * @return order of the constraint
+     */
     int order() default 0;
 
 }

@@ -51,7 +51,7 @@ public class ConstrainedGetter extends ConstrainedTypeContainer {
         return getDeclaringClass();
     }
 
-    // -------------------- constructor -------------------------------------------------
+    // #################### constructor #################################################
 
     /**
      * Construct a constrained getter.
@@ -67,7 +67,7 @@ public class ConstrainedGetter extends ConstrainedTypeContainer {
         this.criterionWrapper = new CriterionWrapper(getter);
     }
 
-    // -------------------- utils -------------------------------------------------------
+    // #################### utils #######################################################
 
     /**
      * Generate getter name like '#age()'.
@@ -79,7 +79,7 @@ public class ConstrainedGetter extends ConstrainedTypeContainer {
         return '#' + ReflectionUtils.getPropertyName(getter) + "()";
     }
 
-    // -------------------- internal utils -----------------------------------------------
+    // ==================== internal utils ==============================================
 
     /** criterion wrapper */
     @RequiredArgsConstructor

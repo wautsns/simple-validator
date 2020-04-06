@@ -67,7 +67,7 @@ public class SimpleMethodValidationInterceptor implements MethodInterceptor {
         // Call from interface-based proxy handle, allowing for an efficient check?
         if (clazz.isInterface()) {
             return ((clazz == FactoryBean.class || clazz == SmartFactoryBean.class) &&
-                    !method.getName().equals("getObject"));
+                    !"getObject".equals(method.getName()));
         }
         // Call from CGLIB proxy handle, potentially implementing a FactoryBean method?
         Class<?> factoryBeanType = null;
@@ -76,7 +76,7 @@ public class SimpleMethodValidationInterceptor implements MethodInterceptor {
         } else if (FactoryBean.class.isAssignableFrom(clazz)) {
             factoryBeanType = FactoryBean.class;
         }
-        return (factoryBeanType != null && !method.getName().equals("getObject") &&
+        return (factoryBeanType != null && !"getObject".equals(method.getName()) &&
                 ClassUtils.hasMethod(factoryBeanType, method.getName(), method.getParameterTypes()));
     }
 

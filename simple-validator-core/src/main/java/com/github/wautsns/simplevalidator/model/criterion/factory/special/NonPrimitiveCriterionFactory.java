@@ -22,15 +22,17 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 
 /**
+ * Criterion factory for non-primitive type.
+ *
  * @author wautsns
  * @since Mar 11, 2020
  */
-public abstract class AbstractCharSequenceCriterionFactory<A extends Annotation>
-        implements TCriterionFactory<A, CharSequence> {
+public abstract class NonPrimitiveCriterionFactory<A extends Annotation>
+        implements TCriterionFactory<A, Object> {
 
     @Override
     public boolean appliesTo(Type type, A constraint) {
-        return TypeUtils.isAssignableTo(type, CharSequence.class);
+        return !TypeUtils.isPrimitive(type);
     }
 
 }
