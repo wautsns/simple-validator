@@ -17,10 +17,8 @@ package com.github.wautsns.templatemessage.formatter.time;
 
 import com.github.wautsns.templatemessage.formatter.Formatter;
 import com.github.wautsns.templatemessage.formatter.time.util.TimeFormatterUtils;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NonNull;
-import lombok.Setter;
 import lombok.experimental.Accessors;
 
 import java.time.LocalDate;
@@ -33,24 +31,16 @@ import java.util.Locale;
  * @author wautsns
  * @since Mar 10, 2020
  */
-@Getter
-@Setter
+@Data
 @Accessors(chain = true)
-@EqualsAndHashCode
 public class LocalDateFormatter implements Formatter<LocalDate> {
 
     /** default {@code LocalDateFormatter} */
     public static final Formatter<LocalDate> DEFAULT = new LocalDateFormatter();
 
-    private static final long serialVersionUID = -7202909023391923980L;
-
     /** string format of {@code null}, default is {@code "null"} */
     private @NonNull String stringWhenNull = "null";
-    /**
-     * locale of string format, default is {@code null}
-     *
-     * <p>Set specified {@code Locale}, if you need to fix the locale of string format.
-     */
+    /** locale specified when formatting, default is {@code null} */
     private Locale localeOfStringFormat = null;
     /** date format style, default is {@link FormatStyle#MEDIUM} */
     private @NonNull FormatStyle formatStyle = FormatStyle.MEDIUM;
@@ -59,7 +49,9 @@ public class LocalDateFormatter implements Formatter<LocalDate> {
     public String format(LocalDate value, Locale locale) {
         if (value == null) { return stringWhenNull; }
         if (localeOfStringFormat != null) { locale = localeOfStringFormat; }
-        return TimeFormatterUtils.DateTimeFormatters.forDate(formatStyle, locale).format(value);
+        return TimeFormatterUtils.DateTimeFormatters
+                .forDate(formatStyle, locale)
+                .format(value);
     }
 
 }

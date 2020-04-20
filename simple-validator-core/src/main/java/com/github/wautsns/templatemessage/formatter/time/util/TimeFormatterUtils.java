@@ -110,14 +110,14 @@ public class TimeFormatterUtils {
     public static class DateTimeFormatters {
 
         /** cache of {@code DateTimeFormatter} for displaying date */
-        private static final EnumMap<FormatStyle, Map<Locale, DateTimeFormatter>> CACHE_ONLY_DATE
-                = new EnumMap<>(FormatStyle.class);
+        private static final EnumMap<FormatStyle, Map<Locale, DateTimeFormatter>> CACHE_ONLY_DATE =
+                new EnumMap<>(FormatStyle.class);
         /** cache of {@code DateTimeFormatter} for displaying time */
-        private static final EnumMap<FormatStyle, Map<Locale, DateTimeFormatter>> CACHE_ONLY_TIME
-                = new EnumMap<>(FormatStyle.class);
+        private static final EnumMap<FormatStyle, Map<Locale, DateTimeFormatter>> CACHE_ONLY_TIME =
+                new EnumMap<>(FormatStyle.class);
         /** cache of {@code DateTimeFormatter} for displaying date and time */
-        private static final EnumMap<FormatStyle, EnumMap<FormatStyle, Map<Locale, DateTimeFormatter>>> CACHE_DATE_TIME
-                = new EnumMap<>(FormatStyle.class);
+        private static final EnumMap<FormatStyle, EnumMap<FormatStyle, Map<Locale, DateTimeFormatter>>> CACHE_DATE_TIME =
+                new EnumMap<>(FormatStyle.class);
 
         /**
          * Get {@link DateTimeFormatter} for displaying date and time.
@@ -134,8 +134,8 @@ public class TimeFormatterUtils {
             if (dateFormatStyle == null) { return forTime(timeFormatStyle, locale); }
             if (timeFormatStyle == null) { return forDate(dateFormatStyle, locale); }
             return CACHE_DATE_TIME
-                    .computeIfAbsent(dateFormatStyle, dfs -> new EnumMap<>(FormatStyle.class))
-                    .computeIfAbsent(timeFormatStyle, dfs -> new ConcurrentHashMap<>())
+                    .computeIfAbsent(dateFormatStyle, i -> new EnumMap<>(FormatStyle.class))
+                    .computeIfAbsent(timeFormatStyle, i -> new ConcurrentHashMap<>())
                     .computeIfAbsent(
                             Objects.requireNonNull(locale),
                             loc -> DateTimeFormatter

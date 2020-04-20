@@ -18,8 +18,7 @@ package com.github.wautsns.simplevalidator.model.failure;
 import com.github.wautsns.templatemessage.formatter.Formatter;
 import com.github.wautsns.templatemessage.formatter.common.EnumFormatter;
 import com.github.wautsns.templatemessage.formatter.multival.ArrayFormatter;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import lombok.experimental.UtilityClass;
 
 /**
  * Formatters.
@@ -27,7 +26,7 @@ import lombok.NoArgsConstructor;
  * @author wautsns
  * @since Mar 14, 2020
  */
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@UtilityClass
 @SuppressWarnings("rawtypes")
 public class Formatters {
 
@@ -50,9 +49,9 @@ public class Formatters {
     public static final Formatter<Enum[]> ENUMS_PROPERTIES_NO_RESTRICTIONS = new ArrayFormatter<Enum[], Enum>()
             .setStringFormatOfNull(PropertyPhrases.NO_RESTRICTIONS)
             .setStringFormatOfEmptyArray(PropertyPhrases.NO_RESTRICTIONS)
-            .setComponentPrefix(ValidationFailureFormatter.LEFT_DELIMITER_RESOURCE)
-            .setComponentSuffix(ValidationFailureFormatter.RIGHT_DELIMITER_RESOURCE)
-            .setComponentFormatter(new EnumFormatter().setDisplayClass(true));
+            .setComponentPrefix(ValidationFailureFormatter.RELOADED_RESOURCE_LD)
+            .setComponentSuffix(ValidationFailureFormatter.RELOADED_RESOURCE_RD)
+            .setComponentFormatter(new EnumFormatter().setDisplayDeclaringClass(true));
 
     /**
      * enums properties(no optional value if the enum properties are {@code null} or empty)
@@ -73,9 +72,9 @@ public class Formatters {
     public static final Formatter<Enum[]> ENUMS_PROPERTIES_NO_OPTIONAL_VALUE = new ArrayFormatter<Enum[], Enum>()
             .setStringFormatOfNull(PropertyPhrases.NO_OPTIONAL_VALUE)
             .setStringFormatOfEmptyArray(PropertyPhrases.NO_OPTIONAL_VALUE)
-            .setComponentPrefix(ValidationFailureFormatter.LEFT_DELIMITER_RESOURCE)
-            .setComponentSuffix(ValidationFailureFormatter.RIGHT_DELIMITER_RESOURCE)
-            .setComponentFormatter(new EnumFormatter().setDisplayClass(true));
+            .setComponentPrefix(ValidationFailureFormatter.RELOADED_RESOURCE_LD)
+            .setComponentSuffix(ValidationFailureFormatter.RELOADED_RESOURCE_RD)
+            .setComponentFormatter(new EnumFormatter().setDisplayDeclaringClass(true));
 
     /**
      * object values(no restrictions if the object values are {@code null} or empty)

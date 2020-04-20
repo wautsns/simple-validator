@@ -39,11 +39,11 @@ class NodeCriterionProducer {
     /** root */
     private final ConstrainedNode root;
     /** disordered constrained node -> criterion processor map */
-    private final Map<ConstrainedNode, List<Constraint<?>.CriterionProcessor>>
-            disorderedNodeCriterionProcessorMap = new LinkedHashMap<>();
+    private final Map<ConstrainedNode, List<Constraint<?>.CriterionProcessor>> disorderedNodeCriterionProcessorMap =
+            new LinkedHashMap<>();
     /** ordered constrained node -> criterion processor map */
-    private final Map<Integer, LinkedHashMap<ConstrainedNode, List<Constraint<?>.CriterionProcessor>>>
-            orderedNodeCriterionProcessorMap = new TreeMap<>(Constraint.ORDER_COMPARATOR);
+    private final Map<Integer, LinkedHashMap<ConstrainedNode, List<Constraint<?>.CriterionProcessor>>> orderedNodeCriterionProcessorMap =
+            new TreeMap<>(Constraint.ORDER_COMPARATOR);
 
     /**
      * Produce criterion.
@@ -147,17 +147,17 @@ class NodeCriterionProducer {
      * </pre>
      */
     private void simplify() {
-        Iterator<Entry<Integer, LinkedHashMap<ConstrainedNode, List<Constraint<?>.CriterionProcessor>>>> iterator
-                = orderedNodeCriterionProcessorMap.entrySet().iterator();
+        Iterator<Entry<Integer, LinkedHashMap<ConstrainedNode, List<Constraint<?>.CriterionProcessor>>>> iterator =
+                orderedNodeCriterionProcessorMap.entrySet().iterator();
         Map<ConstrainedNode, List<Constraint<?>.CriterionProcessor>> prev = null;
         while (iterator.hasNext()) {
-            Entry<Integer, LinkedHashMap<ConstrainedNode, List<Constraint<?>.CriterionProcessor>>> curr
-                    = iterator.next();
+            Entry<Integer, LinkedHashMap<ConstrainedNode, List<Constraint<?>.CriterionProcessor>>> curr =
+                    iterator.next();
             if (prev == null) {
                 prev = curr.getValue();
             } else if (prev.size() == 1) {
-                Entry<ConstrainedNode, List<Constraint<?>.CriterionProcessor>> prevNode
-                        = prev.entrySet().iterator().next();
+                Entry<ConstrainedNode, List<Constraint<?>.CriterionProcessor>> prevNode =
+                        prev.entrySet().iterator().next();
                 List<Constraint<?>.CriterionProcessor> processors = curr.getValue().remove(prevNode.getKey());
                 if (processors == null) { continue; }
                 prevNode.getValue().addAll(processors);

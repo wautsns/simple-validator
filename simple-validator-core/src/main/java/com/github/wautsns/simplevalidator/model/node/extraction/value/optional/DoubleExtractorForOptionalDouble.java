@@ -35,18 +35,18 @@ public class DoubleExtractorForOptionalDouble implements DoubleExtractor<Optiona
     public static final DoubleExtractorForOptionalDouble INSTANCE = new DoubleExtractorForOptionalDouble();
 
     @Override
-    public double extract(OptionalDouble target) {
-        return target.orElseThrow(NullPointerException::new);
-    }
-
-    @Override
     public boolean appliesTo(Type type) {
-        return type == OptionalDouble.class;
+        return (type == OptionalDouble.class);
     }
 
     @Override
     public String getName() {
         return "";
+    }
+
+    @Override
+    public double extract(OptionalDouble target) {
+        return target.orElseThrow(NullPointerException::new);
     }
 
 }

@@ -15,14 +15,15 @@
  */
 package com.github.wautsns.simplevalidator.model.failure;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import lombok.experimental.UtilityClass;
 
 /**
+ * Property phrases.
+ *
  * @author wautsns
  * @since Mar 11, 2020
  */
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@UtilityClass
 public class PropertyPhrases {
 
     /** no restrictions */
@@ -36,10 +37,10 @@ public class PropertyPhrases {
      * @param phrase phrase
      * @return property phrase
      */
-    private static String wrap(String phrase) {
-        return ValidationFailureFormatter.LEFT_DELIMITER_RESOURCE
+    public static String wrap(String phrase) {
+        return ValidationFailureFormatter.RELOADED_RESOURCE_LD
                 + phrase
-                + ValidationFailureFormatter.RIGHT_DELIMITER_RESOURCE;
+                + ValidationFailureFormatter.RELOADED_RESOURCE_RD;
     }
 
 }

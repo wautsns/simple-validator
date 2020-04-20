@@ -26,7 +26,7 @@ import java.lang.reflect.Type;
 public interface ValueExtractor {
 
     /**
-     * Whether the extractor applies to the specified type.
+     * Return whether the extractor applies to the specified type.
      *
      * @param type type
      * @return {@code true} if the extractor applies to the specified type, otherwise {@code false}

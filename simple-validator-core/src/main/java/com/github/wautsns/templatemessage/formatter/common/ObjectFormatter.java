@@ -19,10 +19,8 @@ import com.github.wautsns.templatemessage.formatter.Formatter;
 import com.github.wautsns.templatemessage.formatter.multival.ArrayFormatter;
 import com.github.wautsns.templatemessage.formatter.multival.IterableFormatter;
 import com.github.wautsns.templatemessage.formatter.multival.MapFormatter;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NonNull;
-import lombok.Setter;
 import lombok.experimental.Accessors;
 
 import java.util.Locale;
@@ -32,28 +30,24 @@ import java.util.Map;
  * Formatter for {@code Object} value.
  *
  * <ul>
- * <li>If value is {@code null}, see {@linkplain #getStringFormatOfNull()}.</li>
- * <li>If value is array, {@link ArrayFormatter#DEFAULT} will be used.</li>
- * <li>If value instance of {@code Iterable}, {@link IterableFormatter#DEFAULT} will be used.</li>
- * <li>If value instance of {@code Map}, {@link MapFormatter#DEFAULT} will be used.</li>
+ * <li>If value is {@code null}, see {@link #getStringFormatOfNull()}.</li>
+ * <li>If value is array, see {@link ArrayFormatter#DEFAULT} will be used.</li>
+ * <li>If value is instance of {@code Iterable}, {@link IterableFormatter#DEFAULT} will be used.</li>
+ * <li>If value is instance of {@code Map}, {@link MapFormatter#DEFAULT} will be used.</li>
  * <li>Otherwise {@code value.toString()}.</li>
  * </ul>
  *
  * @author wautsns
  * @since Mar 10, 2020
  */
-@Getter
-@Setter
+@Data
 @Accessors(chain = true)
-@EqualsAndHashCode
 public class ObjectFormatter implements Formatter<Object> {
 
     /** default {@code ObjectFormatter} */
     public static final ObjectFormatter DEFAULT = new ObjectFormatter();
 
-    private static final long serialVersionUID = -3276250483374591036L;
-
-    /** string format for {@code null}, default is {@code "null"} */
+    /** string format of {@code null}, default is {@code "null"} */
     private @NonNull String stringFormatOfNull = "null";
 
     @Override

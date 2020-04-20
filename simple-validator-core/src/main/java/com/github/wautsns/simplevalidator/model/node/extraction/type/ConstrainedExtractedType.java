@@ -79,6 +79,20 @@ public class ConstrainedExtractedType extends ConstrainedTypeContainer {
                 "sun.reflect.annotation.AnnotatedTypeFactory$AnnotatedTypeBaseImpl");
 
         /**
+         * Get name of the extracted type.
+         *
+         * @return name of the extracted type
+         */
+        public abstract String getName();
+
+        /**
+         * Get criterion wrapper.
+         *
+         * @return criterion wrapper
+         */
+        public abstract Criterion.Wrapper getCriterionWrapper();
+
+        /**
          * Extracted annotated type from the specified annotated type.
          *
          * @param target annotated type
@@ -117,12 +131,12 @@ public class ConstrainedExtractedType extends ConstrainedTypeContainer {
          * @return extracted annotated type, or {@code null} if not supported
          */
         private AnnotatedType extractFromParameterizedType(AnnotatedParameterizedType annotatedType) {
-            Class<?> clazz = TypeUtils.getClass(annotatedType.getType());
+            Class<?> parameterizedClass = TypeUtils.getClass(annotatedType.getType());
             TypeParameterMetadata typeParameterMetadata = getTypeParameterMetadata();
             if (typeParameterMetadata == null) { return null; }
             Class<?> typeContainer = typeParameterMetadata.getTypeContainer();
             int typeParameterIndex = typeParameterMetadata.getTypeParameterIndex();
-            typeParameterIndex = TypeUtils.getTypeParameterIndex(clazz, typeContainer, typeParameterIndex);
+            typeParameterIndex = TypeUtils.getTypeParameterIndex(parameterizedClass, typeContainer, typeParameterIndex);
             if (typeParameterIndex < 0) { return null; }
             return annotatedType.getAnnotatedActualTypeArguments()[typeParameterIndex];
         }
@@ -196,20 +210,6 @@ public class ConstrainedExtractedType extends ConstrainedTypeContainer {
             }
             return null;
         }
-
-        /**
-         * Get name of the extracted type.
-         *
-         * @return name of the extracted type
-         */
-        public abstract String getName();
-
-        /**
-         * Get criterion wrapper.
-         *
-         * @return criterion wrapper
-         */
-        public abstract Criterion.Wrapper getCriterionWrapper();
 
     }
 

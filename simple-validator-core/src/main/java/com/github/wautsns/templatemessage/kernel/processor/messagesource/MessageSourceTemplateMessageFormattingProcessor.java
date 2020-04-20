@@ -13,36 +13,41 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.wautsns.templatemessage.kernel.processor;
+package com.github.wautsns.templatemessage.kernel.processor.messagesource;
 
 import com.github.wautsns.templatemessage.kernel.TemplateMessageFormatter;
-import com.github.wautsns.templatemessage.variable.Variable;
 import com.github.wautsns.templatemessage.variable.VariableValueMap;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.ToString;
+import org.springframework.context.MessageSource;
 
 import java.util.Locale;
 
 /**
- * Template message formatting processor for {@linkplain Variable variable}.
+ * Template message formatting processor for {@link MessageSource message source}.
  *
  * @author wautsns
- * @since Mar 10, 2020
+ * @since Mar 24, 2020
  */
-public class VariableFormattingProcessor extends TemplateMessageFormatter.Processor {
+@Getter
+@ToString
+@EqualsAndHashCode(callSuper = true)
+public class MessageSourceTemplateMessageFormattingProcessor<T extends MessageSource>
+        extends TemplateMessageFormatter.Processor {
 
-    private static final long serialVersionUID = -920358351308261184L;
+    /** message source */
+    private final T messageSource;
 
-    public VariableFormattingProcessor(String leftDelimiter, String rightDelimiter) {
+    public MessageSourceTemplateMessageFormattingProcessor(
+            String leftDelimiter, String rightDelimiter, T messageSource) {
         super(leftDelimiter, rightDelimiter);
+        this.messageSource = messageSource;
     }
-
-    // #################### process #####################################################
 
     @Override
     public String process(String text, VariableValueMap variableValueMap, Locale locale) {
-        Variable<Object> variable = variableValueMap.getVariable(text);
-        if (variable == null) { return null; }
-        Object value = variableValueMap.getValue(variable);
-        return variable.getFormatter().format(value, locale);
+        return messageSource.getMessage(text, null, null, locale);
     }
 
 }

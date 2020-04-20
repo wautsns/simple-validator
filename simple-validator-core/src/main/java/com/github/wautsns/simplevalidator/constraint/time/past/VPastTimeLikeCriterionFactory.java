@@ -44,7 +44,7 @@ public class VPastTimeLikeCriterionFactory extends TimeLikeCriterionFactory<VPas
         long year = constraint.years();
         long month = constraint.months();
         long milliseconds = constraint.milliseconds() + TimeLikeUtility.toMilliseconds(
-                constraint.days(), constraint.hours(), constraint.minutes(), constraint.seconds());
+                constraint.weeks(), constraint.days(), constraint.hours(), constraint.minutes(), constraint.seconds());
         if ((year | month) != 0) {
             return initWithYearMonthMillisecondsOffset(utility, year, month, milliseconds);
         } else if (milliseconds == 0) {
@@ -79,8 +79,6 @@ public class VPastTimeLikeCriterionFactory extends TimeLikeCriterionFactory<VPas
             return utility.isBefore(time, ref) ? null : wrong(utility, time, ref);
         };
     }
-
-    // ------------------------- wrong ---------------------------------------------
 
     protected static <T> ValidationFailure wrong(TimeLikeUtility<T> utility, T value, T ref) {
         return utility.fail(value).put(VPast.REF.get(utility), ref);

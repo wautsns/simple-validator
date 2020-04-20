@@ -17,10 +17,8 @@ package com.github.wautsns.templatemessage.formatter.multival;
 
 import com.github.wautsns.templatemessage.formatter.Formatter;
 import com.github.wautsns.templatemessage.formatter.common.ObjectFormatter;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NonNull;
-import lombok.Setter;
 import lombok.experimental.Accessors;
 
 import java.lang.reflect.Array;
@@ -34,16 +32,12 @@ import java.util.Locale;
  * @author wautsns
  * @since Mar 10, 2020
  */
-@Getter
-@Setter
+@Data
 @Accessors(chain = true)
-@EqualsAndHashCode
 public class ArrayFormatter<A, C> implements Formatter<A> {
 
-    /** default {@code ArrayFormatter}, e.g. [1, 2, 3] */
+    /** default {@code ArrayFormatter} */
     public static final ArrayFormatter<Object, Object> DEFAULT = new ArrayFormatter<>();
-
-    private static final long serialVersionUID = -2410808790906328502L;
 
     /** string format of {@code null}, default is {@code "null"} */
     private @NonNull String stringFormatOfNull = "null";
@@ -61,32 +55,6 @@ public class ArrayFormatter<A, C> implements Formatter<A> {
     private @NonNull String delimiter = ", ";
     /** formatter for component, default is {@link ObjectFormatter#DEFAULT} */
     private @NonNull Formatter<? super C> componentFormatter = ObjectFormatter.DEFAULT;
-
-    /**
-     * Set prefix and suffix.
-     *
-     * @param prefix prefix of string formatter
-     * @param suffix suffix of string formatter
-     * @return self reference
-     */
-    public ArrayFormatter<A, C> setPrefixAndSuffix(String prefix, String suffix) {
-        setPrefix(prefix);
-        setSuffix(suffix);
-        return this;
-    }
-
-    /**
-     * Set prefix of string format of component and suffix of string format of component.
-     *
-     * @param prefix prefix of string format of component
-     * @param suffix suffix of string format of component
-     * @return self reference
-     */
-    public ArrayFormatter<A, C> setComponentPrefixAndSuffix(String prefix, String suffix) {
-        setComponentPrefix(prefix);
-        setComponentSuffix(suffix);
-        return this;
-    }
 
     @Override
     @SuppressWarnings("unchecked")

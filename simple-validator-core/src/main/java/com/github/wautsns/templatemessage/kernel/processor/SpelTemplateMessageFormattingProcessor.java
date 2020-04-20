@@ -17,6 +17,8 @@ package com.github.wautsns.templatemessage.kernel.processor;
 
 import com.github.wautsns.templatemessage.kernel.TemplateMessageFormatter;
 import com.github.wautsns.templatemessage.variable.VariableValueMap;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.springframework.expression.EvaluationContext;
 import org.springframework.expression.Expression;
 import org.springframework.expression.ExpressionParser;
@@ -34,16 +36,13 @@ import java.util.Locale;
  * @author wautsns
  * @since Mar 10, 2020
  */
-public class SpelFormattingProcessor extends TemplateMessageFormatter.Processor {
+@ToString
+@EqualsAndHashCode(callSuper = true)
+public class SpelTemplateMessageFormattingProcessor extends TemplateMessageFormatter.Processor {
 
-    /** serialVersionUID */
-    private static final long serialVersionUID = 4480932903559439109L;
-
-    public SpelFormattingProcessor(String leftDelimiter, String rightDelimiter) {
+    public SpelTemplateMessageFormattingProcessor(String leftDelimiter, String rightDelimiter) {
         super(leftDelimiter, rightDelimiter);
     }
-
-    // #################### process #####################################################
 
     @Override
     public String process(String text, VariableValueMap variableValueMap, Locale locale) {
@@ -59,7 +58,7 @@ public class SpelFormattingProcessor extends TemplateMessageFormatter.Processor 
         }
     }
 
-    // #################### internal utils ##############################################
+    // #################### internal utils ################################################
 
     /** spel expression parser */
     private static final ExpressionParser SPEL_PARSER = new SpelExpressionParser();

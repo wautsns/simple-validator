@@ -15,15 +15,10 @@
  */
 package com.github.wautsns.templatemessage.variable;
 
-import lombok.EqualsAndHashCode;
-
-import java.io.Serializable;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * Variable value map.
@@ -31,33 +26,64 @@ import java.util.stream.Stream;
  * @author wautsns
  * @since Mar 10, 2020
  */
-@EqualsAndHashCode
-public class VariableValueMap implements Serializable {
+@SuppressWarnings({"rawtypes", "unchecked"})
+public class VariableValueMap {
 
-    private static final long serialVersionUID = 155772768719651061L;
+    /** empty variableValueMap */
+    public static final VariableValueMap EMPTY = new VariableValueMap(Collections.emptyMap());
 
-    /** variable -> serializable value map */
-    private Map<Variable<?>, Serializable> serializableValueMap = Collections.emptyMap();
-    /** variable -> non-serializable value map */
-    private transient Map<Variable<?>, Object> nonSerializableValueMap = Collections.emptyMap();
+    /** map: variable -> value */
+    private final Map<Variable, Object> dataMap;
+
+    /** Construct a variableValueMap. */
+    public VariableValueMap() {
+        this(8);
+    }
 
     /**
-     * Whether the variableValueMap is empty.
+     * Construct a variableValueMap.
+     *
+     * @param initialCapacity initial capacity
+     */
+    public VariableValueMap(int initialCapacity) {
+        dataMap = new HashMap<>(initialCapacity);
+    }
+
+    /**
+     * Construct a variableValueMap.
+     *
+     * @param initialVariableValueMap initial variable value map data
+     */
+    public VariableValueMap(VariableValueMap initialVariableValueMap) {
+        this.dataMap = new HashMap<>(initialVariableValueMap.dataMap);
+    }
+
+    /**
+     * Construct a variableValueMap.
+     *
+     * @param initialDataMap initial data map
+     */
+    public VariableValueMap(Map<Variable, Object> initialDataMap) {
+        this.dataMap = initialDataMap;
+    }
+
+    /**
+     * Return whethe the variableValueMap is empty.
      *
      * @return {@code true} if the variableValueMap is empty, otherwise {@code false}
      */
     public boolean isEmpty() {
-        return serializableValueMap.isEmpty() && nonSerializableValueMap.isEmpty();
+        return dataMap.isEmpty();
     }
 
     /**
-     * Whether the variableValueMap contains the variable.
+     * Return whethe the variableValueMap contains the specified variable.
      *
      * @param variable variable
      * @return {@code true} if the variableValueMap contains the variable, otherwise {@code false}
      */
-    public boolean containsVariable(Variable<?> variable) {
-        return serializableValueMap.containsKey(variable) || nonSerializableValueMap.containsKey(variable);
+    public boolean contains(Variable<?> variable) {
+        return dataMap.containsKey(variable);
     }
 
     /**
@@ -66,20 +92,19 @@ public class VariableValueMap implements Serializable {
      * @return size of the variableValueMap
      */
     public int size() {
-        return serializableValueMap.size() + nonSerializableValueMap.size();
+        return dataMap.size();
     }
 
     /**
-     * Get the variable with the specified name.
+     * Get variable with the specified name.
      *
      * @param name name
      * @param <T> type of value of variable
-     * @return the variable with the specified name, or {@code null} if the variableValueMap contains no variable with
-     * the specified name
+     * @return variable with the specified name, or {@code null} if the variableValueMap contains no variable with the
+     * specified name
      */
-    @SuppressWarnings("unchecked")
     public <T> Variable<T> getVariable(String name) {
-        return entryStream()
+        return (Variable<T>) dataMap.entrySet().stream()
                 .filter(e -> e.getKey().getName().equals(name))
                 .findFirst()
                 .map(Map.Entry::getKey)
@@ -87,11 +112,11 @@ public class VariableValueMap implements Serializable {
     }
 
     /**
-     * Get the value of the specified variable.
+     * Get value of the specified variable.
      *
      * @param variable variable
      * @param <T> type of value
-     * @return the value of the specified variable, or {@code null} if the variable does not exist in the variable value
+     * @return value of the specified variable, or {@code null} if the variable does not exist in the variable value
      * map, or the value of variable is {@code null}
      */
     public <T> T getValue(Variable<T> variable) {
@@ -99,65 +124,25 @@ public class VariableValueMap implements Serializable {
     }
 
     /**
-     * Get the value of the specified variable.
+     * Get value of the specified variable.
      *
      * @param variable variable
      * @param defaultValue default value
      * @param <T> type of value
-     * @return the value of the specified variable, or {@code null} if the value of variable is {@code null}, or default
+     * @return value of the specified variable, or {@code null} if the value of variable is {@code null}, or default
      * value if the variable does not exist in the variable value
      */
-    @SuppressWarnings("unchecked")
     public <T> T getValue(Variable<T> variable, T defaultValue) {
-        T value = (T) serializableValueMap.get(variable);
-        if (value != null) { return value; }
-        if (serializableValueMap.containsKey(variable)) { return null; }
-        value = (T) nonSerializableValueMap.get(variable);
-        if (value != null) { return value; }
-        if (nonSerializableValueMap.containsKey(variable)) { return null; }
-        return defaultValue;
+        return (T) dataMap.getOrDefault(variable, defaultValue);
     }
 
     /**
-     * Return entry stream of the variableValueMap.
+     * Get dataMap.
      *
-     * @return entry stream of the variableValueMap
+     * @return dataMap
      */
-    @SuppressWarnings({"rawtypes", "unchecked"})
-    public Stream<Map.Entry<Variable, Object>> entryStream() {
-        if (serializableValueMap.isEmpty()) {
-            if (nonSerializableValueMap.isEmpty()) {
-                return Stream.empty();
-            } else {
-                return (Stream) nonSerializableValueMap.entrySet().stream();
-            }
-        } else {
-            Stream serializableDataStream = serializableValueMap.entrySet().stream();
-            if (nonSerializableValueMap.isEmpty()) { return serializableDataStream; }
-            return Stream.concat(serializableDataStream, nonSerializableValueMap.entrySet().stream());
-        }
-    }
-
-    /**
-     * For each variable and value.
-     *
-     * @param action action for variable and value
-     */
-    @SuppressWarnings("rawtypes")
-    public void forEach(BiConsumer<Variable, Object> action) {
-        serializableValueMap.forEach(action);
-        nonSerializableValueMap.forEach(action);
-    }
-
-    /**
-     * Copy all variables and values from the specified variableValueMap to this variableValueMap.
-     *
-     * @param variableValueMap another variableValueMap
-     * @return self reference
-     */
-    public VariableValueMap put(VariableValueMap variableValueMap) {
-        variableValueMap.forEach(this::put);
-        return this;
+    public Map<Variable, Object> getDataMap() {
+        return dataMap;
     }
 
     /**
@@ -169,64 +154,30 @@ public class VariableValueMap implements Serializable {
      * @return self reference
      */
     public <T> VariableValueMap put(Variable<T> variable, T value) {
-        if (value == null || value instanceof Serializable) {
-            if (serializableValueMap.isEmpty()) { serializableValueMap = new HashMap<>(8, 1f); }
-            nonSerializableValueMap.remove(variable);
-            serializableValueMap.put(variable, (Serializable) value);
-        } else {
-            if (nonSerializableValueMap.isEmpty()) { nonSerializableValueMap = new HashMap<>(4, 1f); }
-            serializableValueMap.remove(variable);
-            nonSerializableValueMap.put(variable, value);
-        }
+        dataMap.put(variable, value);
         return this;
     }
 
-    /** Clear the variableValueMap. */
-    public void clear() {
-        serializableValueMap.clear();
-        nonSerializableValueMap.clear();
+    /**
+     * Copy all variables and values from the specified variableValueMap to this variableValueMap.
+     *
+     * @param variableValueMap another variableValueMap
+     * @return self reference
+     */
+    public VariableValueMap put(VariableValueMap variableValueMap) {
+        this.dataMap.putAll(variableValueMap.dataMap);
+        return this;
     }
 
     /**
-     * Remove the value of the specified variable.
+     * Remove value of the specified variable.
      *
      * @param variable variable
      * @return self reference
      */
     public VariableValueMap remove(Variable<?> variable) {
-        serializableValueMap.remove(variable);
-        nonSerializableValueMap.remove(variable);
+        dataMap.remove(variable);
         return this;
-    }
-
-    /**
-     * Remove and return the value of specified variable.
-     *
-     * @param variable variable
-     * @param <T> type of value
-     * @return the value of specified variable, or {@code null} if the map contains no mapping for the variable
-     */
-    public <T> T removeAndGet(Variable<T> variable) {
-        return removeAndGet(variable, null);
-    }
-
-    /**
-     * Remove and return the value of specified variable.
-     *
-     * @param variable variable
-     * @param defaultValue default value
-     * @param <T> type of value
-     * @return the value of specified variable, or default value if the map contains no mapping for the variable
-     */
-    @SuppressWarnings("unchecked")
-    public <T> T removeAndGet(Variable<T> variable, T defaultValue) {
-        T value = (T) serializableValueMap.remove(variable);
-        if (value != null) { return value; }
-        if (serializableValueMap.containsKey(variable)) { return null; }
-        value = (T) nonSerializableValueMap.remove(variable);
-        if (value != null) { return value; }
-        if (nonSerializableValueMap.containsKey(variable)) { return null; }
-        return defaultValue;
     }
 
     @Override
@@ -234,10 +185,10 @@ public class VariableValueMap implements Serializable {
     public String toString() {
         StringBuilder result = new StringBuilder();
         result.append('{');
-        result.append(entryStream()
-                .map(e -> {
-                    Variable variable = e.getKey();
-                    Object value = e.getValue();
+        result.append(dataMap.entrySet().stream()
+                .map(entry -> {
+                    Variable variable = entry.getKey();
+                    Object value = entry.getValue();
                     return variable + "=" + variable.getFormatter().format(value);
                 })
                 .collect(Collectors.joining(", ")));
@@ -245,33 +196,17 @@ public class VariableValueMap implements Serializable {
         return result.toString();
     }
 
-    /** empty variableValueMap */
-    public static final VariableValueMap EMPTY = new VariableValueMap() {
+    @Override
+    public int hashCode() {
+        return dataMap.hashCode();
+    }
 
-        /** serialVersionUID */
-        private static final long serialVersionUID = -4503979970242041809L;
-
-        @Override
-        public <T> T getValue(Variable<T> variable, T defaultValue) {
-            return defaultValue;
-        }
-
-        @Override
-        @SuppressWarnings("rawtypes")
-        public Stream<Map.Entry<Variable, Object>> entryStream() {
-            return Stream.empty();
-        }
-
-        @Override
-        public <T> VariableValueMap put(Variable<T> variable, T value) {
-            throw new UnsupportedOperationException();
-        }
-
-        @Override
-        public <T> T removeAndGet(Variable<T> variable, T defaultValue) {
-            return defaultValue;
-        }
-
-    };
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) { return true; }
+        if (o == null || getClass() != o.getClass()) { return false; }
+        VariableValueMap that = (VariableValueMap) o;
+        return this.dataMap.equals(that.dataMap);
+    }
 
 }

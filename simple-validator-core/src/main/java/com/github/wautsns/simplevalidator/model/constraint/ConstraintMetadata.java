@@ -24,6 +24,7 @@ import com.github.wautsns.simplevalidator.util.extractor.ValueExtractor;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -75,7 +76,7 @@ public class ConstraintMetadata<A extends Annotation> {
     private final Map<String, Method> attributeMap;
 
     /**
-     * Whether the constraint is only used to combine other constraints.
+     * Return whether the constraint is only used to combine other constraints.
      *
      * @return {@code true} if the constraint type is only used to combine other constraints, otherwise {@code false}
      */
@@ -120,7 +121,7 @@ public class ConstraintMetadata<A extends Annotation> {
      * @return the {@code ConstraintMetadata} instance of the specified constraint type
      */
     @SuppressWarnings("unchecked")
-    public static <A extends Annotation> ConstraintMetadata<A> getInstance(Class<? extends A> constraintType) {
+    public static <A extends Annotation> ConstraintMetadata<A> getInstance(@NonNull Class<? extends A> constraintType) {
         return INSTANCE_MAP.computeIfAbsent(constraintType, ConstraintMetadata::new);
     }
 
@@ -179,7 +180,8 @@ public class ConstraintMetadata<A extends Annotation> {
     // ==================== AConstraint =================================================
 
     /**
-     * Whether the annotation type is a constraint type(i.e. an annotation type annotated with {@link AConstraint}).
+     * Return whether the annotation type is a constraint type(i.e. an annotation type annotated with {@link
+     * AConstraint}).
      *
      * @param annotationType annotation type
      * @return {@code true} if the annotation type is a constraint type, otherwise {@code false}

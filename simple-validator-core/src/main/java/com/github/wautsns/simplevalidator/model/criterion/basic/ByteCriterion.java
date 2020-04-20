@@ -48,6 +48,8 @@ public interface ByteCriterion extends PrimitiveCriterion<Byte> {
         };
     }
 
+    // #################### instance ####################################################
+
     /** the truth */
     ByteCriterion TRUTH = any -> null;
 

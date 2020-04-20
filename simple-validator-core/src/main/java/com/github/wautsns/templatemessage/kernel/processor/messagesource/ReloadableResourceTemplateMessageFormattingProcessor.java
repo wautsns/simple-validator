@@ -15,6 +15,8 @@
  */
 package com.github.wautsns.templatemessage.kernel.processor.messagesource;
 
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 
 /**
@@ -23,10 +25,12 @@ import org.springframework.context.support.ReloadableResourceBundleMessageSource
  * @author wautsns
  * @since Mar 24, 2020
  */
-public class ReloadableResourceFormattingProcessor
-        extends MessageSourceFormattingProcessor<ReloadableResourceBundleMessageSource> {
+@ToString
+@EqualsAndHashCode(callSuper = true)
+public class ReloadableResourceTemplateMessageFormattingProcessor
+        extends MessageSourceTemplateMessageFormattingProcessor<ReloadableResourceBundleMessageSource> {
 
-    public ReloadableResourceFormattingProcessor(String leftDelimiter, String rightDelimiter) {
+    public ReloadableResourceTemplateMessageFormattingProcessor(String leftDelimiter, String rightDelimiter) {
         super(leftDelimiter, rightDelimiter, new ReloadableResourceBundleMessageSource());
         getMessageSource().setDefaultEncoding("UTF-8");
     }
@@ -38,7 +42,7 @@ public class ReloadableResourceFormattingProcessor
      * @return self reference
      * @see ReloadableResourceBundleMessageSource#setCacheSeconds(int)
      */
-    public ReloadableResourceFormattingProcessor setCacheSeconds(int cacheSeconds) {
+    public ReloadableResourceTemplateMessageFormattingProcessor setCacheSeconds(int cacheSeconds) {
         getMessageSource().setCacheSeconds(cacheSeconds);
         return this;
     }
@@ -50,7 +54,7 @@ public class ReloadableResourceFormattingProcessor
      * @return self reference
      * @see ReloadableResourceBundleMessageSource#addBasenames(String...)
      */
-    public ReloadableResourceFormattingProcessor loadResources(String... baseNames) {
+    public ReloadableResourceTemplateMessageFormattingProcessor loadResources(String... baseNames) {
         getMessageSource().addBasenames(baseNames);
         return this;
     }

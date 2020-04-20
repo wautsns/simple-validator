@@ -48,6 +48,8 @@ public interface FloatCriterion extends PrimitiveCriterion<Float> {
         };
     }
 
+    // #################### instance ####################################################
+
     /** the truth */
     FloatCriterion TRUTH = any -> null;
 

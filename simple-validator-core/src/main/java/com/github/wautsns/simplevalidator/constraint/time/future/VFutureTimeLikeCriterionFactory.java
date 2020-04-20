@@ -40,12 +40,11 @@ public class VFutureTimeLikeCriterionFactory extends TimeLikeCriterionFactory<VF
 
     // #################### criterion ###################################################
 
-    protected static <T> TCriterion<T> produce(
-            TimeLikeUtility<T> utility, VFuture constraint) {
+    protected static <T> TCriterion<T> produce(TimeLikeUtility<T> utility, VFuture constraint) {
         long year = constraint.years();
         long month = constraint.months();
         long milliseconds = constraint.milliseconds() + TimeLikeUtility.toMilliseconds(
-                constraint.days(), constraint.hours(), constraint.minutes(), constraint.seconds());
+                constraint.weeks(), constraint.days(), constraint.hours(), constraint.minutes(), constraint.seconds());
         if ((year | month) != 0) {
             return initWithYearMonthMillisecondsOffset(utility, year, month, milliseconds);
         } else if (milliseconds == 0) {
@@ -79,8 +78,6 @@ public class VFutureTimeLikeCriterionFactory extends TimeLikeCriterionFactory<VF
             return utility.isAfter(time, ref) ? null : wrong(utility, time, ref);
         };
     }
-
-    // ------------------------- wrong ---------------------------------------------
 
     protected static <T> ValidationFailure wrong(TimeLikeUtility<T> utility, T value, T ref) {
         return utility.fail(value).put(VFuture.REF.get(utility), ref);

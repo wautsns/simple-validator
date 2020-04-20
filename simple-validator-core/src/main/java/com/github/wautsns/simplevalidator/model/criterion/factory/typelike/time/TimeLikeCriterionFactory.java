@@ -17,10 +17,18 @@ package com.github.wautsns.simplevalidator.model.criterion.factory.typelike.time
 
 import com.github.wautsns.simplevalidator.model.criterion.basic.TCriteria;
 import com.github.wautsns.simplevalidator.model.criterion.factory.typelike.TypeLikeCriterionFactory;
+import com.github.wautsns.simplevalidator.model.criterion.factory.typelike.time.utility.CalendarUtility;
+import com.github.wautsns.simplevalidator.model.criterion.factory.typelike.time.utility.DateUtility;
+import com.github.wautsns.simplevalidator.model.criterion.factory.typelike.time.utility.InstantUtility;
+import com.github.wautsns.simplevalidator.model.criterion.factory.typelike.time.utility.LocalDateTimeUtility;
+import com.github.wautsns.simplevalidator.model.criterion.factory.typelike.time.utility.LocalDateUtility;
+import com.github.wautsns.simplevalidator.model.criterion.factory.typelike.time.utility.LocalTimeUtility;
+import com.github.wautsns.simplevalidator.model.criterion.factory.typelike.time.utility.LongUtility;
 import com.github.wautsns.simplevalidator.model.node.ConstrainedNode;
 
 import java.lang.annotation.Annotation;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -32,8 +40,22 @@ import java.util.List;
 public abstract class TimeLikeCriterionFactory<A extends Annotation>
         extends TypeLikeCriterionFactory<A, TimeLikeUtility<?>> {
 
+    /** default time like utility */
+    public static final List<TimeLikeUtility<?>> DEFAULT_UTILITIES = new LinkedList<>(Arrays.asList(
+            CalendarUtility.DEFAULT,
+            DateUtility.DEFAULT,
+            InstantUtility.DEFAULT,
+            LocalDateTimeUtility.DEFAULT,
+            LocalDateUtility.DEFAULT,
+            LocalTimeUtility.DEFAULT,
+            LongUtility.DEFAULT));
+
     @Override
-    public void process(ConstrainedNode node, A constraint, TCriteria<Object> wip) {}
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    public final void process(ConstrainedNode node, A constraint, TCriteria<Object> wip) {
+        TimeLikeUtility utility = getTypeLikeUtility(node.getType());
+        process(utility, node, constraint, wip);
+    }
 
     /**
      * Process wip of criteria.
@@ -44,13 +66,12 @@ public abstract class TimeLikeCriterionFactory<A extends Annotation>
      * @param wip wip of criteria
      */
     protected abstract <T> void process(
-            TimeLikeUtility<T> utility, ConstrainedNode node, A constraint, TCriteria<T> wip);
+            TimeLikeUtility<T> utility,
+            ConstrainedNode node, A constraint, TCriteria<T> wip);
 
     @Override
-    protected List<TimeLikeUtility<?>> initUtilities() {
-        return Arrays.asList(
-                DateUtility.DEFAULT,
-                LocalDateTimeUtility.DEFAULT);
+    protected List<TimeLikeUtility<?>> initTypeLikeUtilities() {
+        return DEFAULT_UTILITIES;
     }
 
 }

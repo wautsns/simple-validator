@@ -27,8 +27,7 @@ import java.lang.reflect.Type;
  * @author wautsns
  * @since Mar 11, 2020
  */
-public abstract class CharSequenceCriterionFactory<A extends Annotation>
-        implements TCriterionFactory<A, CharSequence> {
+public abstract class CharSequenceCriterionFactory<A extends Annotation> implements TCriterionFactory<A, CharSequence> {
 
     @Override
     public boolean appliesTo(Type type, A constraint) {

@@ -13,6 +13,7 @@
 package com.github.wautsns.simplevalidator.constraint.business.idcard;
 
 import com.github.wautsns.simplevalidator.util.common.CollectionUtils;
+import lombok.experimental.UtilityClass;
 
 import java.time.DateTimeException;
 import java.time.LocalDate;
@@ -34,6 +35,7 @@ import java.util.stream.Collectors;
  * @author wautsns
  * @since Mar 11, 2020
  */
+@UtilityClass
 class InternalUtils {
 
     // #################### generations #################################################
@@ -86,7 +88,7 @@ class InternalUtils {
     private static final Set<VChineseIdCard.Generation> GENERATIONS_FIRST =
             Collections.singleton(VChineseIdCard.Generation.FIRST);
 
-    // ------------------------- cities --------------------------------------------
+    // #################### cities ######################################################
 
     private static final Map<Integer, String> CITY_CODE_NAME_MAP = new HashMap<>();
 
@@ -142,7 +144,7 @@ class InternalUtils {
                 .collect(Collectors.toMap(Entry::getKey, Entry::getValue));
     }
 
-    // ------------------------- birthday ------------------------------------------
+    // #################### birthday ####################################################
 
     private static final ZoneId GMT8 = ZoneId.of("+8");
 
@@ -158,7 +160,7 @@ class InternalUtils {
         return (int) ChronoUnit.YEARS.between(birthday, LocalDate.now(GMT8));
     }
 
-    // ------------------------- gender --------------------------------------------
+    // #################### gender ######################################################
 
     private static final Set<VChineseIdCard.Gender> GENDER_ALL = new HashSet<>(
             Arrays.asList(VChineseIdCard.Gender.values()));
@@ -192,7 +194,7 @@ class InternalUtils {
         return ((serialNumber & 1) == 0) ? VChineseIdCard.Gender.FEMALE : VChineseIdCard.Gender.MALE;
     }
 
-    // ------------------------- check code ----------------------------------------
+    // #################### check code ##################################################
 
     private static final int[] SECOND_GENERATION_WEIGHTING_FACTORS = {
             7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2};
@@ -214,9 +216,5 @@ class InternalUtils {
         return (correct == checkCodeChar)
                 || (correct == 'X' && checkCodeChar == 'x');
     }
-
-    // ------------------------- ignored -------------------------------------------
-
-    private InternalUtils() {}
 
 }

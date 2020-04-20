@@ -36,7 +36,7 @@ public interface Criterion {
     Criterion enhanceFailure(UnaryOperator<ValidationFailure> enhancer);
 
     /** criterion wrapper */
-    class Wrapper {
+    abstract class Wrapper {
 
         /**
          * Wrap the criterion.

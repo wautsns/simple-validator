@@ -33,7 +33,7 @@ public interface CodableEnum<T> {
     T getCode();
 
     /**
-     * Whether the specified code is code of the enumeration.
+     * Return whether the specified code is code of the enumeration.
      *
      * @param code code
      * @return {@code true} if the specified code is code of the enumeration, otherwise {@code false}

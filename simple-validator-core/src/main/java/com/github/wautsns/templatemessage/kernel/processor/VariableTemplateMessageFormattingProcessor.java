@@ -13,39 +13,36 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.wautsns.templatemessage.kernel.processor.messagesource;
+package com.github.wautsns.templatemessage.kernel.processor;
 
 import com.github.wautsns.templatemessage.kernel.TemplateMessageFormatter;
+import com.github.wautsns.templatemessage.variable.Variable;
 import com.github.wautsns.templatemessage.variable.VariableValueMap;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import org.springframework.context.MessageSource;
+import lombok.ToString;
 
 import java.util.Locale;
 
 /**
- * Template message formatting processor for {@link MessageSource message source}.
+ * Template message formatting processor for {@linkplain Variable variable}.
  *
  * @author wautsns
- * @since Mar 24, 2020
+ * @since Mar 10, 2020
  */
-@Getter
+@ToString
 @EqualsAndHashCode(callSuper = true)
-public class MessageSourceFormattingProcessor<T extends MessageSource> extends TemplateMessageFormatter.Processor {
+public class VariableTemplateMessageFormattingProcessor extends TemplateMessageFormatter.Processor {
 
-    /** message source */
-    private final T messageSource;
-
-    public MessageSourceFormattingProcessor(String leftDelimiter, String rightDelimiter, T messageSource) {
+    public VariableTemplateMessageFormattingProcessor(String leftDelimiter, String rightDelimiter) {
         super(leftDelimiter, rightDelimiter);
-        this.messageSource = messageSource;
     }
-
-    // #################### process #####################################################
 
     @Override
     public String process(String text, VariableValueMap variableValueMap, Locale locale) {
-        return messageSource.getMessage(text, null, null, locale);
+        Variable<Object> variable = variableValueMap.getVariable(text);
+        if (variable == null) { return null; }
+        Object value = variableValueMap.getValue(variable);
+        return variable.getFormatter().format(value, locale);
     }
 
 }

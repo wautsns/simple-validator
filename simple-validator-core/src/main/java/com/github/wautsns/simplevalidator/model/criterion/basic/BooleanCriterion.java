@@ -48,6 +48,8 @@ public interface BooleanCriterion extends PrimitiveCriterion<Boolean> {
         };
     }
 
+    // #################### instance ####################################################
+
     /** the truth */
     BooleanCriterion TRUTH = any -> null;
 

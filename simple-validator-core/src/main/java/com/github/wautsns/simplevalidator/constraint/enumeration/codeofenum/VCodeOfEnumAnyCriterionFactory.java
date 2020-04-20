@@ -85,12 +85,12 @@ public class VCodeOfEnumAnyCriterionFactory extends NonPrimitiveCriterionFactory
     }
 
     /**
-     * Initialize a criterion for specified enumerations.
+     * Initialize a criterion for the specified enumerations.
      *
      * @param clazz codable enumeration class
      * @param <T> type of enumeration code
      * @param <E> type of enumeration
-     * @return criterion for specified values
+     * @return criterion for the specified values
      */
     private static <T extends Enum<T> & CodableEnum<E>, E> TCriterion<Object> initForSpecifiedEnums(
             Class<T> clazz, String[] include, String[] exclude) {
@@ -108,12 +108,12 @@ public class VCodeOfEnumAnyCriterionFactory extends NonPrimitiveCriterionFactory
     }
 
     /**
-     * Initialize a criterion for specified codes.
+     * Initialize a criterion for the specified codes.
      *
      * @param codes codes
      * @param <T> type of enumeration code
      * @param <E> type of enumeration
-     * @return criterion for specified codes
+     * @return criterion for the specified codes
      */
     private static <T extends Enum<T> & CodableEnum<E>, E> TCriterion<Object> initForCodes(List<T> codes) {
         Object[] optionalValues = codes.stream()

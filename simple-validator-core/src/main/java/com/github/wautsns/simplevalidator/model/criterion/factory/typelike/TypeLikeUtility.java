@@ -29,25 +29,26 @@ import java.lang.reflect.Type;
  */
 public abstract class TypeLikeUtility<T> {
 
-    /** variable for the type like value */
+    /** variable for the type-like value */
     private final Variable<? super T> valueVariable;
 
-    /** Construct a type like utility with {@link ValidationFailure.Variables#VALUE}. */
-    public TypeLikeUtility() {
-        this.valueVariable = ValidationFailure.Variables.VALUE;
-    }
-
     /**
-     * Construct a type like utility with specified value formatter.
+     * Construct a type like utility with the specified value formatter.
+     *
+     * <p>If the value formatter is {@code null}, {@link ValidationFailure.Variables#VALUE} will be used.
      *
      * @param valueFormatter value formatter
      */
     public TypeLikeUtility(Formatter<? super T> valueFormatter) {
-        this.valueVariable = new Variable<>(ValidationFailure.Variables.VALUE.getName(), valueFormatter);
+        if (valueFormatter == null) {
+            this.valueVariable = ValidationFailure.Variables.VALUE;
+        } else {
+            this.valueVariable = new Variable<>(ValidationFailure.Variables.VALUE.getName(), valueFormatter);
+        }
     }
 
     /**
-     * Whether the utility applies to the specified type.
+     * Return whether the utility applies to the specified type.
      *
      * @param type type
      * @return {@code true} if the utility applies to the specified type, otherwise {@code false}

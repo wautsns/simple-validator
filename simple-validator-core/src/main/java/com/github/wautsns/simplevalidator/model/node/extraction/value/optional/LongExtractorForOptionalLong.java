@@ -35,18 +35,18 @@ public class LongExtractorForOptionalLong implements LongExtractor<OptionalLong>
     public static final LongExtractorForOptionalLong INSTANCE = new LongExtractorForOptionalLong();
 
     @Override
-    public long extract(OptionalLong target) {
-        return target.orElseThrow(NullPointerException::new);
-    }
-
-    @Override
     public boolean appliesTo(Type type) {
-        return type == OptionalLong.class;
+        return (type == OptionalLong.class);
     }
 
     @Override
     public String getName() {
         return "";
+    }
+
+    @Override
+    public long extract(OptionalLong target) {
+        return target.orElseThrow(NullPointerException::new);
     }
 
 }

@@ -44,6 +44,8 @@ public interface TCriterion<T> extends Criterion {
         };
     }
 
+    // #################### instance ####################################################
+
     /** the truth */
     TCriterion<Object> TRUTH = any -> null;
 

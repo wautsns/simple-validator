@@ -94,7 +94,7 @@ public class ConstrainedExtractedValue extends ConstrainedNode {
      * @return criterion wrapper.
      */
     private static Criterion.Wrapper generateCriterionWrapper(ValueExtractor valueExtractor) {
-        if (valueExtractor instanceof TCriterion) {
+        if (valueExtractor instanceof TExtractor) {
             return new Criterion.Wrapper() {
 
                 @Override

@@ -19,14 +19,12 @@ import com.github.wautsns.simplevalidator.model.criterion.factory.typelike.TypeL
 import com.github.wautsns.templatemessage.formatter.Formatter;
 
 /**
- * Text like utility.
+ * Utility for text-like value.
  *
  * @author wautsns
  * @since Mar 11, 2020
  */
 public abstract class TextLikeUtility<T> extends TypeLikeUtility<T> {
-
-    protected TextLikeUtility() {}
 
     public TextLikeUtility(Formatter<? super T> formatter) {
         super(formatter);

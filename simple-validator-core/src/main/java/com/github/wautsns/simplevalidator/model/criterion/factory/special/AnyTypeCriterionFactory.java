@@ -32,7 +32,7 @@ public abstract class AnyTypeCriterionFactory<A extends Annotation>
         implements CriterionFactory<A, Criteria<Criterion>, Criterion> {
 
     @Override
-    public boolean appliesTo(Type type, A constraint) {
+    public final boolean appliesTo(Type type, A constraint) {
         return true;
     }
 

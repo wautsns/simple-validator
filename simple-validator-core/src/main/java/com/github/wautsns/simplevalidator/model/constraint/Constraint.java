@@ -137,7 +137,7 @@ public class Constraint<A extends Annotation> {
     }
 
     /**
-     * Whether the constraint applies to the specified type(<strong>ignore value extractors</strong>).
+     * Return whether the constraint applies to the specified type(<strong>ignore value extractors</strong>).
      *
      * @param type type
      * @return {@code true} if the constraint applies to the specified type(<strong>ignore value extractors</strong>),
@@ -387,7 +387,7 @@ public class Constraint<A extends Annotation> {
         return CollectionUtils.unmodifiableMap(memberValues);
     }
 
-    // ==================== variable value map ==========================================
+    // ==================== variableValueMap ============================================
 
     /**
      * Get variable value map declared in the constraint.

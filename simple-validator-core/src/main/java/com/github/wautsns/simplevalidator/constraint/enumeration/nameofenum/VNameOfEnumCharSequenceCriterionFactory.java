@@ -84,10 +84,10 @@ public class VNameOfEnumCharSequenceCriterionFactory implements TCriterionFactor
     }
 
     /**
-     * Initialize a criterion for specified enumerations.
+     * Initialize a criterion for the specified enumerations.
      *
      * @param clazz codable enumeration class
-     * @return criterion for specified values
+     * @return criterion for the specified values
      */
     private static TCriterion<CharSequence> initForSpecifiedEnums(Class<?> clazz, String[] include, String[] exclude) {
         Enum<?>[] enums = (Enum<?>[]) clazz.getEnumConstants();
@@ -105,10 +105,10 @@ public class VNameOfEnumCharSequenceCriterionFactory implements TCriterionFactor
     }
 
     /**
-     * Initialize a criterion for specified names.
+     * Initialize a criterion for the specified names.
      *
      * @param names names
-     * @return criterion for specified names
+     * @return criterion for the specified names
      */
     private static TCriterion<CharSequence> initForNames(String[] names) {
         return value -> {

@@ -206,7 +206,7 @@ public class ReflectionUtils {
         return field.getDouble(target);
     }
 
-    // -------------------- methods -----------------------------------------------------
+    // #################### methods #####################################################
 
     /**
      * Require the declared method and set accessible to {@code true}.

@@ -13,52 +13,47 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.wautsns.simplevalidator.model.criterion.factory.typelike.text;
+package com.github.wautsns.simplevalidator.model.criterion.factory.typelike.text.utility;
 
+import com.github.wautsns.simplevalidator.model.criterion.factory.typelike.text.TextLikeUtility;
 import com.github.wautsns.simplevalidator.util.common.TypeUtils;
 import com.github.wautsns.templatemessage.formatter.Formatter;
 
 import java.lang.reflect.Type;
 
 /**
- * Utility for {@code Character[]} value.
+ * Utility for {@code char[]} value.
  *
  * @author wautsns
  * @since Mar 11, 2020
  */
-public class CharacterArrayUtility extends TextLikeUtility<Character[]> {
+public class CharArrayUtility extends TextLikeUtility<char[]> {
 
-    /** default {@code CharacterArrayUtility} */
-    public static final CharacterArrayUtility DEFAULT = new CharacterArrayUtility();
+    /** default {@code CharArrayUtility} */
+    public static final CharArrayUtility DEFAULT = new CharArrayUtility(null);
 
-    protected CharacterArrayUtility() {}
-
-    public CharacterArrayUtility(Formatter<? super Character[]> formatter) {
+    public CharArrayUtility(Formatter<? super char[]> formatter) {
         super(formatter);
     }
 
     @Override
     public boolean appliesTo(Type type) {
-        return TypeUtils.isAssignableTo(type, Character[].class);
+        return TypeUtils.isAssignableTo(type, char[].class);
     }
 
     @Override
-    public int length(Character[] text) {
+    public int length(char[] text) {
         return text.length;
     }
 
     @Override
-    public char charAt(Character[] text, int index) {
+    public char charAt(char[] text, int index) {
         return text[index];
     }
 
     @Override
-    public CharSequence toCharSequence(Character[] text) {
-        StringBuilder result = new StringBuilder(text.length);
-        for (Character character : text) {
-            result.append(character.charValue());
-        }
-        return result;
+    public CharSequence toCharSequence(char[] text) {
+        return new String(text);
     }
 
 }

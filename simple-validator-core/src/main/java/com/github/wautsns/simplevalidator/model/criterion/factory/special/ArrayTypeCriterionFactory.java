@@ -15,6 +15,7 @@
  */
 package com.github.wautsns.simplevalidator.model.criterion.factory.special;
 
+import com.github.wautsns.simplevalidator.exception.analysis.IllegalConstrainedNodeException;
 import com.github.wautsns.simplevalidator.model.criterion.basic.TCriteria;
 import com.github.wautsns.simplevalidator.model.criterion.factory.TCriterionFactory;
 import com.github.wautsns.simplevalidator.model.node.ConstrainedNode;
@@ -29,17 +30,16 @@ import java.lang.reflect.Type;
  * @author wautsns
  * @since Mar 11, 2020
  */
-public abstract class ArrayTypeCriterionFactory<A extends Annotation>
-        implements TCriterionFactory<A, Object> {
+public abstract class ArrayTypeCriterionFactory<A extends Annotation> implements TCriterionFactory<A, Object> {
 
     @Override
-    public boolean appliesTo(Type type, A constraint) {
+    public final boolean appliesTo(Type type, A constraint) {
         return TypeUtils.isArray(type);
     }
 
     @Override
     @SuppressWarnings({"rawtypes", "unchecked"})
-    public void process(ConstrainedNode node, A constraint, TCriteria<Object> wip) {
+    public final void process(ConstrainedNode node, A constraint, TCriteria<Object> wip) {
         Type componentType = TypeUtils.getComponentType(node.getType());
         if (!TypeUtils.isPrimitive(componentType)) {
             processTArray(node, constraint, (TCriteria) wip);
@@ -69,7 +69,9 @@ public abstract class ArrayTypeCriterionFactory<A extends Annotation>
      * @param constraint constraint
      * @param wip wip of criteria for T array
      */
-    protected abstract <T> void processTArray(ConstrainedNode node, A constraint, TCriteria<T[]> wip);
+    protected <T> void processTArray(ConstrainedNode node, A constraint, TCriteria<T[]> wip) {
+        throw new IllegalConstrainedNodeException(node.getLocation(), constraint);
+    }
 
     /**
      * Process wip of criteria for {@code int} array.
@@ -78,7 +80,9 @@ public abstract class ArrayTypeCriterionFactory<A extends Annotation>
      * @param constraint constraint
      * @param wip wip of criteria for {@code int} array
      */
-    protected abstract void processIntArray(ConstrainedNode node, A constraint, TCriteria<int[]> wip);
+    protected void processIntArray(ConstrainedNode node, A constraint, TCriteria<int[]> wip) {
+        throw new IllegalConstrainedNodeException(node.getLocation(), constraint);
+    }
 
     /**
      * Process wip of criteria for {@code long} array.
@@ -87,7 +91,9 @@ public abstract class ArrayTypeCriterionFactory<A extends Annotation>
      * @param constraint constraint
      * @param wip wip of criteria for {@code long} array
      */
-    protected abstract void processLongArray(ConstrainedNode node, A constraint, TCriteria<long[]> wip);
+    protected void processLongArray(ConstrainedNode node, A constraint, TCriteria<long[]> wip) {
+        throw new IllegalConstrainedNodeException(node.getLocation(), constraint);
+    }
 
     /**
      * Process wip of criteria for {@code boolean} array.
@@ -96,7 +102,9 @@ public abstract class ArrayTypeCriterionFactory<A extends Annotation>
      * @param constraint constraint
      * @param wip wip of criteria for {@code boolean} array
      */
-    protected abstract void processBooleanArray(ConstrainedNode node, A constraint, TCriteria<boolean[]> wip);
+    protected void processBooleanArray(ConstrainedNode node, A constraint, TCriteria<boolean[]> wip) {
+        throw new IllegalConstrainedNodeException(node.getLocation(), constraint);
+    }
 
     /**
      * Process wip of criteria for {@code char} array.
@@ -105,7 +113,9 @@ public abstract class ArrayTypeCriterionFactory<A extends Annotation>
      * @param constraint constraint
      * @param wip wip of criteria for {@code char} array
      */
-    protected abstract void processCharArray(ConstrainedNode node, A constraint, TCriteria<char[]> wip);
+    protected void processCharArray(ConstrainedNode node, A constraint, TCriteria<char[]> wip) {
+        throw new IllegalConstrainedNodeException(node.getLocation(), constraint);
+    }
 
     /**
      * Process wip of criteria for {@code byte} array.
@@ -114,7 +124,9 @@ public abstract class ArrayTypeCriterionFactory<A extends Annotation>
      * @param constraint constraint
      * @param wip wip of criteria for {@code byte} array
      */
-    protected abstract void processByteArray(ConstrainedNode node, A constraint, TCriteria<byte[]> wip);
+    protected void processByteArray(ConstrainedNode node, A constraint, TCriteria<byte[]> wip) {
+        throw new IllegalConstrainedNodeException(node.getLocation(), constraint);
+    }
 
     /**
      * Process wip of criteria for {@code double} array.
@@ -123,7 +135,9 @@ public abstract class ArrayTypeCriterionFactory<A extends Annotation>
      * @param constraint constraint
      * @param wip wip of criteria for {@code double} array
      */
-    protected abstract void processDoubleArray(ConstrainedNode node, A constraint, TCriteria<double[]> wip);
+    protected void processDoubleArray(ConstrainedNode node, A constraint, TCriteria<double[]> wip) {
+        throw new IllegalConstrainedNodeException(node.getLocation(), constraint);
+    }
 
     /**
      * Process wip of criteria for {@code short} array.
@@ -132,7 +146,9 @@ public abstract class ArrayTypeCriterionFactory<A extends Annotation>
      * @param constraint constraint
      * @param wip wip of criteria for {@code short} array
      */
-    protected abstract void processShortArray(ConstrainedNode node, A constraint, TCriteria<short[]> wip);
+    protected void processShortArray(ConstrainedNode node, A constraint, TCriteria<short[]> wip) {
+        throw new IllegalConstrainedNodeException(node.getLocation(), constraint);
+    }
 
     /**
      * Process wip of criteria for {@code float} array.
@@ -141,6 +157,8 @@ public abstract class ArrayTypeCriterionFactory<A extends Annotation>
      * @param constraint constraint
      * @param wip wip of criteria for {@code float} array
      */
-    protected abstract void processFloatArray(ConstrainedNode node, A constraint, TCriteria<float[]> wip);
+    protected void processFloatArray(ConstrainedNode node, A constraint, TCriteria<float[]> wip) {
+        throw new IllegalConstrainedNodeException(node.getLocation(), constraint);
+    }
 
 }

@@ -12,6 +12,7 @@
  */
 package com.github.wautsns.simplevalidator.util.common;
 
+import lombok.NonNull;
 import lombok.experimental.UtilityClass;
 
 import java.math.BigDecimal;
@@ -62,7 +63,8 @@ public class NumericTextParser {
      * @param <T> type of numeric value
      */
     @SuppressWarnings({"rawtypes", "unchecked"})
-    public static <T extends Number & Comparable<T>> void addParser(Class<T> type, Function<String, T> parser) {
+    public static <T extends Number & Comparable<T>> void addParser(
+            Class<T> type, @NonNull Function<String, T> parser) {
         NUMERIC_TEXT_PARSER_MAP.put(type, (Function) parser);
     }
 

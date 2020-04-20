@@ -17,10 +17,8 @@ package com.github.wautsns.templatemessage.formatter.multival;
 
 import com.github.wautsns.templatemessage.formatter.Formatter;
 import com.github.wautsns.templatemessage.formatter.common.ObjectFormatter;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NonNull;
-import lombok.Setter;
 import lombok.experimental.Accessors;
 
 import java.util.Iterator;
@@ -33,16 +31,12 @@ import java.util.Locale;
  * @author wautsns
  * @since Mar 10, 2020
  */
-@Getter
-@Setter
+@Data
 @Accessors(chain = true)
-@EqualsAndHashCode
 public class IterableFormatter<E> implements Formatter<Iterable<E>> {
 
     /** the default {@code IterableFormatter}, e.g. [1, 2, 3] */
     public static final Formatter<Iterable<Object>> DEFAULT = new IterableFormatter<>();
-
-    private static final long serialVersionUID = -6989595378363386988L;
 
     /** string format of {@code null}, default is {@code "null"} */
     private @NonNull String stringFormatOfNull = "null";
@@ -60,32 +54,6 @@ public class IterableFormatter<E> implements Formatter<Iterable<E>> {
     private @NonNull String elementDelimiter = ", ";
     /** formatter for iterable element, default is {@link ObjectFormatter#DEFAULT} */
     private @NonNull Formatter<? super E> elementFormatter = ObjectFormatter.DEFAULT;
-
-    /**
-     * Set prefix and suffix.
-     *
-     * @param prefix prefix of string formatter
-     * @param suffix suffix of string formatter
-     * @return self reference
-     */
-    public IterableFormatter<E> setPrefixAndSuffix(String prefix, String suffix) {
-        setPrefix(prefix);
-        setSuffix(suffix);
-        return this;
-    }
-
-    /**
-     * Set prefix of string format of element and suffix of string format of element.
-     *
-     * @param prefix prefix of string format of element
-     * @param suffix suffix of string format of element
-     * @return self reference
-     */
-    public IterableFormatter<E> setElementPrefixAndSuffix(String prefix, String suffix) {
-        setElementPrefix(prefix);
-        setElementSuffix(suffix);
-        return this;
-    }
 
     @Override
     public String format(Iterable<E> value, Locale locale) {

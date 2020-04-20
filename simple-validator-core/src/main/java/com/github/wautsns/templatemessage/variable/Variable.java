@@ -18,40 +18,27 @@ package com.github.wautsns.templatemessage.variable;
 import com.github.wautsns.templatemessage.formatter.Formatter;
 import com.github.wautsns.templatemessage.formatter.common.ObjectFormatter;
 import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import lombok.experimental.Accessors;
-
-import java.io.Serializable;
 
 /**
  * Variable.
  *
- * @param <T> type of value of variable
+ * @param <T> type of variable
  * @author wautsns
  * @since Mar 10, 2020
  */
-@Getter
-@Setter
+@Data
 @Accessors(chain = true)
-@EqualsAndHashCode(of = "name")
-@RequiredArgsConstructor
 @AllArgsConstructor
-public class Variable<T> implements Serializable {
-
-    private static final long serialVersionUID = -2997879737757537621L;
+@RequiredArgsConstructor
+public class Variable<T> {
 
     /** variable name */
     private final @NonNull String name;
     /** formatter for variable value, default is {@link ObjectFormatter#DEFAULT} */
     private @NonNull Formatter<? super T> formatter = ObjectFormatter.DEFAULT;
-
-    @Override
-    public String toString() {
-        return name;
-    }
 
 }

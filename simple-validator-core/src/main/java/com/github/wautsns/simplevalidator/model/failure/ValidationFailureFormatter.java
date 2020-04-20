@@ -16,9 +16,10 @@
 package com.github.wautsns.simplevalidator.model.failure;
 
 import com.github.wautsns.templatemessage.kernel.TemplateMessageFormatter;
-import com.github.wautsns.templatemessage.kernel.processor.SpelFormattingProcessor;
-import com.github.wautsns.templatemessage.kernel.processor.VariableFormattingProcessor;
-import com.github.wautsns.templatemessage.kernel.processor.messagesource.ReloadableResourceFormattingProcessor;
+import com.github.wautsns.templatemessage.kernel.processor.SpelTemplateMessageFormattingProcessor;
+import com.github.wautsns.templatemessage.kernel.processor.VariableTemplateMessageFormattingProcessor;
+import com.github.wautsns.templatemessage.kernel.processor.messagesource.ReloadableResourceTemplateMessageFormattingProcessor;
+import lombok.Getter;
 
 /**
  * Validation failure formatter.
@@ -26,61 +27,48 @@ import com.github.wautsns.templatemessage.kernel.processor.messagesource.Reloada
  * @author wautsns
  * @since Mar 14, 2020
  */
+@Getter
 public class ValidationFailureFormatter extends TemplateMessageFormatter {
 
-    private static final long serialVersionUID = -6637627708711439692L;
-
     /** the left delimiter for variable processor */
-    public static final String LEFT_DELIMITER_VARIABLE = "{{";
+    public static final String VARIABLE_LD = "{{";
     /** the right delimiter for variable processor */
-    public static final String RIGHT_DELIMITER_VARIABLE = "}}";
+    public static final String VARIABLE_RD = "}}";
     /** the left delimiter for resource processor */
-    public static final String LEFT_DELIMITER_RESOURCE = "[`";
+    public static final String RELOADED_RESOURCE_LD = "[`";
     /** the right delimiter for resource processor */
-    public static final String RIGHT_DELIMITER_RESOURCE = "`]";
+    public static final String RELOADED_RESOURCE_RD = "`]";
     /** the left delimiter for spel processor */
-    public static final String LEFT_DELIMITER_SPEL = "#{";
+    public static final String SPEL_LD = "#{";
     /** the right delimiter for spel processor */
-    public static final String RIGHT_DELIMITER_SPEL = "}#";
+    public static final String SPEL_RD = "}#";
 
     /** built-in messages base name */
     private static final String BUILT_IN_MESSAGES_BASE_NAME = "simple-validator/messages/messages";
 
-    /** reloadable resource formatting processor */
-    private final ReloadableResourceFormattingProcessor reloadableResourceFormattingProcessor;
+    /** reloadable resource template message formatting processor */
+    private final ReloadableResourceTemplateMessageFormattingProcessor reloadableResourceTemplateMessageFormattingProcessor;
 
     /**
      * Construct a validation failure formatter.
      *
      * <ul>
      * default processors are as followers:
-     * <li>{@link VariableFormattingProcessor}</li>
-     * <li>{@link ReloadableResourceFormattingProcessor}</li>
-     * <li>{@link SpelFormattingProcessor}</li>
+     * <li>100: {@link VariableTemplateMessageFormattingProcessor}</li>
+     * <li>200: {@link ReloadableResourceTemplateMessageFormattingProcessor}</li>
+     * <li>300: {@link SpelTemplateMessageFormattingProcessor}</li>
      * </ul>
      */
     public ValidationFailureFormatter() {
         // variable formatting processor
-        addProcessor(0, new VariableFormattingProcessor(LEFT_DELIMITER_VARIABLE, RIGHT_DELIMITER_VARIABLE));
+        addProcessor(100, new VariableTemplateMessageFormattingProcessor(VARIABLE_LD, VARIABLE_RD));
         // reloadable resource formatting processor
-        reloadableResourceFormattingProcessor = new ReloadableResourceFormattingProcessor(
-                LEFT_DELIMITER_RESOURCE, RIGHT_DELIMITER_RESOURCE);
-        loadResources(BUILT_IN_MESSAGES_BASE_NAME);
-        addProcessor(100, reloadableResourceFormattingProcessor);
+        reloadableResourceTemplateMessageFormattingProcessor = new ReloadableResourceTemplateMessageFormattingProcessor(
+                RELOADED_RESOURCE_LD, RELOADED_RESOURCE_RD);
+        reloadableResourceTemplateMessageFormattingProcessor.loadResources(BUILT_IN_MESSAGES_BASE_NAME);
+        addProcessor(200, reloadableResourceTemplateMessageFormattingProcessor);
         // spel formatting processor
-        addProcessor(200, new SpelFormattingProcessor(LEFT_DELIMITER_SPEL, RIGHT_DELIMITER_SPEL));
-    }
-
-    /**
-     * Load resources.
-     *
-     * @param baseNames base names
-     * @return self reference
-     * @see ReloadableResourceFormattingProcessor#loadResources(String...)
-     */
-    public ValidationFailureFormatter loadResources(String... baseNames) {
-        reloadableResourceFormattingProcessor.loadResources(baseNames);
-        return this;
+        addProcessor(300, new SpelTemplateMessageFormattingProcessor(SPEL_LD, SPEL_RD));
     }
 
     @Override

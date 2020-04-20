@@ -13,8 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.wautsns.simplevalidator.model.criterion.factory.typelike.text;
+package com.github.wautsns.simplevalidator.model.criterion.factory.typelike.text.utility;
 
+import com.github.wautsns.simplevalidator.model.criterion.factory.typelike.text.TextLikeUtility;
 import com.github.wautsns.simplevalidator.util.common.TypeUtils;
 import com.github.wautsns.templatemessage.formatter.Formatter;
 
@@ -29,9 +30,7 @@ import java.lang.reflect.Type;
 public class CharSequenceUtility extends TextLikeUtility<CharSequence> {
 
     /** default {@code CharSequenceUtility} */
-    public static final CharSequenceUtility DEFAULT = new CharSequenceUtility();
-
-    protected CharSequenceUtility() {}
+    public static final CharSequenceUtility DEFAULT = new CharSequenceUtility(null);
 
     public CharSequenceUtility(Formatter<? super CharSequence> formatter) {
         super(formatter);

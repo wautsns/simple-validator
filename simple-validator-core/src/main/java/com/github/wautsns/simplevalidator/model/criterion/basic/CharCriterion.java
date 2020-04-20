@@ -48,6 +48,8 @@ public interface CharCriterion extends PrimitiveCriterion<Character> {
         };
     }
 
+    // #################### instance ####################################################
+
     /** the truth */
     CharCriterion TRUTH = any -> null;
 

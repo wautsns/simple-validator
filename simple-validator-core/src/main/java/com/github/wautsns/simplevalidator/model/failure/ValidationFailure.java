@@ -19,8 +19,7 @@ import com.github.wautsns.simplevalidator.model.node.ConstrainedNode;
 import com.github.wautsns.templatemessage.kernel.TemplateMessage;
 import com.github.wautsns.templatemessage.variable.Variable;
 import com.github.wautsns.templatemessage.variable.VariableValueMap;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import lombok.experimental.UtilityClass;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -33,15 +32,13 @@ import java.util.List;
  */
 public class ValidationFailure extends TemplateMessage {
 
-    private static final long serialVersionUID = -1530223882847018052L;
-
     /**
      * Construct a validation failure with {@link Variables#VALUE default value variable} and specified value.
      *
      * @param value value
      */
     public ValidationFailure(Object value) {
-        this(Variables.VALUE, value);
+        put(Variables.VALUE, value);
     }
 
     /**
@@ -93,14 +90,21 @@ public class ValidationFailure extends TemplateMessage {
     }
 
     /** Variables. */
-    @NoArgsConstructor(access = AccessLevel.PRIVATE)
+    @UtilityClass
     public static class Variables {
 
         /** variable: value */
         public static final Variable<Object> VALUE = new Variable<>("value");
         /** variable: target */
         public static final Variable<ConstrainedNode.Location> TARGET = new Variable<>("target");
-        /** variable: indicators */
+        /**
+         * variable: indicators
+         * <ul>
+         * <li>array[1] => indicator is 1</li>
+         * <li>map[key] => indicator is key</li>
+         * <li>customize...</li>
+         * </ul>
+         */
         public static final Variable<List<Object>> INDICATORS = new Variable<>("indicators");
 
     }

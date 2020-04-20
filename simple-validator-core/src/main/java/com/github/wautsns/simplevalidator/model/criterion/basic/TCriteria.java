@@ -30,7 +30,7 @@ public class TCriteria<T> extends Criteria<TCriterion<? super T>> implements TCr
     private boolean nullable = false;
 
     /**
-     * Whether the value can be {@code null}.
+     * Return whether the value can be {@code null}.
      *
      * @return {@code true} if the value can be {@code null}, otherwise {@code false}
      */

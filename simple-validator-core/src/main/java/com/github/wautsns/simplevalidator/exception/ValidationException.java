@@ -29,7 +29,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ValidationException extends RuntimeException {
 
-    /** serialVersionUID */
     private static final long serialVersionUID = -5706334622805333445L;
 
     /** validation failure */

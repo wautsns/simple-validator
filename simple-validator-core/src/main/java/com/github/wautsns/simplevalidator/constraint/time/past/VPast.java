@@ -47,6 +47,8 @@ public @interface VPast {
 
     long months() default 0;
 
+    long weeks() default 0;
+
     long days() default 0;
 
     long hours() default 0;

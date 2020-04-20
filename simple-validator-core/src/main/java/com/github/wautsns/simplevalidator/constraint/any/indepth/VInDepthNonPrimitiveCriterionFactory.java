@@ -68,6 +68,6 @@ public class VInDepthNonPrimitiveCriterionFactory extends NonPrimitiveCriterionF
     }
 
     /** criterion for dynamic in-depth */
-    private static final TCriterion<Object> CRITERION_FOR_DYNAMIC = Validator::validateGently;
+    private static final TCriterion<Object> CRITERION_FOR_DYNAMIC = Validator::validate;
 
 }

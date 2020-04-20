@@ -16,10 +16,8 @@
 package com.github.wautsns.templatemessage.formatter.common;
 
 import com.github.wautsns.templatemessage.formatter.Formatter;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NonNull;
-import lombok.Setter;
 import lombok.experimental.Accessors;
 
 import java.util.LinkedList;
@@ -31,39 +29,35 @@ import java.util.Locale;
  * @author wautsns
  * @since Mar 14, 2020
  */
-@Getter
-@Setter
+@Data
 @Accessors(chain = true)
-@EqualsAndHashCode
 @SuppressWarnings("rawtypes")
 public class EnumFormatter implements Formatter<Enum> {
 
-    /** default {@code ObjectFormatter} */
+    /** default {@code EnumFormatter} */
     public static final EnumFormatter DEFAULT = new EnumFormatter();
-
-    private static final long serialVersionUID = 7938927921714729160L;
 
     /** string format of {@code null}, default is {@code "null"} */
     private @NonNull String stringFormatOfNull = "null";
-    /** whether to display class(all declaring class), default is {@code false} */
-    private boolean displayClass = false;
+    /** whether to display declaring class(es), default is {@code false} */
+    private boolean displayDeclaringClass = false;
 
     @Override
     public String format(Enum value, Locale locale) {
         if (value == null) { return stringFormatOfNull; }
-        if (!displayClass) { return value.name(); }
-        Class<?> clazz = value.getClass();
-        Class<?> declaringClass = clazz.getDeclaringClass();
+        if (!displayDeclaringClass) { return value.name(); }
+        Class<?> enumClass = value.getClass();
+        Class<?> declaringClass = enumClass.getDeclaringClass();
         if (declaringClass == null) {
-            return clazz.getSimpleName() + '.' + value.name();
+            return enumClass.getSimpleName() + "." + value.name();
         } else {
-            LinkedList<String> classList = new LinkedList<>();
-            classList.add(clazz.getSimpleName());
+            LinkedList<String> declaringClasses = new LinkedList<>();
+            declaringClasses.add(enumClass.getSimpleName());
             do {
-                classList.addFirst(declaringClass.getSimpleName());
+                declaringClasses.addFirst(declaringClass.getSimpleName());
                 declaringClass = declaringClass.getDeclaringClass();
             } while (declaringClass != null);
-            return String.join("$", classList) + '.' + value.name();
+            return String.join("$", declaringClasses) + "." + value.name();
         }
     }
 

@@ -21,7 +21,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 
 /**
- * Criterion factory for comparable number type.
+ * Criterion factory for {@code Number & Comparable} value.
  *
  * @author wautsns
  * @since Mar 11, 2020
@@ -31,7 +31,8 @@ public abstract class ComparableNumberCriterionFactory<A extends Annotation>
 
     @Override
     public boolean appliesTo(Type type, A constraint) {
-        return TypeUtils.isAssignableTo(type, Number.class) && super.appliesTo(type, constraint);
+        return TypeUtils.isAssignableTo(type, Number.class)
+                && super.appliesTo(type, constraint);
     }
 
 }

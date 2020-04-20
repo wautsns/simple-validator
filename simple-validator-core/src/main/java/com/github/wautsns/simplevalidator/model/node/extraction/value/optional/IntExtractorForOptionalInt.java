@@ -35,18 +35,18 @@ public class IntExtractorForOptionalInt implements IntExtractor<OptionalInt> {
     public static final IntExtractorForOptionalInt INSTANCE = new IntExtractorForOptionalInt();
 
     @Override
-    public int extract(OptionalInt target) {
-        return target.orElseThrow(NullPointerException::new);
-    }
-
-    @Override
     public boolean appliesTo(Type type) {
-        return type == OptionalInt.class;
+        return (type == OptionalInt.class);
     }
 
     @Override
     public String getName() {
         return "";
+    }
+
+    @Override
+    public int extract(OptionalInt target) {
+        return target.orElseThrow(NullPointerException::new);
     }
 
 }

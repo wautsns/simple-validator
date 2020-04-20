@@ -129,8 +129,6 @@ public class ConstrainedClass extends ConstrainedNode {
         this.getters = initGetters(this);
     }
 
-    // #################### internal utils ##############################################
-
     /**
      * Initialize fields.
      *

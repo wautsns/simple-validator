@@ -17,10 +17,14 @@ package com.github.wautsns.simplevalidator.model.criterion.factory.typelike.text
 
 import com.github.wautsns.simplevalidator.model.criterion.basic.TCriteria;
 import com.github.wautsns.simplevalidator.model.criterion.factory.typelike.TypeLikeCriterionFactory;
+import com.github.wautsns.simplevalidator.model.criterion.factory.typelike.text.utility.CharArrayUtility;
+import com.github.wautsns.simplevalidator.model.criterion.factory.typelike.text.utility.CharSequenceUtility;
+import com.github.wautsns.simplevalidator.model.criterion.factory.typelike.text.utility.CharacterArrayUtility;
 import com.github.wautsns.simplevalidator.model.node.ConstrainedNode;
 
 import java.lang.annotation.Annotation;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -29,13 +33,19 @@ import java.util.List;
  * @author wautsns
  * @since Mar 11, 2020
  */
-public abstract class AbstractTextLikeCriterionFactory<A extends Annotation>
+public abstract class TextLikeCriterionFactory<A extends Annotation>
         extends TypeLikeCriterionFactory<A, TextLikeUtility<?>> {
+
+    /** default text like utility */
+    public static final List<TextLikeUtility<?>> DEFAULT_UTILITIES = new LinkedList<>(Arrays.asList(
+            CharSequenceUtility.DEFAULT,
+            CharArrayUtility.DEFAULT,
+            CharacterArrayUtility.DEFAULT));
 
     @Override
     @SuppressWarnings({"rawtypes", "unchecked"})
     public void process(ConstrainedNode node, A constraint, TCriteria<Object> wip) {
-        TextLikeUtility utility = getUtility(node.getType());
+        TextLikeUtility utility = getTypeLikeUtility(node.getType());
         process(utility, node, constraint, wip);
     }
 
@@ -48,14 +58,12 @@ public abstract class AbstractTextLikeCriterionFactory<A extends Annotation>
      * @param wip wip of criteria
      */
     protected abstract <T> void process(
-            TextLikeUtility<T> utility, ConstrainedNode node, A constraint, TCriteria<T> wip);
+            TextLikeUtility<T> utility,
+            ConstrainedNode node, A constraint, TCriteria<T> wip);
 
     @Override
-    protected List<TextLikeUtility<?>> initUtilities() {
-        return Arrays.asList(
-                CharSequenceUtility.DEFAULT,
-                CharArrayUtility.DEFAULT,
-                CharacterArrayUtility.DEFAULT);
+    protected List<TextLikeUtility<?>> initTypeLikeUtilities() {
+        return DEFAULT_UTILITIES;
     }
 
 }

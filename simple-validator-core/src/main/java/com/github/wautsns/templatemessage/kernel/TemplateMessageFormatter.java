@@ -15,10 +15,10 @@
  */
 package com.github.wautsns.templatemessage.kernel;
 
+import com.github.wautsns.templatemessage.formatter.Formatter;
 import com.github.wautsns.templatemessage.variable.VariableValueMap;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.Data;
+import lombok.NonNull;
 
 import java.util.Collection;
 import java.util.Locale;
@@ -27,14 +27,14 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ConcurrentSkipListMap;
 
 /**
- * {@code TemplateMessageFormatter} formatter.
+ * Formatter for {@code TemplateMessage} value.
  *
  * @author wautsns
  * @since Mar 10, 2020
  */
-public class TemplateMessageFormatter {
+public class TemplateMessageFormatter implements Formatter<TemplateMessage> {
 
-    /** order -> processors map */
+    /** map: order -> processors */
     private final Map<Integer, Collection<Processor>> orderedProcessorsMap = new ConcurrentSkipListMap<>();
 
     /**
@@ -53,18 +53,6 @@ public class TemplateMessageFormatter {
         return this;
     }
 
-    // #################### format ######################################################
-
-    /**
-     * Format the template message with {@linkplain Locale#getDefault() default locale}.
-     *
-     * @param templateMessage template message
-     * @return value in string format
-     */
-    public String format(TemplateMessage templateMessage) {
-        return format(templateMessage, Locale.getDefault());
-    }
-
     /**
      * Format the template message with {@linkplain Locale#getDefault() default locale}.
      *
@@ -72,9 +60,33 @@ public class TemplateMessageFormatter {
      * @param locale locale
      * @return value in string format
      */
+    @Override
     public String format(TemplateMessage templateMessage, Locale locale) {
         return process(templateMessage.getMessageTemplate(), templateMessage, locale);
     }
+
+    /** Processor when formatting variable values. */
+    @Data
+    public abstract static class Processor {
+
+        /** left delimiter */
+        private final @NonNull String leftDelimiter;
+        /** right delimiter */
+        private final @NonNull String rightDelimiter;
+
+        /**
+         * Process variable.
+         *
+         * @param text text between delimiter
+         * @param variableValueMap variable value map
+         * @param locale locale
+         * @return string associated with the text, or {@code null} if the processor cannot process the text
+         */
+        public abstract String process(String text, VariableValueMap variableValueMap, Locale locale);
+
+    }
+
+    // #################### internal utils ################################################
 
     /**
      * Process the wip of the message.
@@ -133,31 +145,6 @@ public class TemplateMessageFormatter {
                 }
             }
         }
-    }
-
-    // #################### utils #######################################################
-
-    /** Processor when formatting variable values. */
-    @Getter
-    @EqualsAndHashCode
-    @RequiredArgsConstructor
-    public abstract static class Processor {
-
-        /** left delimiter */
-        private final String leftDelimiter;
-        /** right delimiter */
-        private final String rightDelimiter;
-
-        /**
-         * Process variable.
-         *
-         * @param text text between delimiter
-         * @param variableValueMap variable value map
-         * @param locale locale
-         * @return string associated with the text, or {@code null} if the processor cannot process the text
-         */
-        public abstract String process(String text, VariableValueMap variableValueMap, Locale locale);
-
     }
 
 }

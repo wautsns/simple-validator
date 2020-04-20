@@ -144,7 +144,7 @@ public class VChineseIdCardCharSequenceCriterionFactory extends CharSequenceCrit
     }
 
     /**
-     * Whether the chars of subtext are digits.
+     * Return whether the chars of subtext are digits.
      *
      * @param text text
      * @param startIndex start index

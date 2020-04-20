@@ -48,6 +48,8 @@ public interface LongCriterion extends PrimitiveCriterion<Long> {
         };
     }
 
+    // #################### instance ####################################################
+
     /** the truth */
     LongCriterion TRUTH = any -> null;
 

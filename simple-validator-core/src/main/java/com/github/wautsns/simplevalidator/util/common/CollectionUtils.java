@@ -108,7 +108,7 @@ public class CollectionUtils {
         }
     }
 
-    // #################### internal utils ###############################################
+    // #################### internal utils ################################################
 
     /** class: Collections$UnmodifiableCollection */
     private static final Class<?> CLASS_UNMODIFIABLE_COLLECTION = ReflectionUtils.requireClass(

@@ -17,10 +17,8 @@ package com.github.wautsns.templatemessage.formatter.time;
 
 import com.github.wautsns.templatemessage.formatter.Formatter;
 import com.github.wautsns.templatemessage.formatter.time.util.TimeFormatterUtils;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NonNull;
-import lombok.Setter;
 import lombok.experimental.Accessors;
 
 import java.time.format.FormatStyle;
@@ -33,43 +31,29 @@ import java.util.Locale;
  * @author wautsns
  * @since Mar 10, 2020
  */
-@Getter
-@Setter
+@Data
 @Accessors(chain = true)
-@EqualsAndHashCode
 public class DateFormatter implements Formatter<Date> {
 
     /** default {@code DateFormatter} */
     public static final DateFormatter DEFAULT = new DateFormatter();
 
-    private static final long serialVersionUID = 3675512503772257828L;
-
     /** string format of {@code null}, default is {@code "null"} */
     private @NonNull String stringWhenNull = "null";
-    /**
-     * locale of string format, default is {@code null}
-     *
-     * <p>Set specified {@code Locale}, if you need to fix the locale of string format.
-     */
+    /** locale specified when formatting, default is {@code null} */
     private Locale localeOfStringFormat = null;
-    /**
-     * date format style, default is {@link FormatStyle#MEDIUM}
-     *
-     * <p>Set to {@code null}, if you do not need to display the date.
-     */
+    /** date format style, default is {@link FormatStyle#MEDIUM}, not display if {@code null} */
     private FormatStyle dateFormatStyle = FormatStyle.MEDIUM;
-    /**
-     * time format style, default is {@link FormatStyle#MEDIUM}
-     *
-     * <p>Set to {@code null}, if you do not need to display the time.
-     */
+    /** time format style, default is {@link FormatStyle#MEDIUM}, not display if {@code null} */
     private FormatStyle timeFormatStyle = FormatStyle.MEDIUM;
 
     @Override
     public String format(Date value, Locale locale) {
         if (value == null) { return stringWhenNull; }
         if (localeOfStringFormat != null) { locale = localeOfStringFormat; }
-        return TimeFormatterUtils.DateFormats.forDateAndTime(dateFormatStyle, timeFormatStyle, locale).format(value);
+        return TimeFormatterUtils.DateFormats
+                .forDateAndTime(dateFormatStyle, timeFormatStyle, locale)
+                .format(value);
     }
 
 }

@@ -37,26 +37,74 @@ public abstract class ComparableCriterionFactory<A extends Annotation, T>
 
     // #################### utils #######################################################
 
+    /**
+     * Return whether valueA is equal to valueB.
+     *
+     * @param valueA valueA
+     * @param valueB valueB
+     * @param <T> type of value
+     * @return {@code true} if valueA is equal to valueB, otherwise {@code false}
+     */
     public static <T> boolean eq(Comparable<T> valueA, T valueB) {
         return valueA.compareTo(valueB) == 0;
     }
 
+    /**
+     * Return whether valueA is not equal to valueB.
+     *
+     * @param valueA valueA
+     * @param valueB valueB
+     * @param <T> type of value
+     * @return {@code true} if valueA is not equal to valueB, otherwise {@code false}
+     */
     public static <T> boolean ne(Comparable<T> valueA, T valueB) {
         return valueA.compareTo(valueB) != 0;
     }
 
+    /**
+     * Return whether valueA is greater than valueB.
+     *
+     * @param valueA valueA
+     * @param valueB valueB
+     * @param <T> type of value
+     * @return {@code true} if valueA is greater than valueB, otherwise {@code false}
+     */
     public static <T> boolean gt(Comparable<T> valueA, T valueB) {
         return valueA.compareTo(valueB) > 0;
     }
 
+    /**
+     * Return whether valueA is greater than or equal to valueB.
+     *
+     * @param valueA valueA
+     * @param valueB valueB
+     * @param <T> type of value
+     * @return {@code true} if valueA is greater than or equal to valueB, otherwise {@code false}
+     */
     public static <T> boolean ge(Comparable<T> valueA, T valueB) {
         return valueA.compareTo(valueB) >= 0;
     }
 
+    /**
+     * Return whether valueA is less than valueB.
+     *
+     * @param valueA valueA
+     * @param valueB valueB
+     * @param <T> type of value
+     * @return {@code true} if valueA is less than valueB, otherwise {@code false}
+     */
     public static <T> boolean lt(Comparable<T> valueA, T valueB) {
         return valueA.compareTo(valueB) < 0;
     }
 
+    /**
+     * Return whether valueA is less than or equal to valueB.
+     *
+     * @param valueA valueA
+     * @param valueB valueB
+     * @param <T> type of value
+     * @return {@code true} if valueA is less than or equal to valueB, otherwise {@code false}
+     */
     public static <T> boolean le(Comparable<T> valueA, T valueB) {
         return valueA.compareTo(valueB) <= 0;
     }

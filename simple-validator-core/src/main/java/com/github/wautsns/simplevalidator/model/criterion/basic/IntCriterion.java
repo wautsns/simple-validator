@@ -48,6 +48,8 @@ public interface IntCriterion extends PrimitiveCriterion<Integer> {
         };
     }
 
+    // #################### instance ####################################################
+
     /** the truth */
     IntCriterion TRUTH = any -> null;
 

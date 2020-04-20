@@ -84,7 +84,7 @@ public class TypeUtils {
     }
 
     /**
-     * Whether the specified type is primitive.
+     * Return whether the specified type is primitive.
      *
      * @param type type
      * @return {@code true} if the specified type is primitive, otherwise {@code false}
@@ -94,7 +94,7 @@ public class TypeUtils {
     }
 
     /**
-     * Whether the specified type is array.
+     * Return whether the specified type is array.
      *
      * @param type type
      * @return {@code true} if the specified type is array, otherwise {@code false}
@@ -104,7 +104,7 @@ public class TypeUtils {
     }
 
     /**
-     * Whether the specified type is enum.
+     * Return whether the specified type is enum.
      *
      * @param type type
      * @return {@code true} if the specified type is enum, otherwise {@code false}
@@ -132,7 +132,7 @@ public class TypeUtils {
     // #################### is assignable to ############################################
 
     /**
-     * Whether the specified type is assignable to the specified class.
+     * Return whether the specified type is assignable to the specified class.
      *
      * @param type type
      * @param clazz class
@@ -163,7 +163,7 @@ public class TypeUtils {
     }
 
     /**
-     * Whether the specified type is assignable to any of the specified classes.
+     * Return whether the specified type is assignable to any of the specified classes.
      *
      * @param type type
      * @param classes classes
@@ -174,7 +174,7 @@ public class TypeUtils {
     }
 
     /**
-     * Whether the specified type is assignable to all specified classes.
+     * Return whether the specified type is assignable to all specified classes.
      *
      * @param type type
      * @param classes classes
@@ -185,7 +185,7 @@ public class TypeUtils {
     }
 
     /**
-     * Whether the specified type is assignable to any of the specified classes.
+     * Return whether the specified type is assignable to any of the specified classes.
      *
      * @param type type
      * @param classes classes
@@ -196,7 +196,7 @@ public class TypeUtils {
     }
 
     /**
-     * Whether the specified type is assignable to all specified classes.
+     * Return whether the specified type is assignable to all specified classes.
      *
      * @param type type
      * @param classes classes

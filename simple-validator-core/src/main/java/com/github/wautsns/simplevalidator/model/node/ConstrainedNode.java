@@ -203,8 +203,6 @@ public abstract class ConstrainedNode {
 
     // #################### utils #######################################################
 
-    // ==================== location ====================================================
-
     /** node location */
     @EqualsAndHashCode(of = "names")
     public static class Location implements Serializable {

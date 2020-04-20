@@ -22,7 +22,7 @@ import java.lang.reflect.Type;
 import java.util.List;
 
 /**
- * Criterion factory for type-like(e.g. text-like, time-like).
+ * Criterion factory for type-like(e.g. text-like, time-like) value.
  *
  * @author wautsns
  * @since Mar 11, 2020
@@ -31,33 +31,33 @@ public abstract class TypeLikeCriterionFactory<A extends Annotation, U extends T
         implements TCriterionFactory<A, Object> {
 
     /** utilities */
-    private final List<U> utilities = initUtilities();
+    private final List<U> utilities = initTypeLikeUtilities();
+
+    /**
+     * Initialize type-like utilities.
+     *
+     * @return type-like utilities
+     */
+    protected abstract List<U> initTypeLikeUtilities();
 
     @Override
-    public boolean appliesTo(Type type, A constraint) {
+    public final boolean appliesTo(Type type, A constraint) {
         return utilities.stream().anyMatch(u -> u.appliesTo(type));
     }
 
     /**
-     * Initialize utilities.
-     *
-     * @return nonnull utilities
-     */
-    protected abstract List<U> initUtilities();
-
-    /**
-     * Get utility.
+     * Get utility for the specified type.
      *
      * @param type type
      * @return utility for the type
      */
-    public U getUtility(Type type) {
+    public U getTypeLikeUtility(Type type) {
         for (U utility : utilities) {
             if (utility.appliesTo(type)) {
                 return utility;
             }
         }
-        throw new IllegalStateException();
+        throw new IllegalArgumentException(String.format("No utility applies to type[%s]", type));
     }
 
 }

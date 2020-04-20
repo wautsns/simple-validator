@@ -17,10 +17,8 @@ package com.github.wautsns.templatemessage.formatter.multival;
 
 import com.github.wautsns.templatemessage.formatter.Formatter;
 import com.github.wautsns.templatemessage.formatter.common.ObjectFormatter;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NonNull;
-import lombok.Setter;
 import lombok.experimental.Accessors;
 
 import java.util.Locale;
@@ -34,16 +32,12 @@ import java.util.Map;
  * @author wautsns
  * @since Mar 10, 2020
  */
-@Getter
-@Setter
+@Data
 @Accessors(chain = true)
-@EqualsAndHashCode
 public class MapFormatter<K, V> implements Formatter<Map<K, V>> {
 
-    /** the default {@code MapFormatter}, e.g. {a=1, b=2, c=3} */
+    /** the default {@code MapFormatter} */
     public static final Formatter<Map<Object, Object>> DEFAULT = new MapFormatter<>();
-
-    private static final long serialVersionUID = 8176960908951658082L;
 
     /** string format of {@code null}, default is {@code "null"} */
     private @NonNull String stringFormatOfNull = "null";
@@ -69,45 +63,6 @@ public class MapFormatter<K, V> implements Formatter<Map<K, V>> {
     private @NonNull Formatter<? super K> keyFormatter = ObjectFormatter.DEFAULT;
     /** formatter for value, default is {@link ObjectFormatter#DEFAULT} */
     private @NonNull Formatter<? super V> valueFormatter = ObjectFormatter.DEFAULT;
-
-    /**
-     * Set prefix and suffix.
-     *
-     * @param prefix prefix of string formatter
-     * @param suffix suffix of string formatter
-     * @return self reference
-     */
-    public MapFormatter<K, V> setPrefixAndSuffix(String prefix, String suffix) {
-        setPrefix(prefix);
-        setSuffix(suffix);
-        return this;
-    }
-
-    /**
-     * Set prefix of string format of key and suffix of string format of key.
-     *
-     * @param prefix prefix of string format of key
-     * @param suffix suffix of string format of key
-     * @return self reference
-     */
-    public MapFormatter<K, V> setKeyPrefixAndSuffix(String prefix, String suffix) {
-        setKeyPrefix(prefix);
-        setKeySuffix(suffix);
-        return this;
-    }
-
-    /**
-     * Set prefix of string format of value and suffix of string format of value.
-     *
-     * @param prefix prefix of string format of value
-     * @param suffix suffix of string format of value
-     * @return self reference
-     */
-    public MapFormatter<K, V> setValuePrefixAndSuffix(String prefix, String suffix) {
-        setValuePrefix(prefix);
-        setValueSuffix(suffix);
-        return this;
-    }
 
     @Override
     public String format(Map<K, V> value, Locale locale) {

@@ -17,9 +17,9 @@ package com.github.wautsns.templatemessage.kernel;
 
 import com.github.wautsns.templatemessage.variable.Variable;
 import com.github.wautsns.templatemessage.variable.VariableValueMap;
+import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.ToString;
 import lombok.experimental.Accessors;
 
 /**
@@ -28,13 +28,11 @@ import lombok.experimental.Accessors;
  * @author wautsns
  * @since Mar 10, 2020
  */
-@Getter
-@Setter
+@Data
 @Accessors(chain = true)
+@ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 public class TemplateMessage extends VariableValueMap {
-
-    private static final long serialVersionUID = -471813798916205381L;
 
     /** message template */
     private String messageTemplate;
@@ -52,11 +50,6 @@ public class TemplateMessage extends VariableValueMap {
     @Override
     public TemplateMessage remove(Variable<?> variable) {
         return (TemplateMessage) super.remove(variable);
-    }
-
-    @Override
-    public String toString() {
-        return messageTemplate + "<==" + super.toString();
     }
 
 }

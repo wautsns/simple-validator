@@ -27,11 +27,10 @@ import java.lang.reflect.Type;
  * @author wautsns
  * @since Mar 11, 2020
  */
-public abstract class NonPrimitiveCriterionFactory<A extends Annotation>
-        implements TCriterionFactory<A, Object> {
+public abstract class NonPrimitiveCriterionFactory<A extends Annotation> implements TCriterionFactory<A, Object> {
 
     @Override
-    public boolean appliesTo(Type type, A constraint) {
+    public final boolean appliesTo(Type type, A constraint) {
         return !TypeUtils.isPrimitive(type);
     }
 

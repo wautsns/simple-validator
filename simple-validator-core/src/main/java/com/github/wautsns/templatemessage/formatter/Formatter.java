@@ -15,7 +15,6 @@
  */
 package com.github.wautsns.templatemessage.formatter;
 
-import java.io.Serializable;
 import java.util.Locale;
 
 /**
@@ -25,10 +24,10 @@ import java.util.Locale;
  * @author wautsns
  * @since Mar 10, 2020
  */
-public interface Formatter<T> extends Serializable {
+public interface Formatter<T> {
 
     /**
-     * Format the value with {@linkplain Locale#getDefault() default locale}.
+     * Format value with {@linkplain Locale#getDefault() default locale}.
      *
      * @param value value
      * @return value in string format
@@ -38,7 +37,7 @@ public interface Formatter<T> extends Serializable {
     }
 
     /**
-     * Format the value with specified locale.
+     * Format value with the specified locale.
      *
      * @param value value
      * @param locale locale
