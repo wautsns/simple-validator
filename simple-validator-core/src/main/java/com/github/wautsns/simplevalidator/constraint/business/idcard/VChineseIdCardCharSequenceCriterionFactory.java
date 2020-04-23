@@ -85,7 +85,7 @@ public class VChineseIdCardCharSequenceCriterionFactory extends CharSequenceCrit
         Set<VChineseIdCard.Gender> genderSet = InternalUtils.simplifyGenders(constraint.genders());
         return id -> {
             boolean correct;
-            if (id.length() != 18) { fail(id); }
+            if (id.length() != 18) { return fail(id); }
             if (!isDigits(id, 0, 17)) { return fail(id); }
             correct = InternalUtils.checkSecondGenerationCheckCodeChar(id);
             if (!correct) { return fail(id); }
