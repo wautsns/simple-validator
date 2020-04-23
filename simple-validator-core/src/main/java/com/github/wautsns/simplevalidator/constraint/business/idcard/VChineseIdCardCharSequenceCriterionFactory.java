@@ -116,7 +116,7 @@ public class VChineseIdCardCharSequenceCriterionFactory extends CharSequenceCrit
         IntPredicate agePredicate = DomainUtils.init(constraint.ages()).forInt();
         Set<VChineseIdCard.Gender> genders = InternalUtils.simplifyGenders(constraint.genders());
         return id -> {
-            if (id.length() != 15) { fail(id); }
+            if (id.length() != 15) { return fail(id); }
             if (!isDigits(id, 0, 15)) { return fail(id); }
             String cityName = cityNameMap.get(toNaturalNumber(id, 0, 2));
             if (cityName == null) { return fail(id); }
