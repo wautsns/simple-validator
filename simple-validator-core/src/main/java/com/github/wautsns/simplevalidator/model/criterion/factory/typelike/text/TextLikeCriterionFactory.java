@@ -56,6 +56,7 @@ public abstract class TextLikeCriterionFactory<A extends Annotation>
      * @param node node
      * @param constraint constraint
      * @param wip wip of criteria
+     * @param <T> type of text
      */
     protected abstract <T> void process(
             TextLikeUtility<T> utility,

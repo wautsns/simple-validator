@@ -101,8 +101,8 @@ public class ValidationFailure extends TemplateMessage {
          * Variable: indicators.
          *
          * <ul>
-         * <li>array[1] => indicator is 1</li>
-         * <li>map[key] => indicator is key</li>
+         * <li>array[1] =&gt; indicator is 1</li>
+         * <li>map[key] =&gt; indicator is key</li>
          * <li>customize...</li>
          * </ul>
          */

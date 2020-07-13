@@ -47,11 +47,11 @@ public class TypeUtils {
      * // parameterized type
      * HashMap.class &lt;== HashMap&lt;String, Object&gt;
      * // type variable
-     * Number.class &lt;== T extends Number & Comparable&lt;T&gt;
+     * Number.class &lt;== T extends Number &amp; Comparable&lt;T&gt;
      * // wildcard type
      * Number.class &lt;== ? extends Number.
      * Number.class &lt;== ? super Number.
-     * Number.class &lt;== ? super T, T extends Number & Comparable&lt;T&gt;.
+     * Number.class &lt;== ? super T, T extends Number &amp; Comparable&lt;T&gt;.
      * </pre>
      *
      * @param type type

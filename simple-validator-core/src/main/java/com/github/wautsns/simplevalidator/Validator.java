@@ -78,6 +78,7 @@ public class Validator {
      * Validate value rudely.
      *
      * @param value value
+     * @param <T> type of value
      * @return validation failure, or {@code null} if the value passes the validation
      */
     public static <T> T validateRudely(T value) {

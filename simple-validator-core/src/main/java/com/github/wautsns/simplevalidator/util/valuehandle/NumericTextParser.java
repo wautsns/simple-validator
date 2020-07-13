@@ -47,14 +47,14 @@ public class NumericTextParser {
      *
      * <pre>
      * types supported by default are as follows:
-     *   1. BigDecimal -> {@code BigDecimal::new}
-     *   2. BigInteger -> {@code BigInteger::new}
-     *   3. Double -> {@code Double::valueOf}
-     *   4. Float -> {@code Float::valueOf}
-     *   5. Long -> {@code Long::valueOf}
-     *   6. Integer -> {@code Integer::valueOf}
-     *   7. Short -> {@code Short::valueOf}
-     *   8. Byte -> {@code Byte::valueOf}
+     *   1. BigDecimal -&gt; {@code BigDecimal::new}
+     *   2. BigInteger -&gt; {@code BigInteger::new}
+     *   3. Double -&gt; {@code Double::valueOf}
+     *   4. Float -&gt; {@code Float::valueOf}
+     *   5. Long -&gt; {@code Long::valueOf}
+     *   6. Integer -&gt; {@code Integer::valueOf}
+     *   7. Short -&gt; {@code Short::valueOf}
+     *   8. Byte -&gt; {@code Byte::valueOf}
      * </pre>
      *
      * @param type numeric value type

@@ -28,14 +28,6 @@ import java.util.Map;
 /**
  * Formatter for {@code Object} value.
  *
- * <ul>
- * <li>If value is {@code null}, see {@link #getStringFormatOfNull()}.</li>
- * <li>If value is array, see {@link ArrayFormatter#DEFAULT} will be used.</li>
- * <li>If value is instance of {@code Iterable}, {@link IterableFormatter#DEFAULT} will be used.</li>
- * <li>If value is instance of {@code Map}, {@link MapFormatter#DEFAULT} will be used.</li>
- * <li>Otherwise {@code value.toString()}.</li>
- * </ul>
- *
  * @author wautsns
  * @since Mar 10, 2020
  */

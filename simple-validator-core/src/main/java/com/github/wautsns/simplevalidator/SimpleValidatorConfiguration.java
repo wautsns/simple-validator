@@ -53,11 +53,7 @@ public class SimpleValidatorConfiguration {
         /**
          * Add criterion factory.
          *
-         * <pre>
-         * It is <strong>not recommended</strong> adding a criterion factory directly to the constraint annotation.
-         * eg. <s>VLuhn.CRITERION_FACTORIES.add(criterionFactory);</s>
-         * SimpleValidatorConfiguration.ForCriterionFactory.add(VLuhn.class, criterionFactory);
-         * </pre>
+         * <p>It is <strong>not recommended</strong> adding a criterion factory directly to the constraint annotation.
          *
          * @param constraintType constraint class
          * @param criterionFactory criterion factory
@@ -96,7 +92,6 @@ public class SimpleValidatorConfiguration {
          *
          * @param order order
          * @param extractedTypeMetadata extracted type metadata
-         * @see ConstrainedTypeContainer#addExtractedTypeMetadata(int, ConstrainedExtractedType.Metadata)
          */
         public static void addExtractedTypeMetadata(
                 int order, ConstrainedExtractedType.Metadata extractedTypeMetadata) {
@@ -107,7 +102,6 @@ public class SimpleValidatorConfiguration {
          * Set parameter name generator.
          *
          * @param parameterNameGenerator parameter name generator
-         * @see ConstrainedParameter#setParameterNameGenerator(Function)
          */
         public static void setParameterNameGenerator(Function<Parameter, String> parameterNameGenerator) {
             ConstrainedParameter.setParameterNameGenerator(parameterNameGenerator);
@@ -149,7 +143,6 @@ public class SimpleValidatorConfiguration {
          * @param type numeric value type
          * @param parser text parser
          * @param <T> type of numeric value
-         * @see NumericTextParser#addParser(Class, Function)
          */
         public static <T extends Number & Comparable<T>> void addNumericTextParser(
                 Class<T> type, Function<String, T> parser) {

@@ -30,10 +30,20 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @AConstraint
 public @interface VLuhn {
 
-    /** @see ConstraintMetadata.Attributes#MESSAGE */
+    /**
+     * Message.
+     *
+     * @return message
+     * @see ConstraintMetadata.Attributes#MESSAGE
+     */
     String message() default "[`VLuhn`]";
 
-    /** @see ConstraintMetadata.Attributes#ORDER */
+    /**
+     * Order
+     *
+     * @return order
+     * @see ConstraintMetadata.Attributes#ORDER
+     */
     int order() default 0;
 
     // #################### extra #######################################################
