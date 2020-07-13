@@ -4,9 +4,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.example</groupId>
+    <groupId>com.github.wautsns</groupId>
     <artifactId>simple-validator</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>0.1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>Simple Validator</name>
@@ -20,6 +20,12 @@
         </license>
     </licenses>
 
+    <scm>
+        <connection>scm:git:git@github.com:wautsns/simple-validator.git</connection>
+        <developerConnection>scm:git:git@github.com:wautsns/simple-validator.git</developerConnection>
+        <url>git@github.com:wautsns/simple-validator.git</url>
+    </scm>
+
     <developers>
         <developer>
             <name>wautsns</name>
@@ -28,11 +34,6 @@
         </developer>
     </developers>
 
-    <scm>
-        <connection>scm:git:git@github.com:wautsns/simple-validator.git</connection>
-        <developerConnection>scm:git:git@github.com:wautsns/simple-validator.git</developerConnection>
-        <url>git@github.com:wautsns/simple-validator.git</url>
-    </scm>
 
     <properties>
         <!-- environment -->
@@ -45,33 +46,29 @@
         <project.build.sourceEncoding>${project.encoding}</project.build.sourceEncoding>
         <project.reporting.outputEncoding>${project.encoding}</project.reporting.outputEncoding>
         <!-- plugins -->
-        <maven-compiler.version>3.8.1</maven-compiler.version>
-        <maven-source.version>3.1.0</maven-source.version>
-        <maven-javadoc.version>3.1.1</maven-javadoc.version>
-        <maven-gpg-plugin>1.6</maven-gpg-plugin>
+        <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
+        <maven-deploy-plugin.version>2.8.2</maven-deploy-plugin.version>
+        <maven-source-plugin.version>3.2.1</maven-source-plugin.version>
+        <maven-javadoc-plugin.version>3.2.0</maven-javadoc-plugin.version>
+        <maven-gpg-plugin.version>1.6</maven-gpg-plugin.version>
         <nexus-staging-maven-plugin.version>1.6.8</nexus-staging-maven-plugin.version>
         <!-- dependencies -->
-        <spel.version>5.2.0.RELEASE</spel.version>
-        <lombok.version>1.18.10</lombok.version>
+        <spring-platform-bom.version>Cairo-SR7</spring-platform-bom.version>
     </properties>
 
     <modules>
         <module>simple-validator-core</module>
+        <module>simple-validator-spring-boot-starter</module>
     </modules>
 
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-expression</artifactId>
-                <version>${spel.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.projectlombok</groupId>
-                <artifactId>lombok</artifactId>
-                <version>${lombok.version}</version>
-                <scope>provided</scope>
+                <groupId>io.spring.platform</groupId>
+                <artifactId>platform-bom</artifactId>
+                <version>${spring-platform-bom.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -81,37 +78,26 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>${maven-compiler.version}</version>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
-                <version>${maven-source.version}</version>
-                <executions>
-                    <execution>
-                        <id>attach-sources</id>
-                        <goals>
-                            <goal>jar-no-fork</goal>
-                        </goals>
-                    </execution>
-                </executions>
+                <version>${maven-compiler-plugin.version}</version>
             </plugin>
         </plugins>
     </build>
 
     <profiles>
         <profile>
-            <id>release-oss</id>
+            <id>release</id>
             <activation>
-                <activeByDefault>false</activeByDefault>
+                <activeByDefault>true</activeByDefault>
             </activation>
             <distributionManagement>
                 <snapshotRepository>
-                    <id>oss</id>
+                    <id>sonatype-nexus-snapshots</id>
+                    <name>Sonatype Nexus Snapshots</name>
                     <url>https://oss.sonatype.org/content/repositories/snapshots</url>
                 </snapshotRepository>
                 <repository>
-                    <id>oss</id>
+                    <id>sonatype-nexus-staging</id>
+                    <name>Nexus Release Repository</name>
                     <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
                 </repository>
             </distributionManagement>
@@ -119,15 +105,24 @@
                 <plugins>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>${maven-javadoc.version}</version>
-                        <configuration>
-                            <failOnError>false</failOnError>
-                            <doclint>none</doclint>
-                        </configuration>
+                        <artifactId>maven-source-plugin</artifactId>
+                        <version>${maven-source-plugin.version}</version>
                         <executions>
                             <execution>
-                                <id>attach-javadocs</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>jar-no-fork</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>${maven-javadoc-plugin.version}</version>
+                        <executions>
+                            <execution>
+                                <phase>package</phase>
                                 <goals>
                                     <goal>jar</goal>
                                 </goals>
@@ -137,16 +132,20 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-gpg-plugin</artifactId>
-                        <version>${maven-gpg-plugin}</version>
+                        <version>${maven-gpg-plugin.version}</version>
                         <executions>
                             <execution>
-                                <id>sign-artifacts</id>
                                 <phase>verify</phase>
                                 <goals>
                                     <goal>sign</goal>
                                 </goals>
                             </execution>
                         </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-deploy-plugin</artifactId>
+                        <version>${maven-deploy-plugin.version}</version>
                     </plugin>
                     <plugin>
                         <groupId>org.sonatype.plugins</groupId>
