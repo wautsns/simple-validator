@@ -34,7 +34,6 @@
         </developer>
     </developers>
 
-
     <properties>
         <!-- environment -->
         <java.version>1.8</java.version>
