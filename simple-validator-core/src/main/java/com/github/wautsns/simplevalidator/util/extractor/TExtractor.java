@@ -16,17 +16,17 @@
 package com.github.wautsns.simplevalidator.util.extractor;
 
 /**
- * The non-primitive value extractor.
+ * Extractor for extracting non-primitive value.
  *
  * @param <T> type of target value
  * @param <V> type of extracted value
  * @author wautsns
  * @since Mar 20, 2020
  */
-public interface TExtractor<T, V> extends ValueExtractor {
+public interface TExtractor<T, V> extends Extractor {
 
     /**
-     * Extract value from the target value.
+     * Extract value from the target.
      *
      * @param target target value
      * @return extracted value

@@ -37,9 +37,9 @@ import java.lang.reflect.AnnotatedWildcardType;
 @Getter
 public class ConstrainedExtractedType extends ConstrainedTypeContainer {
 
-    /** type container */
+    /** Type container. */
     private final ConstrainedTypeContainer typeContainer;
-    /** criterion wrapper */
+    /** Criterion wrapper. */
     private final Criterion.Wrapper criterionWrapper;
 
     /**
@@ -71,10 +71,10 @@ public class ConstrainedExtractedType extends ConstrainedTypeContainer {
 
     // #################### metadata ####################################################
 
-    /** constrained extracted type metadata */
+    /** Constrained extracted type metadata. */
     public abstract static class Metadata {
 
-        /** class: AnnotatedTypeFactory$AnnotatedTypeBaseImpl */
+        /** Class: AnnotatedTypeFactory$AnnotatedTypeBaseImpl. */
         private static final Class<?> ANNOTATED_TYPE_BASE_IMPL = ReflectionUtils.requireClass(
                 "sun.reflect.annotation.AnnotatedTypeFactory$AnnotatedTypeBaseImpl");
 
@@ -150,7 +150,7 @@ public class ConstrainedExtractedType extends ConstrainedTypeContainer {
             return null;
         }
 
-        /** type parameter metadata */
+        /** Type parameter metadata. */
         protected interface TypeParameterMetadata {
 
             /**

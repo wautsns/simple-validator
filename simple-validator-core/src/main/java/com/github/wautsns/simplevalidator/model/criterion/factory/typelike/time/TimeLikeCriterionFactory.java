@@ -40,7 +40,7 @@ import java.util.List;
 public abstract class TimeLikeCriterionFactory<A extends Annotation>
         extends TypeLikeCriterionFactory<A, TimeLikeUtility<?>> {
 
-    /** default time like utility */
+    /** Default time like utility. */
     public static final List<TimeLikeUtility<?>> DEFAULT_UTILITIES = new LinkedList<>(Arrays.asList(
             CalendarUtility.DEFAULT,
             DateUtility.DEFAULT,
@@ -51,9 +51,9 @@ public abstract class TimeLikeCriterionFactory<A extends Annotation>
             LongUtility.DEFAULT));
 
     @Override
-    @SuppressWarnings({"rawtypes", "unchecked"})
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     public final void process(ConstrainedNode node, A constraint, TCriteria<Object> wip) {
-        TimeLikeUtility utility = getTypeLikeUtility(node.getType());
+        TimeLikeUtility utility = requireTypeLikeUtility(node.getType());
         process(utility, node, constraint, wip);
     }
 

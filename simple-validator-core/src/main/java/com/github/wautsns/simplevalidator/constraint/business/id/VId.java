@@ -25,7 +25,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  */
 @Documented
 @Retention(RUNTIME)
-@Target({ANNOTATION_TYPE, FIELD, METHOD, PARAMETER, TYPE_USE})
+@Target({ ANNOTATION_TYPE, FIELD, METHOD, PARAMETER, TYPE_USE })
 @AConstraint
 @VPositive
 public @interface VId {
@@ -48,14 +48,14 @@ public @interface VId {
 
     // #################### extra #######################################################
 
-    /** built-in criterion factories */
+    /** Built-in criterion factories. */
     List<CriterionFactory<VId, ?, ?>> CRITERION_FACTORIES = new LinkedList<>(Collections.singletonList(
             VIdIntegerLongBigIntegerCriterionFactory.INSTANCE
     ));
 
     // ==================== variables ===================================================
 
-    /** variables: {@linkplain #unsigned() unsigned} */
+    /** Variables: {@linkplain #unsigned() unsigned}. */
     Variable<Boolean> UNSIGNED = new Variable<>("unsigned");
 
 }

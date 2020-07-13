@@ -15,6 +15,7 @@
  */
 package com.github.wautsns.simplevalidator.model.criterion.factory.typelike;
 
+import com.github.wautsns.simplevalidator.exception.analysis.ConstraintAnalysisException;
 import com.github.wautsns.simplevalidator.model.criterion.factory.TCriterionFactory;
 
 import java.lang.annotation.Annotation;
@@ -30,7 +31,7 @@ import java.util.List;
 public abstract class TypeLikeCriterionFactory<A extends Annotation, U extends TypeLikeUtility<?>>
         implements TCriterionFactory<A, Object> {
 
-    /** utilities */
+    /** Utilities. */
     private final List<U> utilities = initTypeLikeUtilities();
 
     /**
@@ -46,18 +47,18 @@ public abstract class TypeLikeCriterionFactory<A extends Annotation, U extends T
     }
 
     /**
-     * Get utility for the specified type.
+     * Require utility for the specified type.
      *
      * @param type type
      * @return utility for the type
      */
-    public U getTypeLikeUtility(Type type) {
+    public U requireTypeLikeUtility(Type type) {
         for (U utility : utilities) {
             if (utility.appliesTo(type)) {
                 return utility;
             }
         }
-        throw new IllegalArgumentException(String.format("No utility applies to type[%s]", type));
+        throw new ConstraintAnalysisException("No utility applies to type[%s]", type);
     }
 
 }

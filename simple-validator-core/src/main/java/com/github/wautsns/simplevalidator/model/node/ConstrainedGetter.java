@@ -33,11 +33,11 @@ import java.lang.reflect.Method;
 @Getter
 public class ConstrainedGetter extends ConstrainedTypeContainer {
 
-    /** declaring class */
+    /** Declaring class. */
     private final ConstrainedClass declaringClass;
-    /** original getter */
+    /** Original getter. */
     private final Method origin;
-    /** criterion wrapper */
+    /** Criterion wrapper. */
     private final CriterionWrapper criterionWrapper;
 
     /**
@@ -81,11 +81,11 @@ public class ConstrainedGetter extends ConstrainedTypeContainer {
 
     // ==================== internal utils ==============================================
 
-    /** criterion wrapper */
+    /** Criterion wrapper. */
     @RequiredArgsConstructor
     private static class CriterionWrapper extends Criterion.Wrapper {
 
-        /** accessible getter */
+        /** Accessible getter. */
         private final Method getter;
 
         @Override

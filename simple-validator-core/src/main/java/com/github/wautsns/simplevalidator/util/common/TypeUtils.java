@@ -41,7 +41,7 @@ public class TypeUtils {
      * <pre>
      * // class
      * Integer.class &lt;== Integer
-     * Integer[].class &lt;== Integer[]
+     * Long[].class &lt;== Long[]
      * // generic array type
      * List[].class &lt;== List&lt;String&gt;[]
      * // parameterized type
@@ -49,9 +49,9 @@ public class TypeUtils {
      * // type variable
      * Number.class &lt;== T extends Number & Comparable&lt;T&gt;
      * // wildcard type
-     * Number.class &lt;== ? extends Number
-     * Number.class &lt;== ? super Number
-     * Number.class &lt;== ? super T, T extends Number & Comparable&lt;T&gt;
+     * Number.class &lt;== ? extends Number.
+     * Number.class &lt;== ? super Number.
+     * Number.class &lt;== ? super T, T extends Number & Comparable&lt;T&gt;.
      * </pre>
      *
      * @param type type

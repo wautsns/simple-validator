@@ -1,6 +1,7 @@
 package com.github.wautsns.simplevalidator.constraint.algorithm.luhn;
 
 import com.github.wautsns.simplevalidator.constraint.AConstraint;
+import com.github.wautsns.simplevalidator.model.constraint.ConstraintMetadata;
 import com.github.wautsns.simplevalidator.model.criterion.factory.CriterionFactory;
 
 import java.lang.annotation.Documented;
@@ -18,34 +19,26 @@ import static java.lang.annotation.ElementType.TYPE_USE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
- * Validate value by algorithm: luhn.
+ * Validate value by the algorithm: luhn.
  *
  * @author wautsns
  * @since Mar 19, 2020
  */
 @Documented
 @Retention(RUNTIME)
-@Target({ANNOTATION_TYPE, FIELD, METHOD, PARAMETER, TYPE_USE})
+@Target({ ANNOTATION_TYPE, FIELD, METHOD, PARAMETER, TYPE_USE })
 @AConstraint
 public @interface VLuhn {
 
-    /**
-     * Message(template).
-     *
-     * @return message(template)
-     */
+    /** @see ConstraintMetadata.Attributes#MESSAGE */
     String message() default "[`VLuhn`]";
 
-    /**
-     * Order of the constraint.
-     *
-     * @return order of the constraint
-     */
+    /** @see ConstraintMetadata.Attributes#ORDER */
     int order() default 0;
 
     // #################### extra #######################################################
 
-    /** built-in criterion factories */
+    /** Built-in criterion factories. */
     List<CriterionFactory<VLuhn, ?, ?>> CRITERION_FACTORIES = new LinkedList<>(Collections.singletonList(
             VLuhnCharSequenceCriterionFactory.INSTANCE
     ));

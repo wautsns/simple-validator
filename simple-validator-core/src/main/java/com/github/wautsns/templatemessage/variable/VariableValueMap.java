@@ -26,13 +26,13 @@ import java.util.stream.Collectors;
  * @author wautsns
  * @since Mar 10, 2020
  */
-@SuppressWarnings({"rawtypes", "unchecked"})
+@SuppressWarnings({ "rawtypes", "unchecked" })
 public class VariableValueMap {
 
-    /** empty variableValueMap */
+    /** Empty variableValueMap. */
     public static final VariableValueMap EMPTY = new VariableValueMap(Collections.emptyMap());
 
-    /** map: variable -> value */
+    /** Map: variable -> value. */
     private final Map<Variable, Object> dataMap;
 
     /** Construct a variableValueMap. */
@@ -68,7 +68,7 @@ public class VariableValueMap {
     }
 
     /**
-     * Return whethe the variableValueMap is empty.
+     * Return whether the variableValueMap is empty.
      *
      * @return {@code true} if the variableValueMap is empty, otherwise {@code false}
      */
@@ -77,7 +77,7 @@ public class VariableValueMap {
     }
 
     /**
-     * Return whethe the variableValueMap contains the specified variable.
+     * Return whether the variableValueMap contains the specified variable.
      *
      * @param variable variable
      * @return {@code true} if the variableValueMap contains the variable, otherwise {@code false}
@@ -165,7 +165,7 @@ public class VariableValueMap {
      * @return self reference
      */
     public VariableValueMap put(VariableValueMap variableValueMap) {
-        this.dataMap.putAll(variableValueMap.dataMap);
+        dataMap.putAll(variableValueMap.dataMap);
         return this;
     }
 
@@ -181,7 +181,7 @@ public class VariableValueMap {
     }
 
     @Override
-    @SuppressWarnings({"rawtypes", "unchecked"})
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     public String toString() {
         StringBuilder result = new StringBuilder();
         result.append('{');
@@ -189,7 +189,7 @@ public class VariableValueMap {
                 .map(entry -> {
                     Variable variable = entry.getKey();
                     Object value = entry.getValue();
-                    return variable + "=" + variable.getFormatter().format(value);
+                    return variable.getName() + "=" + variable.getFormatter().format(value);
                 })
                 .collect(Collectors.joining(", ")));
         result.append('}');

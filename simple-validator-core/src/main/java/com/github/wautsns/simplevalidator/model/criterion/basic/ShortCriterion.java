@@ -50,7 +50,7 @@ public interface ShortCriterion extends PrimitiveCriterion<Short> {
 
     // #################### instance ####################################################
 
-    /** the truth */
+    /** Truth. */
     ShortCriterion TRUTH = any -> null;
 
 }

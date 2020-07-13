@@ -67,7 +67,7 @@ public class VCodeOfEnumAnyCriterionFactory extends NonPrimitiveCriterionFactory
         }
     }
 
-    /** codable enumeration type -> criterion cache */
+    /** Codable enumeration type -> criterion cache. */
     private static final Map<Class<?>, TCriterion<Object>> CACHE = new ConcurrentHashMap<>();
 
     /**

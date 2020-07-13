@@ -35,7 +35,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  */
 @Documented
 @Retention(RUNTIME)
-@Target({FIELD, METHOD, PARAMETER, ANNOTATION_TYPE, TYPE_USE})
+@Target({ FIELD, METHOD, PARAMETER, ANNOTATION_TYPE, TYPE_USE })
 @AConstraint
 @VSize(min = 1, max = Integer.MAX_VALUE)
 public @interface VNotEmpty {

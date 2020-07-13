@@ -51,7 +51,7 @@ public class ExtractedIterableElementTypeMetadata extends ConstrainedExtractedTy
 
     // #################### internal utils ##############################################
 
-    /** type parameter metadata */
+    /** Type parameter metadata. */
     private static final TypeParameterMetadata TYPE_PARAMETER_METADATA = new TypeParameterMetadata() {
 
         @Override
@@ -65,7 +65,7 @@ public class ExtractedIterableElementTypeMetadata extends ConstrainedExtractedTy
         }
     };
 
-    /** criterion wrapper */
+    /** Criterion wrapper. */
     private static final Criterion.Wrapper CRITERION_WRAPPER = new Criterion.Wrapper() {
 
         @Override

@@ -40,7 +40,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  */
 @Documented
 @Retention(RUNTIME)
-@Target({FIELD, METHOD, PARAMETER, ANNOTATION_TYPE, TYPE_USE})
+@Target({ FIELD, METHOD, PARAMETER, ANNOTATION_TYPE, TYPE_USE })
 @AConstraint
 public @interface VNameOfEnum {
 
@@ -66,14 +66,14 @@ public @interface VNameOfEnum {
 
     // #################### extra #######################################################
 
-    /** built-in criterion factories */
+    /** Built-in criterion factories. */
     List<CriterionFactory<VNameOfEnum, ?, ?>> CRITERION_FACTORIES = new LinkedList<>(Collections.singletonList(
             VNameOfEnumCharSequenceCriterionFactory.INSTANCE
     ));
 
     // ==================== variables ===================================================
 
-    /** variables: optionalValues */
+    /** Variables: optionalValues. */
     Variable<String[]> OPTIONAL_VALUES = new Variable<>("optionalValues", Formatters.VALUES_NO_OPTIONAL_VALUE);
 
 }

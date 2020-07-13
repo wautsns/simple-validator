@@ -37,9 +37,9 @@ import java.util.stream.Collectors;
 @Getter
 public class ConstrainedClass extends ConstrainedNode {
 
-    /** fields */
+    /** Fields. */
     private final List<ConstrainedField> fields;
-    /** getters */
+    /** Getters. */
     private final List<ConstrainedGetter> getters;
 
     /**
@@ -103,7 +103,7 @@ public class ConstrainedClass extends ConstrainedNode {
 
     // #################### instance ####################################################
 
-    /** type -> constrained class map */
+    /** Type -> constrained class map. */
     private static final Map<Class<?>, ConstrainedClass> INSTANCE_MAP = new ConcurrentHashMap<>(64);
 
     /**

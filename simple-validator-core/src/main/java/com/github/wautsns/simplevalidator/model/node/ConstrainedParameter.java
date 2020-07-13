@@ -17,7 +17,6 @@ package com.github.wautsns.simplevalidator.model.node;
 
 import com.github.wautsns.simplevalidator.model.criterion.basic.Criterion;
 import lombok.Getter;
-import lombok.NonNull;
 import lombok.Setter;
 
 import java.lang.reflect.Executable;
@@ -35,7 +34,7 @@ import java.util.stream.Collectors;
 @Getter
 public class ConstrainedParameter extends ConstrainedTypeContainer {
 
-    /** original parameter */
+    /** Original parameter. */
     private final Parameter origin;
 
     /**
@@ -78,7 +77,7 @@ public class ConstrainedParameter extends ConstrainedTypeContainer {
      * <p>default: parameter(age) -> {@code "TargetClassSimpleName#targetMethodName(String,int)@age"}
      */
     @Setter
-    private static @NonNull Function<Parameter, String> parameterNameGenerator = parameter -> {
+    private static Function<Parameter, String> parameterNameGenerator = parameter -> {
         Executable executable = parameter.getDeclaringExecutable();
         Class<?> clazz = executable.getDeclaringClass();
         StringBuilder name = new StringBuilder();

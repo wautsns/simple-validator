@@ -45,7 +45,7 @@ public class VDomainComparableNumberCriterionFactory extends ComparableNumberCri
      * @param constraint constraint
      * @return criterion
      */
-    @SuppressWarnings({"rawtypes", "unchecked"})
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     protected static TCriterion<Comparable<Number>> produce(
             ConstrainedNode node, VDomain constraint) {
         Predicate predicate = DomainUtils.init(constraint.value())

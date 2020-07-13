@@ -31,6 +31,22 @@ import java.util.Set;
 @UtilityClass
 public class CollectionUtils {
 
+    /** Class: Collections$UnmodifiableCollection. */
+    private static final Class<?> CLASS_UNMODIFIABLE_COLLECTION = ReflectionUtils.requireClass(
+            "java.util.Collections$UnmodifiableCollection");
+    /** Class: Collections$SingletonList. */
+    private static final Class<?> CLASS_SINGLETON_LIST = ReflectionUtils.requireClass(
+            "java.util.Collections$SingletonList");
+    /** Class: Collections$SingletonSet. */
+    private static final Class<?> CLASS_SINGLETON_SET = ReflectionUtils.requireClass(
+            "java.util.Collections$SingletonSet");
+    /** Class: Collections$UnmodifiableMap. */
+    private static final Class<?> CLASS_UNMODIFIABLE_MAP = ReflectionUtils.requireClass(
+            "java.util.Collections$UnmodifiableMap");
+    /** Class: Collections$SingletonMap. */
+    private static final Class<?> CLASS_SINGLETON_MAP = ReflectionUtils.requireClass(
+            "java.util.Collections$SingletonMap");
+
     /**
      * Wrap the list into unmodifiable list.
      *
@@ -107,23 +123,5 @@ public class CollectionUtils {
             return Collections.singletonMap(entry.getKey(), entry.getValue());
         }
     }
-
-    // #################### internal utils ################################################
-
-    /** class: Collections$UnmodifiableCollection */
-    private static final Class<?> CLASS_UNMODIFIABLE_COLLECTION = ReflectionUtils.requireClass(
-            "java.util.Collections$UnmodifiableCollection");
-    /** class: Collections$SingletonList */
-    private static final Class<?> CLASS_SINGLETON_LIST = ReflectionUtils.requireClass(
-            "java.util.Collections$SingletonList");
-    /** class: Collections$SingletonSet */
-    private static final Class<?> CLASS_SINGLETON_SET = ReflectionUtils.requireClass(
-            "java.util.Collections$SingletonSet");
-    /** class: Collections$UnmodifiableMap */
-    private static final Class<?> CLASS_UNMODIFIABLE_MAP = ReflectionUtils.requireClass(
-            "java.util.Collections$UnmodifiableMap");
-    /** class: Collections$SingletonMap */
-    private static final Class<?> CLASS_SINGLETON_MAP = ReflectionUtils.requireClass(
-            "java.util.Collections$SingletonMap");
 
 }

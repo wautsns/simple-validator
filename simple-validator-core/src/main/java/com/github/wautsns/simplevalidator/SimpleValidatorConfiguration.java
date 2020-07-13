@@ -22,18 +22,20 @@ import com.github.wautsns.simplevalidator.model.criterion.factory.typelike.text.
 import com.github.wautsns.simplevalidator.model.criterion.factory.typelike.text.TextLikeUtility;
 import com.github.wautsns.simplevalidator.model.criterion.factory.typelike.time.TimeLikeCriterionFactory;
 import com.github.wautsns.simplevalidator.model.criterion.factory.typelike.time.TimeLikeUtility;
+import com.github.wautsns.simplevalidator.model.failure.ValidationFailureFormatter;
 import com.github.wautsns.simplevalidator.model.node.ConstrainedParameter;
 import com.github.wautsns.simplevalidator.model.node.ConstrainedTypeContainer;
 import com.github.wautsns.simplevalidator.model.node.extraction.type.ConstrainedExtractedType;
-import com.github.wautsns.simplevalidator.util.common.NumericTextParser;
-import com.github.wautsns.simplevalidator.util.extractor.ValueExtractor;
-import lombok.NonNull;
+import com.github.wautsns.simplevalidator.util.extractor.Extractor;
+import com.github.wautsns.simplevalidator.util.valuehandle.NumericTextParser;
 import lombok.experimental.UtilityClass;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Parameter;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 /**
  * Configuration of simple validator.
@@ -44,7 +46,7 @@ import java.util.function.Function;
 @UtilityClass
 public class SimpleValidatorConfiguration {
 
-    /** configuration for criterion factory */
+    /** Configuration for the constraint. */
     @UtilityClass
     public static class ForConstraint {
 
@@ -52,8 +54,8 @@ public class SimpleValidatorConfiguration {
          * Add criterion factory.
          *
          * <pre>
-         * // It is <strong>not recommended</strong> adding a criterion factory directly to the constraint annotation.
-         * <s>VLuhn.CRITERION_FACTORIES.add(criterionFactory);</s>
+         * It is <strong>not recommended</strong> adding a criterion factory directly to the constraint annotation.
+         * eg. <s>VLuhn.CRITERION_FACTORIES.add(criterionFactory);</s>
          * SimpleValidatorConfiguration.ForCriterionFactory.add(VLuhn.class, criterionFactory);
          * </pre>
          *
@@ -62,7 +64,7 @@ public class SimpleValidatorConfiguration {
          * @param <A> type of constraint
          */
         public static <A extends Annotation> void addCriterionFactory(
-                Class<A> constraintType, @NonNull CriterionFactory<A, ?, ?> criterionFactory) {
+                Class<A> constraintType, CriterionFactory<A, ?, ?> criterionFactory) {
             ConstraintMetadata<A> metadata = ConstraintMetadata.getInstance(constraintType);
             if (metadata.isOnlyUsedToCombineOtherConstraints()) {
                 throw new ConstraintAnalysisException(
@@ -76,16 +78,16 @@ public class SimpleValidatorConfiguration {
          * Add value extractor.
          *
          * @param constraintType constraint type
-         * @param valueExtractor value extractor
+         * @param extractor value extractor
          */
-        public static void addValueExtractor(
-                Class<? extends Annotation> constraintType, @NonNull ValueExtractor valueExtractor) {
-            ConstraintMetadata.getInstance(constraintType).getValueExtractors().add(valueExtractor);
+        public static void addExtractor(
+                Class<? extends Annotation> constraintType, Extractor extractor) {
+            ConstraintMetadata.getInstance(constraintType).getExtractors().add(extractor);
         }
 
     }
 
-    /** configuration for constrained node */
+    /** Configuration for the constrained node. */
     @UtilityClass
     public static class ForConstrainedNode {
 
@@ -113,7 +115,7 @@ public class SimpleValidatorConfiguration {
 
     }
 
-    /** configuration for type like utility */
+    /** Configuration for the type like utility. */
     @UtilityClass
     public static class ForTypeLikeUtility {
 
@@ -122,7 +124,7 @@ public class SimpleValidatorConfiguration {
          *
          * @param textLikeUtility text like utility
          */
-        public static void addTextLikeUtility(@NonNull TextLikeUtility<?> textLikeUtility) {
+        public static void addTextLikeUtility(TextLikeUtility<?> textLikeUtility) {
             TextLikeCriterionFactory.DEFAULT_UTILITIES.add(textLikeUtility);
         }
 
@@ -131,13 +133,13 @@ public class SimpleValidatorConfiguration {
          *
          * @param timeLikeUtility time like utility
          */
-        public static void addTimeLikeUtility(@NonNull TimeLikeUtility<?> timeLikeUtility) {
+        public static void addTimeLikeUtility(TimeLikeUtility<?> timeLikeUtility) {
             TimeLikeCriterionFactory.DEFAULT_UTILITIES.add(timeLikeUtility);
         }
 
     }
 
-    /** configuration for value handler */
+    /** Configuration for value handler. */
     @UtilityClass
     public static class ForValueHandler {
 
@@ -149,9 +151,39 @@ public class SimpleValidatorConfiguration {
          * @param <T> type of numeric value
          * @see NumericTextParser#addParser(Class, Function)
          */
-        public static <T extends Number & Comparable<T>> void addNumericValueParser(
+        public static <T extends Number & Comparable<T>> void addNumericTextParser(
                 Class<T> type, Function<String, T> parser) {
             NumericTextParser.addParser(type, parser);
+        }
+
+    }
+
+    /** Configuration for validation failure. */
+    @UtilityClass
+    public static class ForValidationFailure {
+
+        /** Validation failure formatter. */
+        public static final ValidationFailureFormatter FORMATTER = new ValidationFailureFormatter();
+
+        /** Locale supplier. */
+        private static Supplier<Locale> localeSupplier = Locale::getDefault;
+
+        /**
+         * Get locale supplier.
+         *
+         * @return locale supplier
+         */
+        public static Supplier<Locale> getLocaleSupplier() {
+            return localeSupplier;
+        }
+
+        /**
+         * Set locale supplier.
+         *
+         * @param localeSupplier locale supplier
+         */
+        public static void setLocaleSupplier(Supplier<Locale> localeSupplier) {
+            ForValidationFailure.localeSupplier = localeSupplier;
         }
 
     }

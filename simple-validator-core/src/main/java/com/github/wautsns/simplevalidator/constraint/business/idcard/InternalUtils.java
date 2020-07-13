@@ -197,7 +197,7 @@ class InternalUtils {
     // #################### check code ##################################################
 
     private static final int[] SECOND_GENERATION_WEIGHTING_FACTORS = {
-            7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2};
+            7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2 };
     private static final String SECOND_GENERATION_CHECK_CODE_CHARS = "10X98765432";
 
     public static boolean checkSecondGenerationCheckCodeChar(CharSequence id) {

@@ -12,10 +12,11 @@
  */
 package com.github.wautsns.simplevalidator.constraint.number.domain;
 
-import com.github.wautsns.simplevalidator.util.common.NumericTextParser;
+import com.github.wautsns.simplevalidator.exception.analysis.ConstraintAnalysisException;
 import com.github.wautsns.simplevalidator.util.function.BytePredicate;
 import com.github.wautsns.simplevalidator.util.function.FloatPredicate;
 import com.github.wautsns.simplevalidator.util.function.ShortPredicate;
+import com.github.wautsns.simplevalidator.util.valuehandle.NumericTextParser;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -53,8 +54,7 @@ public class DomainUtils {
         if (left == '{' && right == '}') {
             return new NumericValues(data.split(","));
         } else if ("[(".indexOf(left) < 0 || ")]".indexOf(right) < 0) {
-            // TODO message
-            throw new IllegalArgumentException();
+            throw new ConstraintAnalysisException("Cannot analysis domain unit text: %s", domainUnitText);
         } else {
             String[] tmp = data.split(",", 2);
             RangePartUnit min = null;

@@ -31,12 +31,12 @@ import com.github.wautsns.simplevalidator.util.extractor.BooleanExtractor;
 import com.github.wautsns.simplevalidator.util.extractor.ByteExtractor;
 import com.github.wautsns.simplevalidator.util.extractor.CharExtractor;
 import com.github.wautsns.simplevalidator.util.extractor.DoubleExtractor;
+import com.github.wautsns.simplevalidator.util.extractor.Extractor;
 import com.github.wautsns.simplevalidator.util.extractor.FloatExtractor;
 import com.github.wautsns.simplevalidator.util.extractor.IntExtractor;
 import com.github.wautsns.simplevalidator.util.extractor.LongExtractor;
 import com.github.wautsns.simplevalidator.util.extractor.ShortExtractor;
 import com.github.wautsns.simplevalidator.util.extractor.TExtractor;
-import com.github.wautsns.simplevalidator.util.extractor.ValueExtractor;
 import lombok.Getter;
 
 import java.util.Collections;
@@ -51,11 +51,11 @@ import java.util.List;
 @Getter
 public class ConstrainedExtractedValue extends ConstrainedNode {
 
-    /** parent */
+    /** Parent. */
     private final ConstrainedNode parent;
-    /** value extractor */
-    private final ValueExtractor valueExtractor;
-    /** criterion wrapper */
+    /** Value extractor. */
+    private final Extractor extractor;
+    /** Criterion wrapper. */
     private final Criterion.Wrapper criterionWrapper;
 
     @Override
@@ -74,15 +74,15 @@ public class ConstrainedExtractedValue extends ConstrainedNode {
      * Construct a constrained extracted value.
      *
      * @param parent parent
-     * @param valueExtractor value extractor
+     * @param extractor value extractor
      * @param constraints constraints
      */
     public ConstrainedExtractedValue(
-            ConstrainedNode parent, ValueExtractor valueExtractor, List<Constraint<?>> constraints) {
-        super(new Location(parent, valueExtractor.getName()), valueExtractor.getExtractedValueType(), constraints);
+            ConstrainedNode parent, Extractor extractor, List<Constraint<?>> constraints) {
+        super(new Location(parent, extractor.getName()), extractor.getExtractedValueType(), constraints);
         this.parent = parent;
-        this.valueExtractor = valueExtractor;
-        this.criterionWrapper = generateCriterionWrapper(valueExtractor);
+        this.extractor = extractor;
+        this.criterionWrapper = generateCriterionWrapper(extractor);
     }
 
     // #################### metadata ####################################################
@@ -90,97 +90,97 @@ public class ConstrainedExtractedValue extends ConstrainedNode {
     /**
      * Generate criterion wrapper.
      *
-     * @param valueExtractor value extractor
+     * @param extractor value extractor
      * @return criterion wrapper.
      */
-    private static Criterion.Wrapper generateCriterionWrapper(ValueExtractor valueExtractor) {
-        if (valueExtractor instanceof TExtractor) {
+    private static Criterion.Wrapper generateCriterionWrapper(Extractor extractor) {
+        if (extractor instanceof TExtractor) {
             return new Criterion.Wrapper() {
 
                 @Override
                 @SuppressWarnings("unchecked")
                 protected <T> TCriterion<?> wrap(TCriterion<T> criterion) {
-                    return target -> criterion.test(((TExtractor<Object, T>) valueExtractor).extract(target));
+                    return target -> criterion.test(((TExtractor<Object, T>) extractor).extract(target));
                 }
 
             };
-        } else if (valueExtractor instanceof BooleanExtractor) {
+        } else if (extractor instanceof BooleanExtractor) {
             return new Criterion.Wrapper() {
 
                 @Override
                 @SuppressWarnings("unchecked")
                 protected TCriterion<?> wrap(BooleanCriterion criterion) {
-                    return target -> criterion.test(((BooleanExtractor<Object>) valueExtractor).extract(target));
+                    return target -> criterion.test(((BooleanExtractor<Object>) extractor).extract(target));
                 }
 
             };
-        } else if (valueExtractor instanceof IntExtractor) {
+        } else if (extractor instanceof IntExtractor) {
             return new Criterion.Wrapper() {
 
                 @Override
                 @SuppressWarnings("unchecked")
                 protected TCriterion<?> wrap(IntCriterion criterion) {
-                    return target -> criterion.test(((IntExtractor<Object>) valueExtractor).extract(target));
+                    return target -> criterion.test(((IntExtractor<Object>) extractor).extract(target));
                 }
 
             };
-        } else if (valueExtractor instanceof LongExtractor) {
+        } else if (extractor instanceof LongExtractor) {
             return new Criterion.Wrapper() {
 
                 @Override
                 @SuppressWarnings("unchecked")
                 protected TCriterion<?> wrap(LongCriterion criterion) {
-                    return target -> criterion.test(((LongExtractor<Object>) valueExtractor).extract(target));
+                    return target -> criterion.test(((LongExtractor<Object>) extractor).extract(target));
                 }
 
             };
-        } else if (valueExtractor instanceof ByteExtractor) {
+        } else if (extractor instanceof ByteExtractor) {
             return new Criterion.Wrapper() {
 
                 @Override
                 @SuppressWarnings("unchecked")
                 protected TCriterion<?> wrap(ByteCriterion criterion) {
-                    return target -> criterion.test(((ByteExtractor<Object>) valueExtractor).extract(target));
+                    return target -> criterion.test(((ByteExtractor<Object>) extractor).extract(target));
                 }
 
             };
-        } else if (valueExtractor instanceof DoubleExtractor) {
+        } else if (extractor instanceof DoubleExtractor) {
             return new Criterion.Wrapper() {
 
                 @Override
                 @SuppressWarnings("unchecked")
                 protected TCriterion<?> wrap(DoubleCriterion criterion) {
-                    return target -> criterion.test(((DoubleExtractor<Object>) valueExtractor).extract(target));
+                    return target -> criterion.test(((DoubleExtractor<Object>) extractor).extract(target));
                 }
 
             };
-        } else if (valueExtractor instanceof CharExtractor) {
+        } else if (extractor instanceof CharExtractor) {
             return new Criterion.Wrapper() {
 
                 @Override
                 @SuppressWarnings("unchecked")
                 protected TCriterion<?> wrap(CharCriterion criterion) {
-                    return target -> criterion.test(((CharExtractor<Object>) valueExtractor).extract(target));
+                    return target -> criterion.test(((CharExtractor<Object>) extractor).extract(target));
                 }
 
             };
-        } else if (valueExtractor instanceof ShortExtractor) {
+        } else if (extractor instanceof ShortExtractor) {
             return new Criterion.Wrapper() {
 
                 @Override
                 @SuppressWarnings("unchecked")
                 protected TCriterion<?> wrap(ShortCriterion criterion) {
-                    return target -> criterion.test(((ShortExtractor<Object>) valueExtractor).extract(target));
+                    return target -> criterion.test(((ShortExtractor<Object>) extractor).extract(target));
                 }
 
             };
-        } else if (valueExtractor instanceof FloatExtractor) {
+        } else if (extractor instanceof FloatExtractor) {
             return new Criterion.Wrapper() {
 
                 @Override
                 @SuppressWarnings("unchecked")
                 protected TCriterion<?> wrap(FloatCriterion criterion) {
-                    return target -> criterion.test(((FloatExtractor<Object>) valueExtractor).extract(target));
+                    return target -> criterion.test(((FloatExtractor<Object>) extractor).extract(target));
                 }
 
             };

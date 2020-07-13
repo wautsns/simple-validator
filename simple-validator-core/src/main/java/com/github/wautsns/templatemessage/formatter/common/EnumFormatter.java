@@ -17,7 +17,6 @@ package com.github.wautsns.templatemessage.formatter.common;
 
 import com.github.wautsns.templatemessage.formatter.Formatter;
 import lombok.Data;
-import lombok.NonNull;
 import lombok.experimental.Accessors;
 
 import java.util.LinkedList;
@@ -34,12 +33,12 @@ import java.util.Locale;
 @SuppressWarnings("rawtypes")
 public class EnumFormatter implements Formatter<Enum> {
 
-    /** default {@code EnumFormatter} */
+    /** Default {@code EnumFormatter}. */
     public static final EnumFormatter DEFAULT = new EnumFormatter();
 
-    /** string format of {@code null}, default is {@code "null"} */
-    private @NonNull String stringFormatOfNull = "null";
-    /** whether to display declaring class(es), default is {@code false} */
+    /** String format of {@code null}, default is {@code "null"}. */
+    private String stringFormatOfNull = "null";
+    /** Whether to display declaring class(es), default is {@code false}. */
     private boolean displayDeclaringClass = false;
 
     @Override
@@ -48,17 +47,14 @@ public class EnumFormatter implements Formatter<Enum> {
         if (!displayDeclaringClass) { return value.name(); }
         Class<?> enumClass = value.getClass();
         Class<?> declaringClass = enumClass.getDeclaringClass();
-        if (declaringClass == null) {
-            return enumClass.getSimpleName() + "." + value.name();
-        } else {
-            LinkedList<String> declaringClasses = new LinkedList<>();
-            declaringClasses.add(enumClass.getSimpleName());
-            do {
-                declaringClasses.addFirst(declaringClass.getSimpleName());
-                declaringClass = declaringClass.getDeclaringClass();
-            } while (declaringClass != null);
-            return String.join("$", declaringClasses) + "." + value.name();
-        }
+        if (declaringClass == null) { return enumClass.getSimpleName() + "." + value.name(); }
+        LinkedList<String> declaringClasses = new LinkedList<>();
+        declaringClasses.add(enumClass.getSimpleName());
+        do {
+            declaringClasses.addFirst(declaringClass.getSimpleName());
+            declaringClass = declaringClass.getDeclaringClass();
+        } while (declaringClass != null);
+        return String.join("$", declaringClasses) + "." + value.name();
     }
 
 }

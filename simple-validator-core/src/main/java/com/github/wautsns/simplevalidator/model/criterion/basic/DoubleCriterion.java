@@ -50,7 +50,7 @@ public interface DoubleCriterion extends PrimitiveCriterion<Double> {
 
     // #################### instance ####################################################
 
-    /** the truth */
+    /** Truth. */
     DoubleCriterion TRUTH = any -> null;
 
 }

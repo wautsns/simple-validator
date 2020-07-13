@@ -32,7 +32,7 @@ import java.time.temporal.ChronoUnit;
  */
 public class LocalTimeUtility extends TimeLikeUtility<LocalTime> {
 
-    /** default {@code LocalTimeUtility} */
+    /** Default {@code LocalTimeUtility}. */
     public static final LocalTimeUtility DEFAULT = new LocalTimeUtility(null);
 
     public LocalTimeUtility(Formatter<LocalTime> valueFormatter) {

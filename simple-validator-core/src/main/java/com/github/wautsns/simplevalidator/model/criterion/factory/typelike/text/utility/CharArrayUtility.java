@@ -29,7 +29,7 @@ import java.lang.reflect.Type;
  */
 public class CharArrayUtility extends TextLikeUtility<char[]> {
 
-    /** default {@code CharArrayUtility} */
+    /** Default {@code CharArrayUtility}. */
     public static final CharArrayUtility DEFAULT = new CharArrayUtility(null);
 
     public CharArrayUtility(Formatter<? super char[]> formatter) {

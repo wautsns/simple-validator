@@ -21,10 +21,9 @@ import com.github.wautsns.simplevalidator.model.constraint.Constraint;
 import com.github.wautsns.simplevalidator.model.criterion.basic.Criterion;
 import com.github.wautsns.simplevalidator.model.node.extraction.value.ConstrainedExtractedValue;
 import com.github.wautsns.simplevalidator.util.common.CollectionUtils;
-import com.github.wautsns.simplevalidator.util.extractor.ValueExtractor;
+import com.github.wautsns.simplevalidator.util.extractor.Extractor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 import java.io.Serializable;
@@ -48,14 +47,14 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public abstract class ConstrainedNode {
 
-    /** location */
-    protected final @NonNull Location location;
-    /** type */
-    protected final @NonNull Type type;
-    /** constraints */
-    protected final @NonNull List<Constraint<?>> constraints;
-    /** extracted values */
-    protected final @NonNull List<ConstrainedExtractedValue> extractedValues;
+    /** Location. */
+    protected final Location location;
+    /** Type. */
+    protected final Type type;
+    /** Constraints. */
+    protected final List<Constraint<?>> constraints;
+    /** Extracted values. */
+    protected final List<ConstrainedExtractedValue> extractedValues;
 
     /**
      * Get parent.
@@ -83,7 +82,7 @@ public abstract class ConstrainedNode {
     public ConstrainedNode requireChild(String name) {
         ConstrainedNode child = getChild(name);
         if (child != null) { return child; }
-        throw new IllegalArgumentException(String.format("There is no child named [%s] in [%s]", name, location));
+        throw new ConstraintAnalysisException("There is no child named [%s] in [%s]", name, location);
     }
 
     /**
@@ -142,7 +141,7 @@ public abstract class ConstrainedNode {
      * @param annotations annotations
      */
     public ConstrainedNode(String name, Type type, Annotation[] annotations) {
-        this(new Location(name), type, Constraint.filterOutConstraints(annotations));
+        this(new Location(name), type, Constraint.filterConstraints(annotations));
     }
 
     /**
@@ -163,7 +162,7 @@ public abstract class ConstrainedNode {
      * @param annotatedType annotated type
      */
     public ConstrainedNode(Location location, AnnotatedType annotatedType) {
-        this(location, annotatedType.getType(), Constraint.filterOutConstraints(annotatedType));
+        this(location, annotatedType.getType(), Constraint.filterConstraints(annotatedType));
     }
 
     /**
@@ -184,13 +183,13 @@ public abstract class ConstrainedNode {
             this.extractedValues = Collections.emptyList();
         } else {
             this.constraints = CollectionUtils.unmodifiableList(constraintsAppliedToTheNode);
-            Map<ValueExtractor, List<Constraint<?>>> tmp = new HashMap<>();
+            Map<Extractor, List<Constraint<?>>> tmp = new HashMap<>();
             constraints.stream()
                     .filter(constraint -> !constraintsAppliedToTheNode.contains(constraint))
                     .forEach(constraint -> {
                         try {
-                            ValueExtractor valueExtractor = constraint.requireApplicableValueExtractor(type);
-                            tmp.computeIfAbsent(valueExtractor, i -> new LinkedList<>()).add(constraint);
+                            Extractor extractor = constraint.requireApplicableValueExtractor(type);
+                            tmp.computeIfAbsent(extractor, i -> new LinkedList<>()).add(constraint);
                         } catch (ConstraintAnalysisException e) {
                             throw new IllegalConstrainedNodeException(e, location, constraint.getOrigin());
                         }
@@ -203,13 +202,13 @@ public abstract class ConstrainedNode {
 
     // #################### utils #######################################################
 
-    /** node location */
+    /** Node location. */
     @EqualsAndHashCode(of = "names")
     public static class Location implements Serializable {
 
         private static final long serialVersionUID = 6613571499661573545L;
 
-        /** node names */
+        /** Node names. */
         private final LinkedList<String> names = new LinkedList<>();
 
         /**

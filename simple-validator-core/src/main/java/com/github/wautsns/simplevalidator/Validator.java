@@ -15,6 +15,7 @@
  */
 package com.github.wautsns.simplevalidator;
 
+import com.github.wautsns.simplevalidator.exception.ValidationException;
 import com.github.wautsns.simplevalidator.model.criterion.util.CriterionUtils;
 import com.github.wautsns.simplevalidator.model.failure.ValidationFailure;
 import lombok.experimental.UtilityClass;
@@ -26,7 +27,7 @@ import lombok.experimental.UtilityClass;
  * @since Mar 14, 2020
  */
 @UtilityClass
-@SuppressWarnings({"rawtypes", "unchecked"})
+@SuppressWarnings({ "rawtypes", "unchecked" })
 public class Validator {
 
     /**
@@ -36,7 +37,7 @@ public class Validator {
      * @return {@code true} if the value passes the test, otherwise {@code false}
      */
     public static boolean test(Object value) {
-        return (validate(value) == null);
+        return (validatePolitely(value) == null);
     }
 
     /**
@@ -48,29 +49,55 @@ public class Validator {
      * @return {@code true} if the value passes the test, otherwise {@code false}
      */
     public static <T> boolean test(Class<? super T> type, T value) {
-        return (validate(type, value) == null);
+        return (validatePolitely(type, value) == null);
     }
 
     /**
-     * Validate value.
+     * Validate value politely.
      *
      * @param value value
      * @return validation failure, or {@code null} if the value passes the validation
      */
-    public static ValidationFailure validate(Object value) {
-        return validate((Class) value.getClass(), value);
+    public static ValidationFailure validatePolitely(Object value) {
+        return validatePolitely((Class) value.getClass(), value);
     }
 
     /**
-     * Validate value with specified type.
+     * Validate value with specified type politely.
      *
      * @param type benchmark type of validation
      * @param value value
      * @param <T> type of value
      * @return validation failure, or {@code null} if the value passes the validation
      */
-    public static <T> ValidationFailure validate(Class<? super T> type, T value) {
+    public static <T> ValidationFailure validatePolitely(Class<? super T> type, T value) {
         return CriterionUtils.execute(CriterionUtils.forType(type), value);
+    }
+
+    /**
+     * Validate value rudely.
+     *
+     * @param value value
+     * @return validation failure, or {@code null} if the value passes the validation
+     */
+    public static <T> T validateRudely(T value) {
+        ValidationFailure failure = validatePolitely((Class) value.getClass(), value);
+        if (failure == null) { return value; }
+        throw new ValidationException(failure);
+    }
+
+    /**
+     * Validate value with specified type rudely.
+     *
+     * @param type benchmark type of validation
+     * @param value value
+     * @param <T> type of value
+     * @return validation failure, or {@code null} if the value passes the validation
+     */
+    public static <T> T validateRudely(Class<? super T> type, T value) {
+        ValidationFailure failure = validatePolitely(type, value);
+        if (failure == null) { return value; }
+        throw new ValidationException(failure);
     }
 
 }

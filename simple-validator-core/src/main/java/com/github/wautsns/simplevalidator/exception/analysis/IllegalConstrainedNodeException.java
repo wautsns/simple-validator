@@ -24,13 +24,25 @@ import java.lang.annotation.Annotation;
  */
 public class IllegalConstrainedNodeException extends ConstraintAnalysisException {
 
-    /** serialVersionUID */
     private static final long serialVersionUID = -8702277455494595168L;
 
+    /**
+     * Construct an illegalConstrainedNodeException.
+     *
+     * @param location location
+     * @param constraint constraint
+     */
     public IllegalConstrainedNodeException(ConstrainedNode.Location location, Annotation constraint) {
         this(null, location, constraint);
     }
 
+    /**
+     * Construct an illegalConstrainedNodeException.
+     *
+     * @param cause cause
+     * @param location location
+     * @param constraint constraint
+     */
     public IllegalConstrainedNodeException(Throwable cause, ConstrainedNode.Location location, Annotation constraint) {
         super(cause, "Constraint %s on %s is illegal.", constraint, location);
     }

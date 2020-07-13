@@ -321,10 +321,10 @@ public class ReflectionUtils {
                 .collect(Collectors.toCollection(LinkedList::new));
     }
 
-    /** getter prefixes */
-    private static final String[] GETTER_PREFIXES = {"get", "is"};
-    /** setter prefixes */
-    private static final String[] SETTER_PREFIXES = {"set"};
+    /** Getter prefixes. */
+    private static final String[] GETTER_PREFIXES = { "get", "is" };
+    /** Setter prefixes. */
+    private static final String[] SETTER_PREFIXES = { "set" };
 
     // #################### constructor #################################################
 
@@ -344,9 +344,9 @@ public class ReflectionUtils {
 
     // #################### internal utils ##############################################
 
-    /** empty class array */
+    /** Empty class array. */
     private static final Class<?>[] EMPTY_CLASS_ARRAY = new Class[0];
-    /** empty object array */
+    /** Empty object array. */
     private static final Object[] EMPTY_OBJECT_ARRAY = new Object[0];
 
 }

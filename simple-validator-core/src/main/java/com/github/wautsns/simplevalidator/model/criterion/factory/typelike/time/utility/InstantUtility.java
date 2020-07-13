@@ -31,7 +31,7 @@ import java.time.Instant;
  */
 public class InstantUtility extends TimeLikeUtility<Instant> {
 
-    /** default {@code InstantUtility} */
+    /** Default {@code InstantUtility}. */
     public static final InstantUtility DEFAULT = new InstantUtility(null);
 
     public InstantUtility(Formatter<Instant> valueFormatter) {

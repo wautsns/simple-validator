@@ -40,6 +40,12 @@ import java.util.Locale;
 @EqualsAndHashCode(callSuper = true)
 public class SpelTemplateMessageFormattingProcessor extends TemplateMessageFormatter.Processor {
 
+    /**
+     * Construct a spelTemplateMessageFormattingProcessor.
+     *
+     * @param leftDelimiter left delimiter
+     * @param rightDelimiter right delimiter
+     */
     public SpelTemplateMessageFormattingProcessor(String leftDelimiter, String rightDelimiter) {
         super(leftDelimiter, rightDelimiter);
     }
@@ -60,10 +66,10 @@ public class SpelTemplateMessageFormattingProcessor extends TemplateMessageForma
 
     // #################### internal utils ################################################
 
-    /** spel expression parser */
+    /** Spel expression parser. */
     private static final ExpressionParser SPEL_PARSER = new SpelExpressionParser();
 
-    /** property accessors */
+    /** Property accessors. */
     private static final PropertyAccessor[] PROPERTY_ACCESSORS = new PropertyAccessor[]{
             new VariableValueMapAccessor(), DataBindingPropertyAccessor.forReadOnlyAccess()
     };
@@ -71,8 +77,8 @@ public class SpelTemplateMessageFormattingProcessor extends TemplateMessageForma
     /** Variable value map accessor. */
     private static class VariableValueMapAccessor implements PropertyAccessor {
 
-        /** specific target classes */
-        private static final Class<?>[] SPECIFIC_TARGET_CLASSES = new Class[]{VariableValueMap.class};
+        /** Specific target classes. */
+        private static final Class<?>[] SPECIFIC_TARGET_CLASSES = new Class[]{ VariableValueMap.class };
 
         @Override
         public Class<?>[] getSpecificTargetClasses() {

@@ -23,17 +23,34 @@ package com.github.wautsns.simplevalidator.exception.analysis;
  */
 public class ConstraintAnalysisException extends RuntimeException {
 
-    /** serialVersionUID */
     private static final long serialVersionUID = -643722216957275514L;
 
+    /**
+     * Construct a constraintAnalysisException.
+     *
+     * @param cause cause
+     * @param messageFormat message format
+     * @param args message format args
+     */
     public ConstraintAnalysisException(Throwable cause, String messageFormat, Object... args) {
         super(String.format(messageFormat, args), cause);
     }
 
+    /**
+     * Construct a constraintAnalysisException.
+     *
+     * @param messageFormat message format
+     * @param args message format args
+     */
     public ConstraintAnalysisException(String messageFormat, Object... args) {
         this(null, messageFormat, args);
     }
 
+    /**
+     * Construct a constraintAnalysisException.
+     *
+     * @param cause cause
+     */
     public ConstraintAnalysisException(Throwable cause) {
         super(cause);
     }

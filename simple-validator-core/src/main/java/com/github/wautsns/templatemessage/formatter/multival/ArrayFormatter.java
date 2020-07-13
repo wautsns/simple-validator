@@ -18,7 +18,6 @@ package com.github.wautsns.templatemessage.formatter.multival;
 import com.github.wautsns.templatemessage.formatter.Formatter;
 import com.github.wautsns.templatemessage.formatter.common.ObjectFormatter;
 import lombok.Data;
-import lombok.NonNull;
 import lombok.experimental.Accessors;
 
 import java.lang.reflect.Array;
@@ -36,25 +35,25 @@ import java.util.Locale;
 @Accessors(chain = true)
 public class ArrayFormatter<A, C> implements Formatter<A> {
 
-    /** default {@code ArrayFormatter} */
+    /** Default {@code ArrayFormatter}. */
     public static final ArrayFormatter<Object, Object> DEFAULT = new ArrayFormatter<>();
 
-    /** string format of {@code null}, default is {@code "null"} */
-    private @NonNull String stringFormatOfNull = "null";
-    /** string format of empty array, default is {@code "[]"} */
-    private @NonNull String stringFormatOfEmptyArray = "[]";
-    /** prefix of string format, default is {@code "["} */
-    private @NonNull String prefix = "[";
-    /** suffix of string format, default is {@code "]"} */
-    private @NonNull String suffix = "]";
-    /** prefix of string format of component, default is {@code ""} */
-    private @NonNull String componentPrefix = "";
-    /** suffix of string format of component, default is {@code ""} */
-    private @NonNull String componentSuffix = "";
-    /** delimiter between string format of component, default is {@code ", "} */
-    private @NonNull String delimiter = ", ";
-    /** formatter for component, default is {@link ObjectFormatter#DEFAULT} */
-    private @NonNull Formatter<? super C> componentFormatter = ObjectFormatter.DEFAULT;
+    /** String format of {@code null}, default is {@code "null"}. */
+    private String stringFormatOfNull = "null";
+    /** String format of empty array, default is {@code "[]"}. */
+    private String stringFormatOfEmptyArray = "[]";
+    /** Prefix of string format, default is {@code "["}. */
+    private String prefix = "[";
+    /** Suffix of string format, default is {@code "]"}. */
+    private String suffix = "]";
+    /** Prefix of string format of component, default is {@code ""}. */
+    private String componentPrefix = "";
+    /** Suffix of string format of component, default is {@code ""}. */
+    private String componentSuffix = "";
+    /** Delimiter between string format of component, default is {@code ", "}. */
+    private String delimiter = ", ";
+    /** Formatter for component, default is {@link ObjectFormatter#DEFAULT}. */
+    private Formatter<? super C> componentFormatter = ObjectFormatter.DEFAULT;
 
     @Override
     @SuppressWarnings("unchecked")

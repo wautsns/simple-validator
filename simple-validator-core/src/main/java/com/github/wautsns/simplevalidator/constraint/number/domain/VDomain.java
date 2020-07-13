@@ -18,7 +18,7 @@ import com.github.wautsns.simplevalidator.model.criterion.factory.CriterionFacto
 import com.github.wautsns.simplevalidator.model.node.extraction.value.optional.DoubleExtractorForOptionalDouble;
 import com.github.wautsns.simplevalidator.model.node.extraction.value.optional.IntExtractorForOptionalInt;
 import com.github.wautsns.simplevalidator.model.node.extraction.value.optional.LongExtractorForOptionalLong;
-import com.github.wautsns.simplevalidator.util.extractor.ValueExtractor;
+import com.github.wautsns.simplevalidator.util.extractor.Extractor;
 import com.github.wautsns.templatemessage.formatter.multival.ArrayFormatter;
 import com.github.wautsns.templatemessage.variable.Variable;
 
@@ -42,7 +42,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  */
 @Documented
 @Retention(RUNTIME)
-@Target({FIELD, METHOD, PARAMETER, ANNOTATION_TYPE, TYPE_USE})
+@Target({ FIELD, METHOD, PARAMETER, ANNOTATION_TYPE, TYPE_USE })
 @AConstraint
 public @interface VDomain {
 
@@ -64,7 +64,7 @@ public @interface VDomain {
 
     // #################### extra #######################################################
 
-    /** built-in criterion factories */
+    /** Built-in criterion factories. */
     List<CriterionFactory<VDomain, ?, ?>> CRITERION_FACTORIES = new LinkedList<>(Arrays.asList(
             VDomainComparableNumberCriterionFactory.INSTANCE,
             VDomainNumericTextCriterionFactory.INSTANCE,
@@ -76,8 +76,8 @@ public @interface VDomain {
             VDomainFloatCriterionFactory.INSTANCE
     ));
 
-    /** built-in value extractors */
-    List<ValueExtractor> VALUE_EXTRACTORS = new LinkedList<>(Arrays.asList(
+    /** Built-in value extractors. */
+    List<Extractor> VALUE_EXTRACTORS = new LinkedList<>(Arrays.asList(
             IntExtractorForOptionalInt.INSTANCE,
             LongExtractorForOptionalLong.INSTANCE,
             DoubleExtractorForOptionalDouble.INSTANCE
@@ -85,7 +85,7 @@ public @interface VDomain {
 
     // ==================== variables ===================================================
 
-    /** variables: {@linkplain #value() domain} */
+    /** Variables: {@linkplain #value() domain}. */
     @AVariableAlias("value")
     Variable<String[]> DOMAIN = new Variable<>(
             "domain", new ArrayFormatter<>().setPrefix("").setSuffix("").setDelimiter("∪"));

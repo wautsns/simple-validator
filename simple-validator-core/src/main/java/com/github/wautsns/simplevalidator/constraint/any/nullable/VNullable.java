@@ -38,13 +38,13 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  */
 @Documented
 @Retention(RUNTIME)
-@Target({FIELD, METHOD, PARAMETER, ANNOTATION_TYPE, TYPE_USE})
+@Target({ FIELD, METHOD, PARAMETER, ANNOTATION_TYPE, TYPE_USE })
 @AConstraint
 public @interface VNullable {
 
     // #################### extra #######################################################
 
-    /** built-in criterion factories */
+    /** Built-in criterion factories. */
     List<CriterionFactory<VNullable, ?, ?>> CRITERION_FACTORIES = new LinkedList<>(Collections.singletonList(
             VNullableNonPrimitiveCriterionFactory.INSTANCE
     ));

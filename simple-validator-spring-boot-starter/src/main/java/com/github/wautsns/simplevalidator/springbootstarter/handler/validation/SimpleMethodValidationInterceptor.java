@@ -30,12 +30,15 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
+ * Simple method validation interceptor.
+ *
  * @author wautsns
  * @see MethodValidationInterceptor
  * @since Mar 14, 2020
  */
 public class SimpleMethodValidationInterceptor implements MethodInterceptor {
 
+    /** Cache. */
     private final Map<Method, Criterion[]> cache = new ConcurrentHashMap<>(128);
 
     @Override
@@ -54,6 +57,12 @@ public class SimpleMethodValidationInterceptor implements MethodInterceptor {
         return invocation.proceed();
     }
 
+    /**
+     * Initialize parameters criterion.
+     *
+     * @param method method
+     * @return parameters criterion array
+     */
     private Criterion[] initParametersCriterion(Method method) {
         return Arrays.stream(method.getParameters())
                 .map(ConstrainedParameter::new)
@@ -61,6 +70,12 @@ public class SimpleMethodValidationInterceptor implements MethodInterceptor {
                 .toArray(Criterion[]::new);
     }
 
+    /**
+     * Copied from {@code MethodValidationInterceptor#isFactoryBeanMetadataMethod(Method)}.
+     *
+     * @param method method
+     * @return {@code true} if the method is factory bean metadata method, otherwise {@code false}
+     */
     private boolean isFactoryBeanMetadataMethod(Method method) {
         Class<?> clazz = method.getDeclaringClass();
 

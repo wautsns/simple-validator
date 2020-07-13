@@ -38,7 +38,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  */
 @Documented
 @Retention(RUNTIME)
-@Target({FIELD, METHOD, PARAMETER, ANNOTATION_TYPE, TYPE_USE})
+@Target({ FIELD, METHOD, PARAMETER, ANNOTATION_TYPE, TYPE_USE })
 @AConstraint
 public @interface VNotNull {
 
@@ -58,7 +58,7 @@ public @interface VNotNull {
 
     // #################### extra #######################################################
 
-    /** built-in criterion factories */
+    /** Built-in criterion factories. */
     List<CriterionFactory<VNotNull, ?, ?>> CRITERION_FACTORIES = new LinkedList<>(Collections.singletonList(
             VNotNullNonPrimitiveCriterionFactory.INSTANCE
     ));

@@ -33,6 +33,12 @@ import java.util.Locale;
 @EqualsAndHashCode(callSuper = true)
 public class VariableTemplateMessageFormattingProcessor extends TemplateMessageFormatter.Processor {
 
+    /**
+     * Construct a variableTemplateMessageFormattingProcessor.
+     *
+     * @param leftDelimiter left delimiter
+     * @param rightDelimiter right delimiter
+     */
     public VariableTemplateMessageFormattingProcessor(String leftDelimiter, String rightDelimiter) {
         super(leftDelimiter, rightDelimiter);
     }

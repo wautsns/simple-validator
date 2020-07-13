@@ -30,7 +30,7 @@ import java.util.List;
  */
 public abstract class Criteria<C extends Criterion> implements Criterion {
 
-    /** criterionList */
+    /** Criterion list. */
     protected final List<C> criterionList = new LinkedList<>();
 
     /**

@@ -12,13 +12,36 @@
  */
 package com.github.wautsns.simplevalidator.springbootstarter;
 
+import com.github.wautsns.simplevalidator.SimpleValidatorConfiguration;
+import com.github.wautsns.simplevalidator.springbootstarter.properties.SimpleValidatorProperties;
+import lombok.RequiredArgsConstructor;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.i18n.LocaleContextHolder;
+
+import javax.annotation.PostConstruct;
 
 /**
+ * Simple validator auto-configuration.
+ *
  * @author wautsns
  * @since Mar 14, 2020
  */
+@RequiredArgsConstructor
 @Configuration
 @ComponentScan("com.github.wautsns.simplevalidator.springbootstarter.handler")
-public class SimpleValidatorAutoConfiguration {}
+@EnableConfigurationProperties(SimpleValidatorProperties.class)
+public class SimpleValidatorAutoConfiguration {
+
+    /** Simple validator properties. */
+    private final SimpleValidatorProperties properties;
+
+    @PostConstruct
+    public void postConstruct() {
+        SimpleValidatorConfiguration.ForValidationFailure.FORMATTER
+                .loadMessageResources(properties.getMessageResources());
+        SimpleValidatorConfiguration.ForValidationFailure.setLocaleSupplier(LocaleContextHolder::getLocale);
+    }
+
+}

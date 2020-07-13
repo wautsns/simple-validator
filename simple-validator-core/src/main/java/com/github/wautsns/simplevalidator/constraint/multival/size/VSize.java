@@ -39,7 +39,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  */
 @Documented
 @Retention(RUNTIME)
-@Target({FIELD, METHOD, PARAMETER, ANNOTATION_TYPE, TYPE_USE})
+@Target({ FIELD, METHOD, PARAMETER, ANNOTATION_TYPE, TYPE_USE })
 @AConstraint
 public @interface VSize {
 
@@ -63,7 +63,7 @@ public @interface VSize {
 
     // #################### extra #######################################################
 
-    /** built-in criterion factories */
+    /** Built-in criterion factories. */
     List<CriterionFactory<VSize, ?, ?>> CRITERION_FACTORIES = new LinkedList<>(Arrays.asList(
             VSizeCollectionCriterionFactory.INSTANCE,
             VSizeCharSequenceCriterionFactory.INSTANCE,
@@ -73,9 +73,9 @@ public @interface VSize {
 
     // ==================== variables ===================================================
 
-    /** variables: {@linkplain #min()} min} */
+    /** Variables: {@linkplain #min()} min}. */
     Variable<Integer> MIN = new Variable<>("min");
-    /** variables: {@linkplain #max() max} */
+    /** Variables: {@linkplain #max() max}. */
     Variable<Integer> MAX = new Variable<>("max");
 
 }

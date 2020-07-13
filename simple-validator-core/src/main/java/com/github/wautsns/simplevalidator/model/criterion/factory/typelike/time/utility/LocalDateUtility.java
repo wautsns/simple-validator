@@ -31,7 +31,7 @@ import java.time.LocalDate;
  */
 public class LocalDateUtility extends TimeLikeUtility<LocalDate> {
 
-    /** default {@code LocalDateUtility} */
+    /** Default {@code LocalDateUtility}. */
     public static final LocalDateUtility DEFAULT = new LocalDateUtility(null);
 
     public LocalDateUtility(Formatter<LocalDate> valueFormatter) {

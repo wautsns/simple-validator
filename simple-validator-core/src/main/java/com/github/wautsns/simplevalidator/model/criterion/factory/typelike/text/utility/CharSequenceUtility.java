@@ -29,7 +29,7 @@ import java.lang.reflect.Type;
  */
 public class CharSequenceUtility extends TextLikeUtility<CharSequence> {
 
-    /** default {@code CharSequenceUtility} */
+    /** Default {@code CharSequenceUtility}. */
     public static final CharSequenceUtility DEFAULT = new CharSequenceUtility(null);
 
     public CharSequenceUtility(Formatter<? super CharSequence> formatter) {

@@ -51,13 +51,13 @@ import java.util.stream.Collectors;
  */
 public class DynamicCombinedConstraintMetadata<A extends Annotation, C extends Annotation> {
 
-    /** target constraint type */
+    /** Target constraint type. */
     private final Class<A> targetConstraintType;
-    /** ACombine */
+    /** ACombine. */
     private final ACombine aCombine;
-    /** fixed attribute value map */
+    /** Fixed attribute value map. */
     private final Map<String, Object> fixedAttributeValueMap;
-    /** dynamic attribute value producer map */
+    /** Dynamic attribute value producer map. */
     private final Map<String, Function<Constraint<A>, Object>> dynamicAttributeValueProducerMap;
 
     /**
@@ -243,21 +243,21 @@ public class DynamicCombinedConstraintMetadata<A extends Annotation, C extends A
         };
     }
 
-    /** spel parser */
+    /** Spel parser. */
     private static final ExpressionParser SPEL_PARSER = new SpelExpressionParser();
 
-    /** property accessors */
+    /** Property accessors. */
     private static final PropertyAccessor[] PROPERTY_ACCESSORS = new PropertyAccessor[]{
-            MapAccessor.INSTANCE, DataBindingPropertyAccessor.forReadOnlyAccess()};
+            MapAccessor.INSTANCE, DataBindingPropertyAccessor.forReadOnlyAccess() };
 
-    /** map accessor */
+    /** Map accessor. */
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
     private static class MapAccessor implements PropertyAccessor {
 
         public static final MapAccessor INSTANCE = new MapAccessor();
 
-        /** specific target classes */
-        private static final Class<?>[] SPECIFIC_TARGET_CLASSES = new Class[]{Map.class};
+        /** Specific target classes. */
+        private static final Class<?>[] SPECIFIC_TARGET_CLASSES = new Class[]{ Map.class };
 
         @Override
         public Class<?>[] getSpecificTargetClasses() {

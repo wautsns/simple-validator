@@ -18,7 +18,6 @@ package com.github.wautsns.templatemessage.formatter.multival;
 import com.github.wautsns.templatemessage.formatter.Formatter;
 import com.github.wautsns.templatemessage.formatter.common.ObjectFormatter;
 import lombok.Data;
-import lombok.NonNull;
 import lombok.experimental.Accessors;
 
 import java.util.Locale;
@@ -36,33 +35,33 @@ import java.util.Map;
 @Accessors(chain = true)
 public class MapFormatter<K, V> implements Formatter<Map<K, V>> {
 
-    /** the default {@code MapFormatter} */
+    /** Default {@code MapFormatter}. */
     public static final Formatter<Map<Object, Object>> DEFAULT = new MapFormatter<>();
 
-    /** string format of {@code null}, default is {@code "null"} */
-    private @NonNull String stringFormatOfNull = "null";
-    /** string format of empty array, default is {@code "[]"} */
-    private @NonNull String stringFormatOfEmptyMap = "[]";
-    /** prefix of string format, default is {@code "["} */
-    private @NonNull String prefix = "[";
-    /** suffix of string format, default is {@code "]"} */
-    private @NonNull String suffix = "]";
-    /** prefix of string format of key, default is {@code ""} */
-    private @NonNull String keyPrefix = "";
-    /** suffix of string format of key, default is {@code ""} */
-    private @NonNull String keySuffix = "";
-    /** prefix of string format of value, default is {@code ""} */
-    private @NonNull String valuePrefix = "";
-    /** suffix of string format of value, default is {@code ""} */
-    private @NonNull String valueSuffix = "";
-    /** delimiter between string format of key and string format of value, default is {@code "="} */
-    private @NonNull String keyValueDelimiter = "=";
-    /** delimiter of string format of entry, default is {@code ", "} */
-    private @NonNull String delimiter = ", ";
-    /** formatter for key, default is {@link ObjectFormatter#DEFAULT} */
-    private @NonNull Formatter<? super K> keyFormatter = ObjectFormatter.DEFAULT;
-    /** formatter for value, default is {@link ObjectFormatter#DEFAULT} */
-    private @NonNull Formatter<? super V> valueFormatter = ObjectFormatter.DEFAULT;
+    /** String format of {@code null}, default is {@code "null"}. */
+    private String stringFormatOfNull = "null";
+    /** String format of empty array, default is {@code "[]"}. */
+    private String stringFormatOfEmptyMap = "[]";
+    /** Prefix of string format, default is {@code "["}. */
+    private String prefix = "[";
+    /** Suffix of string format, default is {@code "]"}. */
+    private String suffix = "]";
+    /** Prefix of string format of key, default is {@code ""}. */
+    private String keyPrefix = "";
+    /** Suffix of string format of key, default is {@code ""}. */
+    private String keySuffix = "";
+    /** Prefix of string format of value, default is {@code ""}. */
+    private String valuePrefix = "";
+    /** Suffix of string format of value, default is {@code ""}. */
+    private String valueSuffix = "";
+    /** Delimiter between string format of key and string format of value, default is {@code "="}. */
+    private String keyValueDelimiter = "=";
+    /** Delimiter of string format of entry, default is {@code ", "}. */
+    private String delimiter = ", ";
+    /** Formatter for key, default is {@link ObjectFormatter#DEFAULT}. */
+    private Formatter<? super K> keyFormatter = ObjectFormatter.DEFAULT;
+    /** Formatter for value, default is {@link ObjectFormatter#DEFAULT}. */
+    private Formatter<? super V> valueFormatter = ObjectFormatter.DEFAULT;
 
     @Override
     public String format(Map<K, V> value, Locale locale) {

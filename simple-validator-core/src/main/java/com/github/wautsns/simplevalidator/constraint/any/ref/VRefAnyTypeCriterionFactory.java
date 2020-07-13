@@ -66,9 +66,8 @@ public class VRefAnyTypeCriterionFactory extends AnyTypeCriterionFactory<VRef> {
      * Initialize a <strong>temporary</strong> constrained node.
      *
      * <p>The temporary constrained node and original constrained node have the same type, parent and criterion
-     * wrapper.
-     * And the temporary constrained node and reference constrained node have the same constraints, extracted values and
-     * children.
+     * wrapper. And the temporary constrained node and reference constrained node have the same constraints, extracted
+     * values and children.
      *
      * @param node original constrained node
      * @param ref reference constrained node

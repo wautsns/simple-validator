@@ -18,13 +18,13 @@ package com.github.wautsns.simplevalidator.util.extractor;
 import java.lang.reflect.Type;
 
 /**
- * The {@code long} value extractor.
+ * Extractor for extracting {@code long} value.
  *
  * @param <T> type of target value
  * @author wautsns
  * @since Mar 20, 2020
  */
-public interface LongExtractor<T> extends ValueExtractor {
+public interface LongExtractor<T> extends Extractor {
 
     @Override
     default Type getExtractedValueType() {
@@ -32,7 +32,7 @@ public interface LongExtractor<T> extends ValueExtractor {
     }
 
     /**
-     * Extract {@code long} value from the target value.
+     * Extract {@code long} value from the target.
      *
      * @param target target value
      * @return extracted {@code long} value

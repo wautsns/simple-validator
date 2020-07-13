@@ -25,7 +25,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  *
  * <p>Used to specify attribute in {@linkplain ACombine @ACombine}.
  *
- * <p>Value priority: {@linkplain #spel() spel}, {@linkplain #values() value}, {@linkplain #ref() ref}.
+ * <p>Priority: {@linkplain #spel() spel}, {@linkplain #values() value}, {@linkplain #ref() ref}.
  *
  * @author wautsns
  * @see ACombine
@@ -58,7 +58,7 @@ public @interface AAttribute {
      *
      * @return values(in string format)
      */
-    String[] values() default {LOOK_REF};
+    String[] values() default { LOOK_REF };
 
     /**
      * Value ref, default is {@code ""}.
@@ -71,13 +71,13 @@ public @interface AAttribute {
 
     // #################### special values ##############################################
 
-    /** look value, is used for {@link #spel()} */
+    /** Look value, is used for {@link #spel()}. */
     String LOOK_VALUE = "LOOK_VALUE##AAttribute.constraint.simple-validator.wautsns.github.com";
 
-    /** look ref, is used for {@link #values()} */
+    /** Look ref, is used for {@link #values()}. */
     String LOOK_REF = "LOOK_REF#AAttribute.constraint.simple-validator.wautsns.github.com";
 
-    /** use default value, is used for {@link #values()} */
+    /** Use default value, is used for {@link #values()}. */
     String DEFAULT = "DEFAULT#AAttribute.constraint.simple-validator.wautsns.github.com";
 
 }

@@ -31,7 +31,7 @@ import java.util.Calendar;
  */
 public class CalendarUtility extends TimeLikeUtility<Calendar> {
 
-    /** default {@code CalendarUtility} */
+    /** Default {@code CalendarUtility}. */
     public static final CalendarUtility DEFAULT = new CalendarUtility(null);
 
     public CalendarUtility(Formatter<Calendar> valueFormatter) {

@@ -18,7 +18,6 @@ package com.github.wautsns.templatemessage.formatter.time;
 import com.github.wautsns.templatemessage.formatter.Formatter;
 import com.github.wautsns.templatemessage.formatter.time.util.TimeFormatterUtils;
 import lombok.Data;
-import lombok.NonNull;
 import lombok.experimental.Accessors;
 
 import java.time.format.FormatStyle;
@@ -35,22 +34,22 @@ import java.util.Locale;
 @Accessors(chain = true)
 public class DateFormatter implements Formatter<Date> {
 
-    /** default {@code DateFormatter} */
+    /** Default {@code DateFormatter}. */
     public static final DateFormatter DEFAULT = new DateFormatter();
 
-    /** string format of {@code null}, default is {@code "null"} */
-    private @NonNull String stringWhenNull = "null";
-    /** locale specified when formatting, default is {@code null} */
-    private Locale localeOfStringFormat = null;
-    /** date format style, default is {@link FormatStyle#MEDIUM}, not display if {@code null} */
+    /** String format of {@code null}, default is {@code "null"}. */
+    private String stringWhenNull = "null";
+    /** Locale specified, default is {@code null}. */
+    private Locale specifiedLocale = null;
+    /** Date format style, default is {@link FormatStyle#MEDIUM}, not display if {@code null}. */
     private FormatStyle dateFormatStyle = FormatStyle.MEDIUM;
-    /** time format style, default is {@link FormatStyle#MEDIUM}, not display if {@code null} */
+    /** Time format style, default is {@link FormatStyle#MEDIUM}, not display if {@code null}. */
     private FormatStyle timeFormatStyle = FormatStyle.MEDIUM;
 
     @Override
     public String format(Date value, Locale locale) {
         if (value == null) { return stringWhenNull; }
-        if (localeOfStringFormat != null) { locale = localeOfStringFormat; }
+        if (specifiedLocale != null) { locale = specifiedLocale; }
         return TimeFormatterUtils.DateFormats
                 .forDateAndTime(dateFormatStyle, timeFormatStyle, locale)
                 .format(value);

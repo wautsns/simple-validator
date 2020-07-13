@@ -36,16 +36,16 @@ import java.util.List;
 public abstract class TextLikeCriterionFactory<A extends Annotation>
         extends TypeLikeCriterionFactory<A, TextLikeUtility<?>> {
 
-    /** default text like utility */
+    /** Default text like utility. */
     public static final List<TextLikeUtility<?>> DEFAULT_UTILITIES = new LinkedList<>(Arrays.asList(
             CharSequenceUtility.DEFAULT,
             CharArrayUtility.DEFAULT,
             CharacterArrayUtility.DEFAULT));
 
     @Override
-    @SuppressWarnings({"rawtypes", "unchecked"})
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     public void process(ConstrainedNode node, A constraint, TCriteria<Object> wip) {
-        TextLikeUtility utility = getTypeLikeUtility(node.getType());
+        TextLikeUtility utility = requireTypeLikeUtility(node.getType());
         process(utility, node, constraint, wip);
     }
 

@@ -18,7 +18,6 @@ package com.github.wautsns.templatemessage.formatter.multival;
 import com.github.wautsns.templatemessage.formatter.Formatter;
 import com.github.wautsns.templatemessage.formatter.common.ObjectFormatter;
 import lombok.Data;
-import lombok.NonNull;
 import lombok.experimental.Accessors;
 
 import java.util.Iterator;
@@ -35,25 +34,25 @@ import java.util.Locale;
 @Accessors(chain = true)
 public class IterableFormatter<E> implements Formatter<Iterable<E>> {
 
-    /** the default {@code IterableFormatter}, e.g. [1, 2, 3] */
+    /** Default {@code IterableFormatter}, e.g. [1, 2, 3]. */
     public static final Formatter<Iterable<Object>> DEFAULT = new IterableFormatter<>();
 
-    /** string format of {@code null}, default is {@code "null"} */
-    private @NonNull String stringFormatOfNull = "null";
-    /** string format of empty array, default is {@code "[]"} */
-    private @NonNull String stringFormatOfEmptyIterable = "[]";
-    /** prefix of string format, default is {@code "["} */
-    private @NonNull String prefix = "[";
-    /** suffix of string format, default is {@code "]"} */
-    private @NonNull String suffix = "]";
-    /** prefix of string format of element, default is {@code ""} */
-    private @NonNull String elementPrefix = "";
-    /** suffix of string format of element, default is {@code ""} */
-    private @NonNull String elementSuffix = "";
-    /** delimiter between string format of element, default is {@code ", "} */
-    private @NonNull String elementDelimiter = ", ";
-    /** formatter for iterable element, default is {@link ObjectFormatter#DEFAULT} */
-    private @NonNull Formatter<? super E> elementFormatter = ObjectFormatter.DEFAULT;
+    /** String format of {@code null}, default is {@code "null"}. */
+    private String stringFormatOfNull = "null";
+    /** String format of empty array, default is {@code "[]"}. */
+    private String stringFormatOfEmptyIterable = "[]";
+    /** Prefix of string format, default is {@code "["}. */
+    private String prefix = "[";
+    /** Suffix of string format, default is {@code "]"}. */
+    private String suffix = "]";
+    /** Prefix of string format of element, default is {@code ""}. */
+    private String elementPrefix = "";
+    /** Suffix of string format of element, default is {@code ""}. */
+    private String elementSuffix = "";
+    /** Delimiter between string format of element, default is {@code ", "}. */
+    private String elementDelimiter = ", ";
+    /** Formatter for iterable element, default is {@link ObjectFormatter#DEFAULT}. */
+    private Formatter<? super E> elementFormatter = ObjectFormatter.DEFAULT;
 
     @Override
     public String format(Iterable<E> value, Locale locale) {

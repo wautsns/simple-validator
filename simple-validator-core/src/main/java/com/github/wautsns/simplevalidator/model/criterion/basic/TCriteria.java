@@ -26,7 +26,7 @@ import com.github.wautsns.simplevalidator.model.failure.ValidationFailure;
  */
 public class TCriteria<T> extends Criteria<TCriterion<? super T>> implements TCriterion<T> {
 
-    /** whether the value can be {@code null} */
+    /** Whether the value can be {@code null}. */
     private boolean nullable = false;
 
     /**

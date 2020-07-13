@@ -13,30 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.wautsns.simplevalidator.util.extractor;
+package com.github.wautsns.simplevalidator.springbootstarter.properties;
 
-import java.lang.reflect.Type;
+import lombok.Data;
+import lombok.experimental.Accessors;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
- * Extractor for extracting {@code double} value.
+ * Simple validator properties.
  *
- * @param <T> type of target value
  * @author wautsns
- * @since Mar 20, 2020
+ * @since Jul 13, 2020
  */
-public interface DoubleExtractor<T> extends Extractor {
+@Data
+@Accessors(chain = true)
+@ConfigurationProperties(prefix = "simple-validator")
+public class SimpleValidatorProperties {
 
-    @Override
-    default Type getExtractedValueType() {
-        return double.class;
-    }
-
-    /**
-     * Extract {@code double} value from the target.
-     *
-     * @param target target value
-     * @return extracted {@code double} value
-     */
-    double extract(T target);
+    /** Message resource. */
+    private String[] messageResources;
 
 }

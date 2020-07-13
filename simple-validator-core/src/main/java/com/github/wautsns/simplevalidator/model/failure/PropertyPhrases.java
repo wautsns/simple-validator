@@ -26,9 +26,9 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class PropertyPhrases {
 
-    /** no restrictions */
+    /** No restrictions. */
     public static final String NO_RESTRICTIONS = wrap("NO_RESTRICTIONS");
-    /** no optional value */
+    /** No optional value. */
     public static final String NO_OPTIONAL_VALUE = wrap("NO_OPTIONAL_VALUE");
 
     /**

@@ -19,7 +19,6 @@ import com.github.wautsns.templatemessage.formatter.Formatter;
 import com.github.wautsns.templatemessage.formatter.common.ObjectFormatter;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 
@@ -36,9 +35,14 @@ import lombok.experimental.Accessors;
 @RequiredArgsConstructor
 public class Variable<T> {
 
-    /** variable name */
-    private final @NonNull String name;
-    /** formatter for variable value, default is {@link ObjectFormatter#DEFAULT} */
-    private @NonNull Formatter<? super T> formatter = ObjectFormatter.DEFAULT;
+    /** Variable name. */
+    private final String name;
+    /** Formatter for variable value, default is {@link ObjectFormatter#DEFAULT}. */
+    private Formatter<? super T> formatter = ObjectFormatter.DEFAULT;
+
+    @Override
+    public String toString() {
+        return name;
+    }
 
 }

@@ -18,12 +18,25 @@ package com.github.wautsns.simplevalidator.util.extractor;
 import java.lang.reflect.Type;
 
 /**
- * Value extractor.
+ * Extractor for extracting value from target value.
+ *
+ * <ul>
+ * implementations:
+ * <li>{@code boolean}: {@link BooleanExtractor}</li>
+ * <li>{@code byte}: {@link ByteExtractor}</li>
+ * <li>{@code char}: {@link CharExtractor}</li>
+ * <li>{@code double}: {@link DoubleExtractor}</li>
+ * <li>{@code float}: {@link FloatExtractor}</li>
+ * <li>{@code int}: {@link IntExtractor}</li>
+ * <li>{@code long}: {@link LongExtractor}</li>
+ * <li>{@code short}: {@link ShortExtractor}</li>
+ * <li>{@code non-primitive}: {@link TExtractor}</li>
+ * </ul>
  *
  * @author wautsns
  * @since Mar 21, 2020
  */
-public interface ValueExtractor {
+public interface Extractor {
 
     /**
      * Return whether the extractor applies to the specified type.

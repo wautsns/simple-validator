@@ -15,6 +15,8 @@
  */
 package com.github.wautsns.simplevalidator.constraint;
 
+import com.github.wautsns.simplevalidator.model.constraint.ConstraintMetadata;
+
 import java.lang.annotation.Annotation;
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
@@ -38,11 +40,7 @@ public @interface ACombine {
      */
     Class<? extends Annotation> constraint();
 
-    /**
-     * Message(template).
-     *
-     * @return message(template)
-     */
+    /** @see ConstraintMetadata.Attributes#MESSAGE */
     String message() default "";
 
     /**

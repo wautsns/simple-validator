@@ -42,7 +42,7 @@ public class VNotNullNonPrimitiveCriterionFactory extends NonPrimitiveCriterionF
 
     // #################### criterion ###################################################
 
-    /** criterion for not-null */
+    /** Criterion for not-null. */
     protected static final TCriterion<Object> CRITERION =
             value -> (value == null) ? new ValidationFailure(null) : null;
 

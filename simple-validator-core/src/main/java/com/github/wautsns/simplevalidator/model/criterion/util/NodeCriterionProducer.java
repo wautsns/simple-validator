@@ -36,12 +36,12 @@ import java.util.TreeMap;
  */
 class NodeCriterionProducer {
 
-    /** root */
+    /** Root. */
     private final ConstrainedNode root;
-    /** disordered constrained node -> criterion processor map */
+    /** Disordered constrained node -> criterion processor map. */
     private final Map<ConstrainedNode, List<Constraint<?>.CriterionProcessor>> disorderedNodeCriterionProcessorMap =
             new LinkedHashMap<>();
-    /** ordered constrained node -> criterion processor map */
+    /** Ordered constrained node -> criterion processor map. */
     private final Map<Integer, LinkedHashMap<ConstrainedNode, List<Constraint<?>.CriterionProcessor>>> orderedNodeCriterionProcessorMap =
             new TreeMap<>(Constraint.ORDER_COMPARATOR);
 
@@ -50,7 +50,7 @@ class NodeCriterionProducer {
      *
      * @return criterion, or {@code null} if the criterion is unnecessary
      */
-    @SuppressWarnings({"rawtypes", "unchecked"})
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     public Criterion produce() {
         Criteria criteria = Criteria.newInstance(root.getType());
         orderedNodeCriterionProcessorMap.forEach((order, nodeCriterionProcessorMap) -> {

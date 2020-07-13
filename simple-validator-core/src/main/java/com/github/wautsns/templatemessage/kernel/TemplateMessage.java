@@ -34,7 +34,7 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper = true)
 public class TemplateMessage extends VariableValueMap {
 
-    /** message template */
+    /** Message template. */
     private String messageTemplate;
 
     @Override

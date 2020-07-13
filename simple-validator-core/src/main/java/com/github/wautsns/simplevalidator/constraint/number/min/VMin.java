@@ -39,7 +39,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  */
 @Documented
 @Retention(RUNTIME)
-@Target({FIELD, METHOD, PARAMETER, ANNOTATION_TYPE, TYPE_USE})
+@Target({ FIELD, METHOD, PARAMETER, ANNOTATION_TYPE, TYPE_USE })
 @AConstraint(combines = {
         @ACombine(constraint = VDomain.class, attributes = {
                 @AAttribute(name = "value", spel = "{(inclusive ? '[' : '(') + value + ',~)'}")
@@ -67,10 +67,10 @@ public @interface VMin {
 
     // #################### extra #######################################################
 
-    /** variables: {@linkplain #value() min} */
+    /** Variables: {@linkplain #value() min}. */
     @AVariableAlias("value")
     Variable<String> MIN = new Variable<>("min");
-    /** variables: {@linkplain #inclusive() inclusive} */
+    /** Variables: {@linkplain #inclusive() inclusive}. */
     Variable<String> INCLUSIVE = new Variable<>("inclusive");
 
 }

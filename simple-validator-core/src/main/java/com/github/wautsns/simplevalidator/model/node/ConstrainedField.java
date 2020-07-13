@@ -40,11 +40,11 @@ import java.lang.reflect.Field;
 @Getter
 public class ConstrainedField extends ConstrainedTypeContainer {
 
-    /** declaring class */
+    /** Declaring class. */
     private final ConstrainedClass declaringClass;
-    /** original field */
+    /** Original field. */
     private final Field origin;
-    /** criterion wrapper */
+    /** Criterion wrapper. */
     private final Criterion.Wrapper criterionWrapper;
 
     /**
@@ -88,11 +88,11 @@ public class ConstrainedField extends ConstrainedTypeContainer {
 
     // ==================== internal utils ==============================================
 
-    /** criterion wrapper */
+    /** Criterion wrapper. */
     @RequiredArgsConstructor
     private static class CriterionWrapper extends Criterion.Wrapper {
 
-        /** accessible field */
+        /** Accessible field. */
         private final Field field;
 
         @Override

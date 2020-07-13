@@ -47,7 +47,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @UtilityClass
 public class CriterionUtils {
 
-    /** cache for criterion */
+    /** Cache for the criterion. */
     private static final Map<ConstrainedNode, Criterion> CACHE = new ConcurrentHashMap<>(128);
 
     /**
@@ -102,7 +102,7 @@ public class CriterionUtils {
      * @param value value
      * @return validation failure, or {@code null} if the value passed the validation
      */
-    @SuppressWarnings({"rawtypes", "unchecked"})
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     public static ValidationFailure execute(Criterion criterion, Object value) {
         if (criterion instanceof TCriterion) {
             return ((TCriterion) criterion).test(value);

@@ -18,9 +18,9 @@ package com.github.wautsns.templatemessage.formatter;
 import java.util.Locale;
 
 /**
- * Value formatter.
+ * Formatter.
  *
- * @param <T> type of value
+ * @param <T> type of value to be formatted
  * @author wautsns
  * @since Mar 10, 2020
  */
@@ -30,7 +30,7 @@ public interface Formatter<T> {
      * Format value with {@linkplain Locale#getDefault() default locale}.
      *
      * @param value value
-     * @return value in string format
+     * @return formatted value
      */
     default String format(T value) {
         return format(value, Locale.getDefault());
@@ -41,7 +41,7 @@ public interface Formatter<T> {
      *
      * @param value value
      * @param locale locale
-     * @return value in string format
+     * @return formatted value
      */
     String format(T value, Locale locale);
 

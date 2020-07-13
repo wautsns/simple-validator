@@ -16,7 +16,6 @@
 package com.github.wautsns.simplevalidator.model.criterion.factory.typelike;
 
 import com.github.wautsns.templatemessage.variable.Variable;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Map;
@@ -32,10 +31,10 @@ import java.util.concurrent.ConcurrentHashMap;
 @SuppressWarnings("rawtypes")
 public class TypeLikeUtilityVariableCache<U extends TypeLikeUtility> {
 
-    /** cache */
+    /** Cache. */
     private final Map<U, Variable> cache = new ConcurrentHashMap<>(8);
-    /** name of variable */
-    private final @NonNull String name;
+    /** Name of variable. */
+    private final String name;
 
     /**
      * Get variable associated with the specified utility.

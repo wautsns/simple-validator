@@ -39,7 +39,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  */
 @Documented
 @Retention(RUNTIME)
-@Target({FIELD, METHOD, PARAMETER, ANNOTATION_TYPE, TYPE_USE})
+@Target({ FIELD, METHOD, PARAMETER, ANNOTATION_TYPE, TYPE_USE })
 @AConstraint(combines = {
         @ACombine(constraint = VDomain.class, attributes = {
                 @AAttribute(name = "value", spel = "{'(~,' + value + (inclusive ? ']' : ')')}")
@@ -67,10 +67,10 @@ public @interface VMax {
 
     // #################### extra #######################################################
 
-    /** variables: {@linkplain #value() max} */
+    /** Variables: {@linkplain #value() max}. */
     @AVariableAlias("value")
     Variable<String> MAX = new Variable<>("max");
-    /** variables: {@linkplain #inclusive() inclusive} */
+    /** Variables: {@linkplain #inclusive() inclusive}. */
     Variable<String> INCLUSIVE = new Variable<>("inclusive");
 
 }

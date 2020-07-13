@@ -38,7 +38,7 @@ public abstract class ArrayTypeCriterionFactory<A extends Annotation> implements
     }
 
     @Override
-    @SuppressWarnings({"rawtypes", "unchecked"})
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     public final void process(ConstrainedNode node, A constraint, TCriteria<Object> wip) {
         Type componentType = TypeUtils.getComponentType(node.getType());
         if (!TypeUtils.isPrimitive(componentType)) {

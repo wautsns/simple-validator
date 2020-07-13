@@ -36,7 +36,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  */
 @Documented
 @Retention(RUNTIME)
-@Target({FIELD, METHOD, PARAMETER, ANNOTATION_TYPE, TYPE_USE})
+@Target({ FIELD, METHOD, PARAMETER, ANNOTATION_TYPE, TYPE_USE })
 @AConstraint
 public @interface VPattern {
 
@@ -58,14 +58,14 @@ public @interface VPattern {
 
     // #################### extra #######################################################
 
-    /** built-in criterion factories */
+    /** Built-in criterion factories. */
     List<CriterionFactory<VPattern, ?, ?>> CRITERION_FACTORIES = new LinkedList<>(Collections.singletonList(
             VPatternTextLikeCriterionFactory.INSTANCE
     ));
 
     // ==================== variables ===================================================
 
-    /** variables: {@linkplain #regex() regex} */
+    /** Variables: {@linkplain #regex() regex}. */
     Variable<String> REGEX = new Variable<>("regex");
 
 }

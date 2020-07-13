@@ -38,7 +38,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  */
 @Documented
 @Retention(RUNTIME)
-@Target({FIELD, METHOD, PARAMETER, ANNOTATION_TYPE, TYPE_USE})
+@Target({ FIELD, METHOD, PARAMETER, ANNOTATION_TYPE, TYPE_USE })
 @AConstraint(combines = {
         @ACombine(constraint = VDomain.class, attributes = {
                 @AAttribute(name = "value", spel = "{'[' + min + ',' + max + ']'}")
@@ -68,9 +68,9 @@ public @interface VBetween {
 
     // ==================== variables ===================================================
 
-    /** variables: {@linkplain #min() min} */
+    /** Variables: {@linkplain #min() min}. */
     Variable<String> MIN = new Variable<>("min");
-    /** variables: {@linkplain #max() max} */
+    /** Variables: {@linkplain #max() max}. */
     Variable<String> MAX = new Variable<>("max");
 
 }

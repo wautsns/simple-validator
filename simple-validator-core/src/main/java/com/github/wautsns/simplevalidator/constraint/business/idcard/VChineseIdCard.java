@@ -25,7 +25,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  */
 @Documented
 @Retention(RUNTIME)
-@Target({ANNOTATION_TYPE, FIELD, METHOD, PARAMETER, TYPE_USE})
+@Target({ ANNOTATION_TYPE, FIELD, METHOD, PARAMETER, TYPE_USE })
 @AConstraint
 public @interface VChineseIdCard {
 
@@ -43,7 +43,7 @@ public @interface VChineseIdCard {
      */
     int order() default 0;
 
-    Generation[] generations() default {Generation.SECOND};
+    Generation[] generations() default { Generation.SECOND };
 
     String[] cities() default {};
 
@@ -57,20 +57,20 @@ public @interface VChineseIdCard {
 
     enum Gender {MALE, FEMALE}
 
-    /** built-in criterion factories */
+    /** Built-in criterion factories. */
     List<CriterionFactory<VChineseIdCard, ?, ?>> CRITERION_FACTORIES = new LinkedList<>(Collections.singletonList(
             VChineseIdCardCharSequenceCriterionFactory.INSTANCE
     ));
 
     // ==================== variables ===================================================
 
-    /** variables: {@linkplain #generations() generations} */
+    /** Variables: {@linkplain #generations() generations}. */
     Variable<Generation[]> GENERATIONS = new Variable<>("generations", Formatters.ENUMS_PROPERTIES_NO_RESTRICTIONS);
-    /** variables: {@linkplain #cities() cities} */
+    /** Variables: {@linkplain #cities() cities}. */
     Variable<String[]> CITIES = new Variable<>("cities", Formatters.VALUES_NO_RESTRICTIONS);
-    /** variables: {@linkplain #ages()} () ages} */
+    /** Variables: {@linkplain #ages()} () ages}. */
     Variable<String[]> AGES = new Variable<>("ages", Formatters.VALUES_NO_RESTRICTIONS);
-    /** variables: {@linkplain #genders()} genders} */
+    /** Variables: {@linkplain #genders()} genders}. */
     Variable<Gender[]> GENDERS = new Variable<>("genders", Formatters.ENUMS_PROPERTIES_NO_RESTRICTIONS);
 
 }

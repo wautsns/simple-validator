@@ -50,7 +50,7 @@ public interface IntCriterion extends PrimitiveCriterion<Integer> {
 
     // #################### instance ####################################################
 
-    /** the truth */
+    /** Truth. */
     IntCriterion TRUTH = any -> null;
 
 }

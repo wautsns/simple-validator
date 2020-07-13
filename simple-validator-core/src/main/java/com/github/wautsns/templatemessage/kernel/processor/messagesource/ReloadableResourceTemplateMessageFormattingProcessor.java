@@ -30,6 +30,12 @@ import org.springframework.context.support.ReloadableResourceBundleMessageSource
 public class ReloadableResourceTemplateMessageFormattingProcessor
         extends MessageSourceTemplateMessageFormattingProcessor<ReloadableResourceBundleMessageSource> {
 
+    /**
+     * Construct a reloadableResourceTemplateMessageFormattingProcessor.
+     *
+     * @param leftDelimiter left delimiter
+     * @param rightDelimiter right delimiter
+     */
     public ReloadableResourceTemplateMessageFormattingProcessor(String leftDelimiter, String rightDelimiter) {
         super(leftDelimiter, rightDelimiter, new ReloadableResourceBundleMessageSource());
         getMessageSource().setDefaultEncoding("UTF-8");

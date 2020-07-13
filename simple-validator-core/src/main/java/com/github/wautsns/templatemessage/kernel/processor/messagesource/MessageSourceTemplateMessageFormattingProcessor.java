@@ -36,9 +36,16 @@ import java.util.Locale;
 public class MessageSourceTemplateMessageFormattingProcessor<T extends MessageSource>
         extends TemplateMessageFormatter.Processor {
 
-    /** message source */
+    /** Message source. */
     private final T messageSource;
 
+    /**
+     * Construct a messageSourceTemplateMessageFormattingProcessor.
+     *
+     * @param leftDelimiter left delimiter
+     * @param rightDelimiter right delimiter
+     * @param messageSource message source
+     */
     public MessageSourceTemplateMessageFormattingProcessor(
             String leftDelimiter, String rightDelimiter, T messageSource) {
         super(leftDelimiter, rightDelimiter);

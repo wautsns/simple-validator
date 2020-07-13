@@ -29,7 +29,7 @@ import java.lang.reflect.Type;
  */
 public abstract class TypeLikeUtility<T> {
 
-    /** variable for the type-like value */
+    /** Variable for the type-like value. */
     private final Variable<? super T> valueVariable;
 
     /**

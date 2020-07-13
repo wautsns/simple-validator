@@ -72,7 +72,7 @@ public class VIdIntegerLongBigIntegerCriterionFactory extends ComparableNumberCr
         return value -> le(value, max) ? null : new ValidationFailure(value);
     }
 
-    /** type({@code T extends Number & Comparable<T>}) -> unsigned max value map */
+    /** Type({@code T extends Number & Comparable<T>}) -> unsigned max value map. */
     private static final Map<Class<?>, Number> UNSIGNED_MAX_VALUE_MAP;
 
     static {

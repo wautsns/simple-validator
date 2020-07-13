@@ -18,13 +18,13 @@ package com.github.wautsns.simplevalidator.util.extractor;
 import java.lang.reflect.Type;
 
 /**
- * The {@code boolean} value extractor.
+ * Extractor for extracting {@code boolean} value.
  *
  * @param <T> type of target value
  * @author wautsns
  * @since Mar 20, 2020
  */
-public interface BooleanExtractor<T> extends ValueExtractor {
+public interface BooleanExtractor<T> extends Extractor {
 
     @Override
     default Type getExtractedValueType() {
@@ -32,7 +32,7 @@ public interface BooleanExtractor<T> extends ValueExtractor {
     }
 
     /**
-     * Extract {@code boolean} value from target value.
+     * Extract {@code boolean} value from target.
      *
      * @param target target value
      * @return extracted {@code boolean} value

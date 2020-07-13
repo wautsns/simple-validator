@@ -15,11 +15,15 @@
  */
 package com.github.wautsns.simplevalidator.model.failure;
 
+import com.github.wautsns.templatemessage.kernel.TemplateMessage;
 import com.github.wautsns.templatemessage.kernel.TemplateMessageFormatter;
 import com.github.wautsns.templatemessage.kernel.processor.SpelTemplateMessageFormattingProcessor;
 import com.github.wautsns.templatemessage.kernel.processor.VariableTemplateMessageFormattingProcessor;
 import com.github.wautsns.templatemessage.kernel.processor.messagesource.ReloadableResourceTemplateMessageFormattingProcessor;
+import com.github.wautsns.templatemessage.variable.Variable;
 import lombok.Getter;
+
+import java.util.Locale;
 
 /**
  * Validation failure formatter.
@@ -30,23 +34,26 @@ import lombok.Getter;
 @Getter
 public class ValidationFailureFormatter extends TemplateMessageFormatter {
 
-    /** the left delimiter for variable processor */
+    /** Left delimiter for the variable processor. */
     public static final String VARIABLE_LD = "{{";
-    /** the right delimiter for variable processor */
+    /** Right delimiter for the variable processor. */
     public static final String VARIABLE_RD = "}}";
-    /** the left delimiter for resource processor */
+    /** Left delimiter for the resource processor. */
     public static final String RELOADED_RESOURCE_LD = "[`";
-    /** the right delimiter for resource processor */
+    /** Right delimiter for the resource processor. */
     public static final String RELOADED_RESOURCE_RD = "`]";
-    /** the left delimiter for spel processor */
+    /** Left delimiter for the spel processor. */
     public static final String SPEL_LD = "#{";
-    /** the right delimiter for spel processor */
+    /** Right delimiter for the spel processor. */
     public static final String SPEL_RD = "}#";
 
-    /** built-in messages base name */
+    /** Built-in messages base name. */
     private static final String BUILT_IN_MESSAGES_BASE_NAME = "simple-validator/messages/messages";
+    /** Variable: value. */
+    private static final String VARIABLE_VALUE_PLACEHOLDER =
+            VARIABLE_LD + ValidationFailure.Variables.VALUE.getName() + VARIABLE_RD;
 
-    /** reloadable resource template message formatting processor */
+    /** Reloadable resource template message formatting processor. */
     private final ReloadableResourceTemplateMessageFormattingProcessor reloadableResourceTemplateMessageFormattingProcessor;
 
     /**
@@ -74,6 +81,28 @@ public class ValidationFailureFormatter extends TemplateMessageFormatter {
     @Override
     public ValidationFailureFormatter addProcessor(int order, Processor processor) {
         return (ValidationFailureFormatter) super.addProcessor(order, processor);
+    }
+
+    /**
+     * Load message resources.
+     *
+     * @param messageResources message resources.
+     * @return self reference
+     */
+    public ValidationFailureFormatter loadMessageResources(String[] messageResources) {
+        reloadableResourceTemplateMessageFormattingProcessor.loadResources(messageResources);
+        return this;
+    }
+
+    @Override
+    public String format(TemplateMessage templateMessage, Locale locale) {
+        // Prevent spel expression injection.
+        Variable<Object> variable = templateMessage.getVariable(ValidationFailure.Variables.VALUE.getName());
+        Object value = templateMessage.getValue(variable);
+        templateMessage.remove(variable);
+        String wip = super.format(templateMessage, locale);
+        String valueInStringFormat = variable.getFormatter().format(value, locale);
+        return wip.replace(VARIABLE_VALUE_PLACEHOLDER, valueInStringFormat);
     }
 
 }

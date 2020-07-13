@@ -20,7 +20,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  */
 @Documented
 @Retention(RUNTIME)
-@Target({ANNOTATION_TYPE, FIELD, METHOD, PARAMETER, TYPE_USE})
+@Target({ ANNOTATION_TYPE, FIELD, METHOD, PARAMETER, TYPE_USE })
 @AConstraint
 @VLuhn
 public @interface VBankCard {

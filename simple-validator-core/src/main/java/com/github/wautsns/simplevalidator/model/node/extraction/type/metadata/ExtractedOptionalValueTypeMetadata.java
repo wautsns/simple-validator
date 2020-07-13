@@ -52,7 +52,7 @@ public class ExtractedOptionalValueTypeMetadata extends ConstrainedExtractedType
 
     // #################### internal utils ##############################################
 
-    /** type parameter metadata */
+    /** Type parameter metadata. */
     private static final TypeParameterMetadata TYPE_PARAMETER_METADATA = new TypeParameterMetadata() {
 
         @Override
@@ -66,7 +66,7 @@ public class ExtractedOptionalValueTypeMetadata extends ConstrainedExtractedType
         }
     };
 
-    /** criterion wrapper */
+    /** Criterion wrapper. */
     private static final Criterion.Wrapper CRITERION_WRAPPER = new Criterion.Wrapper() {
 
         @Override

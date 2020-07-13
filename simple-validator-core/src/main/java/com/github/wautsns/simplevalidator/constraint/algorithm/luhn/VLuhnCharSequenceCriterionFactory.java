@@ -24,7 +24,7 @@ import lombok.NoArgsConstructor;
 import java.lang.reflect.Type;
 
 /**
- * {@code CharSequence} criterion factory for algorithm: luhn.
+ * {@code CharSequence} criterion factory for the algorithm: luhn.
  *
  * @author wautsns
  * @since Mar 19, 2020
@@ -47,7 +47,7 @@ public class VLuhnCharSequenceCriterionFactory implements TCriterionFactory<VLuh
 
     // #################### criterion ###################################################
 
-    /** criterion for luhn */
+    /** Criterion for luhn. */
     protected static final TCriterion<CharSequence> CRITERION = id -> {
         int length = id.length();
         if (length < 8 || length > 19) { return new ValidationFailure(id); }

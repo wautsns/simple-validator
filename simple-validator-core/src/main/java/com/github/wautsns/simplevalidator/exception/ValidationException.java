@@ -15,9 +15,8 @@
  */
 package com.github.wautsns.simplevalidator.exception;
 
+import com.github.wautsns.simplevalidator.SimpleValidatorConfiguration;
 import com.github.wautsns.simplevalidator.model.failure.ValidationFailure;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 /**
  * Validation exception.
@@ -25,13 +24,37 @@ import lombok.RequiredArgsConstructor;
  * @author wautsns
  * @since Mar 10, 2020
  */
-@Getter
-@RequiredArgsConstructor
 public class ValidationException extends RuntimeException {
 
     private static final long serialVersionUID = -5706334622805333445L;
 
-    /** validation failure */
-    private final ValidationFailure failure;
+    /**
+     * Construct a validationException.
+     *
+     * @param validationFailure validation failure
+     */
+    public ValidationException(ValidationFailure validationFailure) {
+        super(SimpleValidatorConfiguration.ForValidationFailure.FORMATTER.format(
+                validationFailure, SimpleValidatorConfiguration.ForValidationFailure.getLocaleSupplier().get()));
+    }
+
+    /**
+     * Construct a validationException.
+     *
+     * @param message message
+     */
+    public ValidationException(String message) {
+        super(message);
+    }
+
+    /**
+     * Construct a validationException.
+     *
+     * @param message message
+     * @param cause cause
+     */
+    public ValidationException(String message, Throwable cause) {
+        super(message, cause);
+    }
 
 }

@@ -18,7 +18,6 @@ package com.github.wautsns.templatemessage.kernel;
 import com.github.wautsns.templatemessage.formatter.Formatter;
 import com.github.wautsns.templatemessage.variable.VariableValueMap;
 import lombok.Data;
-import lombok.NonNull;
 
 import java.util.Collection;
 import java.util.Locale;
@@ -34,7 +33,7 @@ import java.util.concurrent.ConcurrentSkipListMap;
  */
 public class TemplateMessageFormatter implements Formatter<TemplateMessage> {
 
-    /** map: order -> processors */
+    /** Map: order -> processors */
     private final Map<Integer, Collection<Processor>> orderedProcessorsMap = new ConcurrentSkipListMap<>();
 
     /**
@@ -69,10 +68,10 @@ public class TemplateMessageFormatter implements Formatter<TemplateMessage> {
     @Data
     public abstract static class Processor {
 
-        /** left delimiter */
-        private final @NonNull String leftDelimiter;
-        /** right delimiter */
-        private final @NonNull String rightDelimiter;
+        /** Left delimiter. */
+        private final String leftDelimiter;
+        /** Right delimiter. */
+        private final String rightDelimiter;
 
         /**
          * Process variable.

@@ -31,7 +31,7 @@ import java.util.Date;
  */
 public class DateUtility extends TimeLikeUtility<Date> {
 
-    /** default {@code DateUtility} */
+    /** Default {@code DateUtility}. */
     public static final DateUtility DEFAULT = new DateUtility(null);
 
     public DateUtility(Formatter<? super Date> valueFormatter) {

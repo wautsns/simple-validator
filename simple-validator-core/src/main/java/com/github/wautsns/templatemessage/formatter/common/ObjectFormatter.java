@@ -20,7 +20,6 @@ import com.github.wautsns.templatemessage.formatter.multival.ArrayFormatter;
 import com.github.wautsns.templatemessage.formatter.multival.IterableFormatter;
 import com.github.wautsns.templatemessage.formatter.multival.MapFormatter;
 import lombok.Data;
-import lombok.NonNull;
 import lombok.experimental.Accessors;
 
 import java.util.Locale;
@@ -44,11 +43,11 @@ import java.util.Map;
 @Accessors(chain = true)
 public class ObjectFormatter implements Formatter<Object> {
 
-    /** default {@code ObjectFormatter} */
+    /** Default {@code ObjectFormatter}. */
     public static final ObjectFormatter DEFAULT = new ObjectFormatter();
 
-    /** string format of {@code null}, default is {@code "null"} */
-    private @NonNull String stringFormatOfNull = "null";
+    /** String format of {@code null}, default is {@code "null"}. */
+    private String stringFormatOfNull = "null";
 
     @Override
     @SuppressWarnings("unchecked")
@@ -63,6 +62,8 @@ public class ObjectFormatter implements Formatter<Object> {
             return IterableFormatter.DEFAULT.format((Iterable<Object>) value, locale);
         } else if (value instanceof Map) {
             return MapFormatter.DEFAULT.format((Map<Object, Object>) value, locale);
+        } else if (value instanceof Enum) {
+            return EnumFormatter.DEFAULT.format((Enum<?>) value, locale);
         } else {
             return value.toString();
         }

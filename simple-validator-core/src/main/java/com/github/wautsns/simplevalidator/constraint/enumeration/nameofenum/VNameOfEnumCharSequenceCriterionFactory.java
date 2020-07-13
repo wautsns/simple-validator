@@ -69,7 +69,7 @@ public class VNameOfEnumCharSequenceCriterionFactory implements TCriterionFactor
         }
     }
 
-    /** enumeration type -> criterion cache */
+    /** Enumeration type -> criterion cache. */
     private static final Map<Class<?>, TCriterion<CharSequence>> CACHE = new ConcurrentHashMap<>();
 
     /**

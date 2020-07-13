@@ -27,7 +27,7 @@ import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * Utils for {@link DateTimeFormatter}.
+ * Utils for date and time.
  *
  * @author wautsns
  * @since Mar 12, 2020
@@ -88,7 +88,7 @@ public class TimeFormatterUtils {
          * @param formatStyle format style
          * @return code of {@code DateFormat} associated with the format style
          */
-        public static int getDateFormatStyleCode(FormatStyle formatStyle) {
+        private static int getDateFormatStyleCode(FormatStyle formatStyle) {
             switch (Objects.requireNonNull(formatStyle)) {
                 case LONG:
                     return DateFormat.LONG;
@@ -109,13 +109,13 @@ public class TimeFormatterUtils {
     @UtilityClass
     public static class DateTimeFormatters {
 
-        /** cache of {@code DateTimeFormatter} for displaying date */
+        /** Cache of {@code DateTimeFormatter} for displaying date only. */
         private static final EnumMap<FormatStyle, Map<Locale, DateTimeFormatter>> CACHE_ONLY_DATE =
                 new EnumMap<>(FormatStyle.class);
-        /** cache of {@code DateTimeFormatter} for displaying time */
+        /** Cache of {@code DateTimeFormatter} for displaying time only. */
         private static final EnumMap<FormatStyle, Map<Locale, DateTimeFormatter>> CACHE_ONLY_TIME =
                 new EnumMap<>(FormatStyle.class);
-        /** cache of {@code DateTimeFormatter} for displaying date and time */
+        /** Cache of {@code DateTimeFormatter} for displaying date and time. */
         private static final EnumMap<FormatStyle, EnumMap<FormatStyle, Map<Locale, DateTimeFormatter>>> CACHE_DATE_TIME =
                 new EnumMap<>(FormatStyle.class);
 
@@ -152,7 +152,7 @@ public class TimeFormatterUtils {
          */
         public static DateTimeFormatter forDate(FormatStyle formatStyle, Locale locale) {
             return CACHE_ONLY_DATE
-                    .computeIfAbsent(Objects.requireNonNull(formatStyle), i -> new ConcurrentHashMap<>(8))
+                    .computeIfAbsent(Objects.requireNonNull(formatStyle), i -> new ConcurrentHashMap<>())
                     .computeIfAbsent(
                             Objects.requireNonNull(locale),
                             loc -> DateTimeFormatter.ofLocalizedDate(formatStyle).withLocale(loc));
@@ -167,7 +167,7 @@ public class TimeFormatterUtils {
          */
         public static DateTimeFormatter forTime(FormatStyle formatStyle, Locale locale) {
             return CACHE_ONLY_TIME
-                    .computeIfAbsent(Objects.requireNonNull(formatStyle), i -> new ConcurrentHashMap<>(8))
+                    .computeIfAbsent(Objects.requireNonNull(formatStyle), i -> new ConcurrentHashMap<>())
                     .computeIfAbsent(
                             Objects.requireNonNull(locale),
                             loc -> DateTimeFormatter.ofLocalizedTime(formatStyle).withLocale(loc));

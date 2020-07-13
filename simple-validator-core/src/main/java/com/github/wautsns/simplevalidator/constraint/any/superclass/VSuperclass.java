@@ -47,7 +47,7 @@ public @interface VSuperclass {
 
     // #################### extra #######################################################
 
-    /** built-in criterion factories */
+    /** Built-in criterion factories. */
     List<CriterionFactory<VSuperclass, ?, ?>> CRITERION_FACTORIES = new LinkedList<>(Collections.singletonList(
             VSuperclassNonPrimitiveCriterionFactory.INSTANCE
     ));

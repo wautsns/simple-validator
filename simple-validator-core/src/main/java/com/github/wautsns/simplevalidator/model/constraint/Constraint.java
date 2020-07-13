@@ -25,7 +25,7 @@ import com.github.wautsns.simplevalidator.model.failure.ValidationFailure;
 import com.github.wautsns.simplevalidator.model.node.ConstrainedNode;
 import com.github.wautsns.simplevalidator.util.common.CollectionUtils;
 import com.github.wautsns.simplevalidator.util.common.ReflectionUtils;
-import com.github.wautsns.simplevalidator.util.extractor.ValueExtractor;
+import com.github.wautsns.simplevalidator.util.extractor.Extractor;
 import com.github.wautsns.templatemessage.variable.Variable;
 import com.github.wautsns.templatemessage.variable.VariableValueMap;
 import lombok.AccessLevel;
@@ -59,17 +59,17 @@ import java.util.stream.Collectors;
 @Getter
 public class Constraint<A extends Annotation> {
 
-    /** constraint metadata */
+    /** Constraint metadata. */
     private final ConstraintMetadata<A> metadata;
-    /** original constraint */
+    /** Original constraint. */
     private final A origin;
-    /** attribute value map */
+    /** Attribute value map. */
     private final Map<String, Object> attributeValueMap;
-    /** combined constraints */
+    /** Combined constraints. */
     private final List<Constraint<?>> combinedConstraints;
-    /** variable value map */
+    /** Variable value map. */
     private final VariableValueMap variableValueMap;
-    /** criterion processor */
+    /** Criterion processor. */
     private final CriterionProcessor criterionProcessor;
 
     /**
@@ -160,14 +160,14 @@ public class Constraint<A extends Annotation> {
      * @return the value extractor suitable for the specified type
      * @throws ConstraintAnalysisException if no value extractor applies to the specified type
      */
-    public ValueExtractor requireApplicableValueExtractor(Type type) {
-        ValueExtractor applicableValueExtractor = metadata.getValueExtractors().stream()
+    public Extractor requireApplicableValueExtractor(Type type) {
+        Extractor applicableExtractor = metadata.getExtractors().stream()
                 .filter(valueExtractor -> valueExtractor.appliesTo(type))
                 .findFirst()
                 .orElse(null);
-        if (applicableValueExtractor != null) { return applicableValueExtractor; }
+        if (applicableExtractor != null) { return applicableExtractor; }
         if (metadata.isOnlyUsedToCombineOtherConstraints()) {
-            ValueExtractor ref = combinedConstraints.get(0).requireApplicableValueExtractor(type);
+            Extractor ref = combinedConstraints.get(0).requireApplicableValueExtractor(type);
             boolean allMatch = combinedConstraints.stream()
                     .skip(1)
                     .map(constraint -> constraint.requireApplicableValueExtractor(type))
@@ -179,7 +179,7 @@ public class Constraint<A extends Annotation> {
 
     // #################### instance ####################################################
 
-    /** constraint type -> ((attribute -> value map) -> constraint instance) map */
+    /** Map: constraint type -> ((map: attribute -> value) -> constraint instance) */
     @SuppressWarnings("rawtypes")
     private static final Map<Class, Map<Map<String, Object>, Constraint>> INSTANCE_MAP = new ConcurrentHashMap<>();
 
@@ -204,7 +204,7 @@ public class Constraint<A extends Annotation> {
     /**
      * Construct a constraint.
      *
-     * @param constraint constraint
+     * @param constraint constraint annotation
      */
     @SuppressWarnings("unchecked")
     private Constraint(A constraint) {
@@ -222,7 +222,7 @@ public class Constraint<A extends Annotation> {
      * @param constraint constraint
      * @return combined constraints
      */
-    @SuppressWarnings({"rawtypes", "unchecked"})
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     private static List<Constraint<?>> initCombinedConstraints(Constraint<?> constraint) {
         ConstraintMetadata<?> metadata = ConstraintMetadata.getInstance(constraint.metadata.getConstraintType());
         List<Constraint<?>> combinedConstraints = new LinkedList<>();
@@ -235,7 +235,7 @@ public class Constraint<A extends Annotation> {
 
     // #################### utils #######################################################
 
-    /** constraint order comparator */
+    /** Constraint order comparator. */
     public static final Comparator<Integer> ORDER_COMPARATOR = (o1, o2) -> {
         if (o1 == null) {
             return (o2 == null) ? 0 : -1;
@@ -247,22 +247,22 @@ public class Constraint<A extends Annotation> {
     // ==================== constraint ==================================================
 
     /**
-     * Filter out constraints.
+     * Filter constraints.
      *
      * @param annotations annotations
      * @return constraints(unmodified)
      */
-    public static List<Constraint<?>> filterOutConstraints(Annotation[] annotations) {
-        return filterOutConstraints(Arrays.asList(annotations));
+    public static List<Constraint<?>> filterConstraints(Annotation[] annotations) {
+        return filterConstraints(Arrays.asList(annotations));
     }
 
     /**
-     * Filter out constraints.
+     * Filter constraints.
      *
      * @param annotations annotation list
      * @return constraints(unmodified)
      */
-    public static List<Constraint<?>> filterOutConstraints(List<Annotation> annotations) {
+    public static List<Constraint<?>> filterConstraints(List<Annotation> annotations) {
         List<Constraint<?>> constraints = annotations.stream()
                 .filter(annotation -> ConstraintMetadata.isConstraintType(annotation.annotationType()))
                 .map(Constraint::getInstance)
@@ -272,20 +272,20 @@ public class Constraint<A extends Annotation> {
     }
 
     /**
-     * Filter out constraint list.
+     * Filter constraint list.
      *
      * @param annotatedType annotated type
      * @return constraint list(unmodified)
      */
-    public static List<Constraint<?>> filterOutConstraints(AnnotatedType annotatedType) {
+    public static List<Constraint<?>> filterConstraints(AnnotatedType annotatedType) {
         List<Constraint<?>> constraints = new LinkedList<>();
-        constraints.addAll(filterOutConstraints(annotatedType.getDeclaredAnnotations()));
+        constraints.addAll(filterConstraints(annotatedType.getDeclaredAnnotations()));
         Type type = annotatedType.getType();
         if (type instanceof TypeVariable) {
             TypeVariable<?> typeVariable = (TypeVariable<?>) type;
-            constraints.addAll(0, filterOutConstraints(typeVariable.getDeclaredAnnotations()));
+            constraints.addAll(0, filterConstraints(typeVariable.getDeclaredAnnotations()));
             for (AnnotatedType annotatedBound : typeVariable.getAnnotatedBounds()) {
-                constraints.addAll(0, filterOutConstraints(annotatedBound));
+                constraints.addAll(0, filterConstraints(annotatedBound));
             }
         }
         return CollectionUtils.unmodifiableList(constraints.stream()
@@ -295,8 +295,8 @@ public class Constraint<A extends Annotation> {
 
     // ==================== criterion processor =========================================
 
-    /** constraint criterion processor */
-    @SuppressWarnings({"rawtypes", "unchecked"})
+    /** Constraint criterion processor. */
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
     public final class CriterionProcessor {
 
@@ -372,13 +372,11 @@ public class Constraint<A extends Annotation> {
 
     // #################### internal utils ##############################################
 
-    // ==================== attribute value =============================================
-
     /**
-     * Get the attribute value map(unmodified) of the specified constraint.
+     * Get unmodified attribute value map of the specified constraint.
      *
      * @param constraint constraint
-     * @return the attribute value map(unmodified) of the specified constraint
+     * @return unmodified attribute value map of the specified constraint
      */
     private static Map<String, Object> getAttributeValueMap(Annotation constraint) {
         InvocationHandler h = Proxy.getInvocationHandler(constraint);
@@ -387,15 +385,13 @@ public class Constraint<A extends Annotation> {
         return CollectionUtils.unmodifiableMap(memberValues);
     }
 
-    // ==================== variableValueMap ============================================
-
     /**
      * Get variable value map declared in the constraint.
      *
      * @param constraint constraint
      * @return variable value map declared in the constraint
      */
-    @SuppressWarnings({"rawtypes", "unchecked"})
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     private static VariableValueMap getVariableValueMap(Annotation constraint) {
         VariableValueMap variableValueMap = new VariableValueMap();
         ConstraintMetadata<?> metadata = ConstraintMetadata.getInstance(constraint.annotationType());

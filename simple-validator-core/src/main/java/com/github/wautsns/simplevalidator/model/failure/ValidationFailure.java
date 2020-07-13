@@ -93,12 +93,13 @@ public class ValidationFailure extends TemplateMessage {
     @UtilityClass
     public static class Variables {
 
-        /** variable: value */
+        /** Variable: value. */
         public static final Variable<Object> VALUE = new Variable<>("value");
-        /** variable: target */
+        /** Variable: target. */
         public static final Variable<ConstrainedNode.Location> TARGET = new Variable<>("target");
         /**
-         * variable: indicators
+         * Variable: indicators.
+         *
          * <ul>
          * <li>array[1] => indicator is 1</li>
          * <li>map[key] => indicator is key</li>

@@ -62,7 +62,7 @@ public class ExtractedArrayComponentTypeMetadata extends ConstrainedExtractedTyp
 
     // #################### internal utils ##############################################
 
-    /** criterion wrapper */
+    /** Criterion wrapper. */
     private static final Criterion.Wrapper CRITERION_WRAPPER = new Criterion.Wrapper() {
 
         @Override

@@ -18,13 +18,13 @@ package com.github.wautsns.simplevalidator.util.extractor;
 import java.lang.reflect.Type;
 
 /**
- * The {@code float} value extractor.
+ * Extractor for extracting {@code float} value.
  *
  * @param <T> type of target value
  * @author wautsns
  * @since Mar 20, 2020
  */
-public interface FloatExtractor<T> extends ValueExtractor {
+public interface FloatExtractor<T> extends Extractor {
 
     @Override
     default Type getExtractedValueType() {
@@ -32,7 +32,7 @@ public interface FloatExtractor<T> extends ValueExtractor {
     }
 
     /**
-     * Extract {@code float} value from the target value.
+     * Extract {@code float} value from the target.
      *
      * @param target target value
      * @return extracted {@code float} value

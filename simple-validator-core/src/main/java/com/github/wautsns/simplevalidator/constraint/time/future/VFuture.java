@@ -25,7 +25,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  */
 @Documented
 @Retention(RUNTIME)
-@Target({ANNOTATION_TYPE, FIELD, METHOD, PARAMETER, TYPE_USE})
+@Target({ ANNOTATION_TYPE, FIELD, METHOD, PARAMETER, TYPE_USE })
 @AConstraint
 public @interface VFuture {
 
@@ -61,14 +61,14 @@ public @interface VFuture {
 
     // #################### extra #######################################################
 
-    /** built-in criterion factories */
+    /** Built-in criterion factories. */
     List<CriterionFactory<VFuture, ?, ?>> CRITERION_FACTORIES = new LinkedList<>(Collections.singletonList(
             VFutureTimeLikeCriterionFactory.INSTANCE
     ));
 
     // ==================== variables ===================================================
 
-    /** variables: ref */
+    /** Variables: ref. */
     TypeLikeUtilityVariableCache<TimeLikeUtility<?>> REF = new TypeLikeUtilityVariableCache<>("ref");
 
 }

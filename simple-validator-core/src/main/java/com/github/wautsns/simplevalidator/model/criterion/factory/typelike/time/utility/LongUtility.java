@@ -30,7 +30,7 @@ import java.time.Duration;
  */
 public class LongUtility extends TimeLikeUtility<Long> {
 
-    /** default {@code LongUtility} */
+    /** Default {@code LongUtility}. */
     public static final LongUtility DEFAULT = new LongUtility(null);
 
     public LongUtility(Formatter<Long> valueFormatter) {

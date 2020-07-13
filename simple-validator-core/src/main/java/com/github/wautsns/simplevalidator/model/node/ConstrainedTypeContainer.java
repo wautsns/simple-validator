@@ -23,7 +23,6 @@ import com.github.wautsns.simplevalidator.model.node.extraction.type.metadata.Ex
 import com.github.wautsns.simplevalidator.model.node.extraction.type.metadata.ExtractedOptionalValueTypeMetadata;
 import com.github.wautsns.simplevalidator.util.common.CollectionUtils;
 import lombok.Getter;
-import lombok.NonNull;
 
 import java.lang.reflect.AnnotatedType;
 import java.util.HashSet;
@@ -41,9 +40,9 @@ import java.util.TreeMap;
 @Getter
 public abstract class ConstrainedTypeContainer extends ConstrainedNode {
 
-    /** annotated type */
+    /** Annotated type. */
     protected final AnnotatedType annotatedType;
-    /** constrained extracted types */
+    /** Constrained extracted types. */
     protected final List<ConstrainedExtractedType> extractedTypes;
 
     @Override
@@ -113,7 +112,7 @@ public abstract class ConstrainedTypeContainer extends ConstrainedNode {
 
     // #################### extracted type metadata #####################################
 
-    /** extracted type metadata cache */
+    /** Extracted type metadata cache. */
     private static final TreeMap<Integer, List<ConstrainedExtractedType.Metadata>> METADATA = new TreeMap<>();
 
     static {
@@ -140,7 +139,7 @@ public abstract class ConstrainedTypeContainer extends ConstrainedNode {
      * @param metadata extracted type metadata
      * @see ConstrainedTypeContainer#addExtractedTypeMetadata(int, ConstrainedExtractedType.Metadata)
      */
-    public static void addExtractedTypeMetadata(int order, @NonNull ConstrainedExtractedType.Metadata metadata) {
+    public static void addExtractedTypeMetadata(int order, ConstrainedExtractedType.Metadata metadata) {
         METADATA.computeIfAbsent(order, i -> new LinkedList<>()).add(metadata);
     }
 

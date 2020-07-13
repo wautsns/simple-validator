@@ -20,11 +20,10 @@ import com.github.wautsns.simplevalidator.exception.analysis.ConstraintAnalysisE
 import com.github.wautsns.simplevalidator.model.criterion.factory.CriterionFactory;
 import com.github.wautsns.simplevalidator.util.common.CollectionUtils;
 import com.github.wautsns.simplevalidator.util.common.ReflectionUtils;
-import com.github.wautsns.simplevalidator.util.extractor.ValueExtractor;
+import com.github.wautsns.simplevalidator.util.extractor.Extractor;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -49,30 +48,30 @@ import java.util.stream.Collectors;
 @Getter
 public class ConstraintMetadata<A extends Annotation> {
 
-    /** constraint attributes */
+    /** Constraint attributes. */
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
     public static class Attributes {
 
-        /** attribute: message */
+        /** Attribute: message. */
         public static final String MESSAGE = "message";
-        /** attribute: order */
+        /** Attribute: order. */
         public static final String ORDER = "order";
 
     }
 
-    /** constraint type */
+    /** Constraint type. */
     private final Class<A> constraintType;
-    /** order(only used to control the execution order of <strong>combined</strong> constraints) */
+    /** Order(only used to control the execution order of <strong>combined</strong> constraints). */
     private final int order;
-    /** supported criterion factories */
+    /** Supported criterion factories. */
     private final List<CriterionFactory<A, ?, ?>> criterionFactories;
-    /** supported value extractors */
-    private final List<ValueExtractor> valueExtractors;
-    /** fixed combined constraints */
+    /** Supported value extractors. */
+    private final List<Extractor> extractors;
+    /** Fixed combined constraints. */
     private final List<Constraint<?>> fixedCombinedConstraints;
-    /** dynamic combined constraint metadata list */
+    /** Dynamic combined constraint metadata list. */
     private final List<DynamicCombinedConstraintMetadata<A, ?>> dynamicCombinedConstraintMetadataList;
-    /** name -> attribute map */
+    /** Name -> attribute map. */
     private final Map<String, Method> attributeMap;
 
     /**
@@ -109,7 +108,7 @@ public class ConstraintMetadata<A extends Annotation> {
 
     // #################### instance ####################################################
 
-    /** constraint type -> {@code ConstraintMetadata} instance map */
+    /** Constraint type -> {@code ConstraintMetadata} instance map. */
     @SuppressWarnings("rawtypes")
     private static final Map<Class, ConstraintMetadata> INSTANCE_MAP = new ConcurrentHashMap<>();
 
@@ -121,8 +120,12 @@ public class ConstraintMetadata<A extends Annotation> {
      * @return the {@code ConstraintMetadata} instance of the specified constraint type
      */
     @SuppressWarnings("unchecked")
-    public static <A extends Annotation> ConstraintMetadata<A> getInstance(@NonNull Class<? extends A> constraintType) {
-        return INSTANCE_MAP.computeIfAbsent(constraintType, ConstraintMetadata::new);
+    public static <A extends Annotation> ConstraintMetadata<A> getInstance(Class<A> constraintType) {
+        ConstraintMetadata<A> metadata = INSTANCE_MAP.get(constraintType);
+        if (metadata != null) { return metadata; }
+        metadata = new ConstraintMetadata<>(constraintType);
+        ConstraintMetadata<A> previousValue = INSTANCE_MAP.putIfAbsent(constraintType, metadata);
+        return (previousValue == null) ? metadata : previousValue;
     }
 
     // ==================== constructor =================================================
@@ -137,8 +140,8 @@ public class ConstraintMetadata<A extends Annotation> {
         this.constraintType = constraintType;
         this.order = aConstraint.order();
         this.criterionFactories = getCriterionFactories(constraintType);
-        this.valueExtractors = getValueExtractors(constraintType);
-        this.fixedCombinedConstraints = Constraint.filterOutConstraints(constraintType.getDeclaredAnnotations());
+        this.extractors = getExtractors(constraintType);
+        this.fixedCombinedConstraints = Constraint.filterConstraints(constraintType.getDeclaredAnnotations());
         this.dynamicCombinedConstraintMetadataList = initDynamicCombinedConstraintMetadataList(
                 constraintType, aConstraint);
         this.attributeMap = getAttributeMap(constraintType);
@@ -209,7 +212,7 @@ public class ConstraintMetadata<A extends Annotation> {
 
     // ==================== attribute ===================================================
 
-    /** non-attribute names */
+    /** Non-attribute names. */
     private static final Set<String> NON_ATTRIBUTE_NAMES = new HashSet<>(Arrays.asList(
             "annotationType", "hashCode", "equals", "toString"));
 
@@ -249,7 +252,7 @@ public class ConstraintMetadata<A extends Annotation> {
      * @param constraintType constraint type
      * @return value extractors for the specified constraint type
      */
-    private static List<ValueExtractor> getValueExtractors(Class<? extends Annotation> constraintType) {
+    private static List<Extractor> getExtractors(Class<? extends Annotation> constraintType) {
         Field field = ReflectionUtils.getDeclaredField(constraintType, "VALUE_EXTRACTORS");
         return (field == null) ? new LinkedList<>() : ReflectionUtils.getValue(null, field);
     }
