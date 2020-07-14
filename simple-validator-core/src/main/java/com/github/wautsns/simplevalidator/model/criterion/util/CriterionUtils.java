@@ -70,7 +70,11 @@ public class CriterionUtils {
      */
     @SuppressWarnings("unchecked")
     public static <C extends Criterion> C forNode(ConstrainedNode node) {
-        return (C) CACHE.computeIfAbsent(node, CriterionUtils::resolveNode);
+        Criterion criterion = CACHE.get(node);
+        if (criterion != null) { return (C) criterion; }
+        criterion = resolveNode(node);
+        Criterion previousValue = CACHE.putIfAbsent(node, criterion);
+        return (C) ((previousValue == null) ? criterion : previousValue);
     }
 
     /**

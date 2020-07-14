@@ -42,9 +42,9 @@ import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
@@ -337,19 +337,18 @@ public class Constraint<A extends Annotation> {
          */
         public void processWithoutVariables(ConstrainedNode node, Criteria wip) {
             int order = metadata.getOrder();
-            Iterator<Constraint<?>> iterator = combinedConstraints.iterator();
-            Constraint<?> current = null;
+            ListIterator<Constraint<?>> iterator = combinedConstraints.listIterator();
             while (iterator.hasNext()) {
-                current = iterator.next();
+                Constraint<?> current = iterator.next();
                 Integer combinedConstraintOrder = current.getOrder();
                 if (combinedConstraintOrder == null || combinedConstraintOrder <= order) {
                     current.criterionProcessor.processWithoutVariables(node, wip);
                 } else {
-                    current = null;
+                    iterator.previous();
+                    break;
                 }
             }
             if (!metadata.isOnlyUsedToCombineOtherConstraints()) { processByCriterionFactories(node, wip); }
-            if (current != null) { current.criterionProcessor.processWithoutVariables(node, wip); }
             while (iterator.hasNext()) { iterator.next().criterionProcessor.processWithoutVariables(node, wip); }
         }
 

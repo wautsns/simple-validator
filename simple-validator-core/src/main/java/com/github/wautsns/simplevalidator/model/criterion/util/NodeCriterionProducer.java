@@ -62,10 +62,11 @@ class NodeCriterionProducer {
                 new LinkedHashMap<>(nodeCriteriaMap).forEach((node, wip) -> {
                     if (node == root) { return; }
                     Criterion criterion = wip.simplify();
-                    if (criterion == null) { return; }
-                    Criteria parentWip = nodeCriteriaMap.computeIfAbsent(
-                            node.getParent(), n -> Criteria.newInstance(n.getType()));
-                    parentWip.add(node.getCriterionWrapper().wrap(criterion));
+                    if (criterion != null) {
+                        Criteria parentWip = nodeCriteriaMap.computeIfAbsent(
+                                node.getParent(), n -> Criteria.newInstance(n.getType()));
+                        parentWip.add(node.getCriterionWrapper().wrap(criterion));
+                    }
                     nodeCriteriaMap.remove(node);
                 });
             }
