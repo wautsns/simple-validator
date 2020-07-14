@@ -48,10 +48,9 @@ public class ConstrainedField extends ConstrainedTypeContainer {
     private final Criterion.Wrapper criterionWrapper;
 
     /**
-     * The method is equal to {@link #getDeclaringClass()}.
+     * Get declaring class.
      *
      * @return declaring class
-     * @see #getDeclaringClass()
      */
     @Override
     public ConstrainedNode getParent() {

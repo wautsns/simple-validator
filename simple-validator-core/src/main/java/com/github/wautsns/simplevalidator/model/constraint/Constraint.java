@@ -103,6 +103,7 @@ public class Constraint<A extends Annotation> {
      * Require attribute value.
      *
      * @param name attribute name
+     * @param <T> type of value
      * @return attribute value
      * @throws ConstraintAnalysisException if the attribute is not declared
      */

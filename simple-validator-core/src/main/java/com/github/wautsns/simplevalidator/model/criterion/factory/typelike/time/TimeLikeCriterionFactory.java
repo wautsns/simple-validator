@@ -64,6 +64,7 @@ public abstract class TimeLikeCriterionFactory<A extends Annotation>
      * @param node constrained node
      * @param constraint constraint
      * @param wip wip of criteria
+     * @param <T> type of time
      */
     protected abstract <T> void process(
             TimeLikeUtility<T> utility,

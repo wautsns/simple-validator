@@ -59,12 +59,12 @@ public class ValidationFailureFormatter extends TemplateMessageFormatter {
     /**
      * Construct a validation failure formatter.
      *
-     * <ul>
+     * <pre>
      * default processors are as followers:
-     * <li>100: {@link VariableTemplateMessageFormattingProcessor}</li>
-     * <li>200: {@link ReloadableResourceTemplateMessageFormattingProcessor}</li>
-     * <li>300: {@link SpelTemplateMessageFormattingProcessor}</li>
-     * </ul>
+     *   100: {@link VariableTemplateMessageFormattingProcessor}
+     *   200: {@link ReloadableResourceTemplateMessageFormattingProcessor}
+     *   300: {@link SpelTemplateMessageFormattingProcessor}
+     * </pre>
      */
     public ValidationFailureFormatter() {
         // variable formatting processor

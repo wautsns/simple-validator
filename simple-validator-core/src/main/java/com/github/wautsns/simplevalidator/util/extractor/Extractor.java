@@ -20,18 +20,18 @@ import java.lang.reflect.Type;
 /**
  * Extractor for extracting value from target value.
  *
- * <ul>
+ * <pre>
  * implementations:
- * <li>{@code boolean}: {@link BooleanExtractor}</li>
- * <li>{@code byte}: {@link ByteExtractor}</li>
- * <li>{@code char}: {@link CharExtractor}</li>
- * <li>{@code double}: {@link DoubleExtractor}</li>
- * <li>{@code float}: {@link FloatExtractor}</li>
- * <li>{@code int}: {@link IntExtractor}</li>
- * <li>{@code long}: {@link LongExtractor}</li>
- * <li>{@code short}: {@link ShortExtractor}</li>
- * <li>{@code non-primitive}: {@link TExtractor}</li>
- * </ul>
+ *   {@code boolean}: {@link BooleanExtractor}
+ *   {@code byte}: {@link ByteExtractor}
+ *   {@code char}: {@link CharExtractor}
+ *   {@code double}: {@link DoubleExtractor}
+ *   {@code float}: {@link FloatExtractor}
+ *   {@code int}: {@link IntExtractor}
+ *   {@code long}: {@link LongExtractor}
+ *   {@code short}: {@link ShortExtractor}
+ *   {@code non-primitive}: {@link TExtractor}
+ * </pre>
  *
  * @author wautsns
  * @since Mar 21, 2020

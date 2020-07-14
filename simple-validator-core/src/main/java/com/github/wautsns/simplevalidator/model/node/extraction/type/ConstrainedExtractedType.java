@@ -43,10 +43,9 @@ public class ConstrainedExtractedType extends ConstrainedTypeContainer {
     private final Criterion.Wrapper criterionWrapper;
 
     /**
-     * The method is equal to {@link #getTypeContainer()}.
+     * Get type container.
      *
      * @return type container
-     * @see #getTypeContainer()
      */
     @Override
     public ConstrainedNode getParent() {

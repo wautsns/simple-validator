@@ -77,6 +77,7 @@ public class CalendarUtility extends TimeLikeUtility<Calendar> {
      * Plus and set months to the specified time.
      *
      * @param timestamp timestamp
+     * @return {@code Calendar} instance
      */
     public Calendar getInstance(long timestamp) {
         Calendar instance = Calendar.getInstance();
@@ -89,6 +90,7 @@ public class CalendarUtility extends TimeLikeUtility<Calendar> {
      *
      * @param timestamp timestamp
      * @param monthsOffset months offset
+     * @return {@code Calendar} instance
      */
     public Calendar getInstance(long timestamp, long monthsOffset) {
         Calendar instance = getInstance(timestamp);

@@ -126,14 +126,14 @@ public abstract class ConstrainedTypeContainer extends ConstrainedNode {
     /**
      * Add extracted type metadata.
      *
-     * <ul>
+     * <pre>
      * default extracted type metadata are as followers:
-     * <li>1000: {@link ExtractedIterableElementTypeMetadata#INSTANCE}</li>
-     * <li>2000: {@link ExtractedMapKeyTypeMetadata#INSTANCE}</li>
-     * <li>3000: {@link ExtractedMapValueTypeMetadata#INSTANCE}</li>
-     * <li>4000: {@link ExtractedArrayComponentTypeMetadata#INSTANCE}</li>
-     * <li>5000: {@link ExtractedOptionalValueTypeMetadata#INSTANCE}</li>
-     * </ul>
+     *   1000: {@link ExtractedIterableElementTypeMetadata#INSTANCE}
+     *   2000: {@link ExtractedMapKeyTypeMetadata#INSTANCE}
+     *   3000: {@link ExtractedMapValueTypeMetadata#INSTANCE}
+     *   4000: {@link ExtractedArrayComponentTypeMetadata#INSTANCE}
+     *   5000: {@link ExtractedOptionalValueTypeMetadata#INSTANCE}
+     * </pre>
      *
      * @param order order
      * @param metadata extracted type metadata

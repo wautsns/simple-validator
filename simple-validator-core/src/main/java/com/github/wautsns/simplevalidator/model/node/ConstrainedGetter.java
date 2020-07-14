@@ -41,10 +41,9 @@ public class ConstrainedGetter extends ConstrainedTypeContainer {
     private final CriterionWrapper criterionWrapper;
 
     /**
-     * The method is equal to {@link #getDeclaringClass()}.
+     * Get declaring class.
      *
      * @return declaring class
-     * @see #getDeclaringClass()
      */
     @Override
     public ConstrainedNode getParent() {

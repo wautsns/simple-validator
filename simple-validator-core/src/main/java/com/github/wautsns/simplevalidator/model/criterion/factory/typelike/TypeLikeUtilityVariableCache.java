@@ -40,6 +40,7 @@ public class TypeLikeUtilityVariableCache<U extends TypeLikeUtility> {
      * Get variable associated with the specified utility.
      *
      * @param utility utility
+     * @param <T> type of value
      * @return variable associated with the specified utility
      */
     @SuppressWarnings("unchecked")

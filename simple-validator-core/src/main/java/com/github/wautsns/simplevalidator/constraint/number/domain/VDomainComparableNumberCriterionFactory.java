@@ -42,6 +42,7 @@ public class VDomainComparableNumberCriterionFactory extends ComparableNumberCri
     /**
      * Produce criterion.
      *
+     * @param node constrained node
      * @param constraint constraint
      * @return criterion
      */

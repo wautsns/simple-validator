@@ -41,6 +41,7 @@ public class TypeLikeUtilityCriterionCache<U extends TypeLikeUtility> {
      * Get criterion associated with the specified utility.
      *
      * @param utility utility
+     * @param <T> type of value
      * @return criterion associated with the specified utility
      */
     @SuppressWarnings("unchecked")

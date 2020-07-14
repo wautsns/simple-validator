@@ -57,7 +57,6 @@ public class ConstrainedClass extends ConstrainedNode {
      *
      * @param name field name
      * @return field, or {@code null} if there is no field named the specified name
-     * @see ConstrainedField#generateName(Field)
      */
     public ConstrainedField getField(String name) {
         return getNode(fields, name);

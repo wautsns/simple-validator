@@ -68,6 +68,7 @@ public abstract class ArrayTypeCriterionFactory<A extends Annotation> implements
      * @param node constrained node
      * @param constraint constraint
      * @param wip wip of criteria for T array
+     * @param <T> type of array element
      */
     protected <T> void processTArray(ConstrainedNode node, A constraint, TCriteria<T[]> wip) {
         throw new IllegalConstrainedNodeException(node.getLocation(), constraint);
