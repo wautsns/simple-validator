@@ -36,7 +36,7 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class VRefAnyTypeCriterionFactory extends AnyTypeCriterionFactory<VRef> {
 
-    /** {@code VRefAnyTypeCriterionFactory} instance */
+    /** {@code VRefAnyTypeCriterionFactory} instance. */
     public static final VRefAnyTypeCriterionFactory INSTANCE = new VRefAnyTypeCriterionFactory();
 
     @Override

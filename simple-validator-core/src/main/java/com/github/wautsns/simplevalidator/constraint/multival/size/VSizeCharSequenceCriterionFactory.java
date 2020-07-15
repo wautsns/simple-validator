@@ -30,7 +30,7 @@ import java.lang.reflect.Type;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class VSizeCharSequenceCriterionFactory implements TCriterionFactory<VSize, CharSequence> {
 
-    /** {@code VSizeCharSequenceCriterionFactory} instance */
+    /** {@code VSizeCharSequenceCriterionFactory} instance. */
     public static final VSizeCharSequenceCriterionFactory INSTANCE = new VSizeCharSequenceCriterionFactory();
 
     @Override

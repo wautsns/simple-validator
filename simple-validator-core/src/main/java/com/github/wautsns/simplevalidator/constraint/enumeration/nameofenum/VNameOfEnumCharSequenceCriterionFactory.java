@@ -37,7 +37,7 @@ import java.util.stream.Stream;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class VNameOfEnumCharSequenceCriterionFactory implements TCriterionFactory<VNameOfEnum, CharSequence> {
 
-    /** {@code VNameOfEnumCharSequenceCriterionFactory} instance */
+    /** {@code VNameOfEnumCharSequenceCriterionFactory} instance. */
     public static final VNameOfEnumCharSequenceCriterionFactory INSTANCE = new VNameOfEnumCharSequenceCriterionFactory();
 
     @Override

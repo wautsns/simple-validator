@@ -33,7 +33,7 @@ import java.util.concurrent.ConcurrentSkipListMap;
  */
 public class TemplateMessageFormatter implements Formatter<TemplateMessage> {
 
-    /** Map: order -> processors */
+    /** Map: order -> processors. */
     private final Map<Integer, Collection<Processor>> orderedProcessorsMap = new ConcurrentSkipListMap<>();
 
     /**

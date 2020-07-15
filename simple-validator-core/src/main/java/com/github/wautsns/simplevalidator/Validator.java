@@ -27,7 +27,7 @@ import lombok.experimental.UtilityClass;
  * @since Mar 14, 2020
  */
 @UtilityClass
-@SuppressWarnings({ "rawtypes", "unchecked" })
+@SuppressWarnings("unchecked")
 public class Validator {
 
     /**
@@ -79,12 +79,11 @@ public class Validator {
      *
      * @param value value
      * @param <T> type of value
-     * @return validation failure, or {@code null} if the value passes the validation
+     * @return value if the value pass the validation
+     * @throws ValidationException if the value does not pass the validation
      */
-    public static <T> T validateRudely(T value) {
-        ValidationFailure failure = validatePolitely((Class) value.getClass(), value);
-        if (failure == null) { return value; }
-        throw new ValidationException(failure);
+    public static <T> T validateRudely(T value) throws ValidationException {
+        return validateRudely((Class<T>) value.getClass(), value);
     }
 
     /**
@@ -93,9 +92,10 @@ public class Validator {
      * @param type benchmark type of validation
      * @param value value
      * @param <T> type of value
-     * @return validation failure, or {@code null} if the value passes the validation
+     * @return value if the value pass the validation
+     * @throws ValidationException if the value does not pass the validation
      */
-    public static <T> T validateRudely(Class<? super T> type, T value) {
+    public static <T> T validateRudely(Class<? super T> type, T value) throws ValidationException {
         ValidationFailure failure = validatePolitely(type, value);
         if (failure == null) { return value; }
         throw new ValidationException(failure);

@@ -175,13 +175,18 @@ public abstract class ConstrainedNode {
     public ConstrainedNode(Location location, Type type, List<Constraint<?>> constraints) {
         this.location = location;
         this.type = type;
+        // Get constraints applied to the type.
         List<Constraint<?>> constraintsAppliedToTheNode = constraints.stream()
                 .filter(constraint -> constraint.appliesTo(type))
                 .collect(Collectors.toCollection(LinkedList::new));
         if (constraintsAppliedToTheNode.size() == constraints.size()) {
+            // All constraints apply to the type, ok.
             this.constraints = CollectionUtils.unmodifiableList(constraints);
             this.extractedValues = Collections.emptyList();
         } else {
+            // If any constraint does not apply to the type, lookup extractors.
+            // eg. @VMin applies to int but not applies to OptionalInt directly, and IntExtractorForOptionalInt can make
+            // @VMin apply to OptionalInt.
             this.constraints = CollectionUtils.unmodifiableList(constraintsAppliedToTheNode);
             Map<Extractor, List<Constraint<?>>> tmp = new HashMap<>();
             constraints.stream()

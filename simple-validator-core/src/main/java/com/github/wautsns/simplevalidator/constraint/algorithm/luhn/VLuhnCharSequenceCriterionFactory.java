@@ -32,7 +32,7 @@ import java.lang.reflect.Type;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class VLuhnCharSequenceCriterionFactory implements TCriterionFactory<VLuhn, CharSequence> {
 
-    /** {@code VLuhnCharSequenceCriterionFactory} instance */
+    /** {@code VLuhnCharSequenceCriterionFactory} instance. */
     public static final VLuhnCharSequenceCriterionFactory INSTANCE = new VLuhnCharSequenceCriterionFactory();
 
     @Override

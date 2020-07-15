@@ -16,6 +16,7 @@
 package com.github.wautsns.simplevalidator.model.constraint;
 
 import com.github.wautsns.simplevalidator.constraint.AConstraint;
+import com.github.wautsns.simplevalidator.constraint.AConstraintList;
 import com.github.wautsns.simplevalidator.exception.analysis.ConstraintAnalysisException;
 import com.github.wautsns.simplevalidator.model.criterion.factory.CriterionFactory;
 import com.github.wautsns.simplevalidator.util.common.CollectionUtils;
@@ -191,6 +192,17 @@ public class ConstraintMetadata<A extends Annotation> {
      */
     public static boolean isConstraintType(Class<? extends Annotation> annotationType) {
         return annotationType.isAnnotationPresent(AConstraint.class);
+    }
+
+    /**
+     * Return whether the annotation type is a constraint list(i.e. an annotation type annotated with {@link
+     * AConstraintList}).
+     *
+     * @param annotationType annotation type
+     * @return {@code true} if the annotation type is a constraint list, otherwise {@code false}
+     */
+    public static boolean isConstraintList(Class<? extends Annotation> annotationType) {
+        return annotationType.isAnnotationPresent(AConstraintList.class);
     }
 
     // #################### internal utils ##############################################

@@ -32,7 +32,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class VNotNullNonPrimitiveCriterionFactory extends NonPrimitiveCriterionFactory<VNotNull> {
 
-    /** {@code VNotNullNonPrimitiveCriterionFactory} instance */
+    /** {@code VNotNullNonPrimitiveCriterionFactory} instance. */
     public static final VNotNullNonPrimitiveCriterionFactory INSTANCE = new VNotNullNonPrimitiveCriterionFactory();
 
     @Override

@@ -31,7 +31,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ExtractedIterableElementTypeMetadata extends ConstrainedExtractedType.Metadata {
 
-    /** {@code ExtractedIterableElementTypeMetadata} instance */
+    /** {@code ExtractedIterableElementTypeMetadata} instance. */
     public static final ExtractedIterableElementTypeMetadata INSTANCE = new ExtractedIterableElementTypeMetadata();
 
     @Override

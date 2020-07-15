@@ -42,7 +42,7 @@ import java.lang.reflect.AnnotatedType;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ExtractedArrayComponentTypeMetadata extends ConstrainedExtractedType.Metadata {
 
-    /** {@code ExtractedArrayComponentTypeMetadata} instance */
+    /** {@code ExtractedArrayComponentTypeMetadata} instance. */
     public static final ExtractedArrayComponentTypeMetadata INSTANCE = new ExtractedArrayComponentTypeMetadata();
 
     @Override

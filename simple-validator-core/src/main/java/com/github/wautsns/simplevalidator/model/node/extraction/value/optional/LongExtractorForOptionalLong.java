@@ -31,7 +31,7 @@ import java.util.OptionalLong;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class LongExtractorForOptionalLong implements LongExtractor<OptionalLong> {
 
-    /** {@code LongExtractorForOptionalLong} instance */
+    /** {@code LongExtractorForOptionalLong} instance. */
     public static final LongExtractorForOptionalLong INSTANCE = new LongExtractorForOptionalLong();
 
     @Override

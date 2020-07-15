@@ -33,7 +33,7 @@ import org.springframework.expression.spel.standard.SpelExpressionParser;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class VWithSpelAnyTypeCriterionFactory extends AnyTypeCriterionFactory<VWithSpel> {
 
-    /** {@code VWithSpelAnyTypeCriterionFactory} instance */
+    /** {@code VWithSpelAnyTypeCriterionFactory} instance. */
     public static final VWithSpelAnyTypeCriterionFactory INSTANCE = new VWithSpelAnyTypeCriterionFactory();
 
     @Override

@@ -26,7 +26,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class VSizeArrayCriterionFactory extends ArrayTypeCriterionFactory<VSize> {
 
-    /** {@code VSizeArrayCriterionFactory} instance */
+    /** {@code VSizeArrayCriterionFactory} instance. */
     public static final VSizeArrayCriterionFactory INSTANCE = new VSizeArrayCriterionFactory();
 
     @Override
