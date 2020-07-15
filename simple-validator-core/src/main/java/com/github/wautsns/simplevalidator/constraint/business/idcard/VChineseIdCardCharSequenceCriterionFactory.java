@@ -34,7 +34,7 @@ import java.util.function.IntPredicate;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class VChineseIdCardCharSequenceCriterionFactory extends CharSequenceCriterionFactory<VChineseIdCard> {
 
-    /** {@code VChineseIdCardCharSequenceCriterionFactory} instance */
+    /** {@code VChineseIdCardCharSequenceCriterionFactory} instance. */
     public static final VChineseIdCardCharSequenceCriterionFactory INSTANCE = new VChineseIdCardCharSequenceCriterionFactory();
 
     @Override

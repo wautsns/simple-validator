@@ -33,7 +33,7 @@ import java.util.Map;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ExtractedMapValueTypeMetadata extends ConstrainedExtractedType.Metadata {
 
-    /** {@code ExtractedMapValueTypeMetadata} instance */
+    /** {@code ExtractedMapValueTypeMetadata} instance. */
     public static final ExtractedMapValueTypeMetadata INSTANCE = new ExtractedMapValueTypeMetadata();
 
     @Override

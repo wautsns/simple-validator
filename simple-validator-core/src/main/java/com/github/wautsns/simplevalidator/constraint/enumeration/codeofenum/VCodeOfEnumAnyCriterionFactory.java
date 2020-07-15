@@ -38,7 +38,7 @@ import java.util.stream.Stream;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class VCodeOfEnumAnyCriterionFactory extends NonPrimitiveCriterionFactory<VCodeOfEnum> {
 
-    /** {@code VCodeOfEnumAnyCriterionFactory} instance */
+    /** {@code VCodeOfEnumAnyCriterionFactory} instance. */
     public static final VCodeOfEnumAnyCriterionFactory INSTANCE = new VCodeOfEnumAnyCriterionFactory();
 
     @Override

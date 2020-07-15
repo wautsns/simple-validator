@@ -31,7 +31,7 @@ import java.util.Map;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class VSizeMapCriterionFactory implements TCriterionFactory<VSize, Map<?, ?>> {
 
-    /** {@code VSizeMapCriterionFactory} instance */
+    /** {@code VSizeMapCriterionFactory} instance. */
     public static final VSizeMapCriterionFactory INSTANCE = new VSizeMapCriterionFactory();
 
     @Override

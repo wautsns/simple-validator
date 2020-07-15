@@ -32,7 +32,7 @@ import java.util.Objects;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class VSuperclassNonPrimitiveCriterionFactory extends NonPrimitiveCriterionFactory<VSuperclass> {
 
-    /** {@code VSuperclassNonPrimitiveCriterionFactory} instance */
+    /** {@code VSuperclassNonPrimitiveCriterionFactory} instance. */
     public static final VSuperclassNonPrimitiveCriterionFactory INSTANCE = new VSuperclassNonPrimitiveCriterionFactory();
 
     @Override

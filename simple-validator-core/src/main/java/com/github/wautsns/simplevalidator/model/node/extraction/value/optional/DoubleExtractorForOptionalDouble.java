@@ -31,7 +31,7 @@ import java.util.OptionalDouble;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class DoubleExtractorForOptionalDouble implements DoubleExtractor<OptionalDouble> {
 
-    /** {@code DoubleExtractorForOptionalDouble} instance */
+    /** {@code DoubleExtractorForOptionalDouble} instance. */
     public static final DoubleExtractorForOptionalDouble INSTANCE = new DoubleExtractorForOptionalDouble();
 
     @Override

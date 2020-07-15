@@ -41,6 +41,7 @@ import java.lang.reflect.Proxy;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
@@ -264,9 +265,21 @@ public class Constraint<A extends Annotation> {
      * @return constraints(unmodified)
      */
     public static List<Constraint<?>> filterConstraints(List<Annotation> annotations) {
-        List<Constraint<?>> constraints = annotations.stream()
-                .filter(annotation -> ConstraintMetadata.isConstraintType(annotation.annotationType()))
-                .map(Constraint::getInstance)
+        if (annotations.isEmpty()) { return Collections.emptyList(); }
+        List<Constraint<?>> constraints = new LinkedList<>();
+        for (Annotation annotation : annotations) {
+            Class<? extends Annotation> annotationType = annotation.annotationType();
+            if (ConstraintMetadata.isConstraintType(annotationType)) {
+                constraints.add(Constraint.getInstance(annotation));
+            } else if (ConstraintMetadata.isConstraintList(annotationType)) {
+                Method value = ReflectionUtils.getDeclaredMethod(annotationType, "value");
+                Annotation[] constraintAnnotations = ReflectionUtils.invoke(annotation, value);
+                for (Annotation constraintAnnotation : constraintAnnotations) {
+                    constraints.add(Constraint.getInstance(constraintAnnotation));
+                }
+            }
+        }
+        constraints = constraints.stream()
                 .distinct()
                 .collect(Collectors.toCollection(LinkedList::new));
         return CollectionUtils.unmodifiableList(constraints);

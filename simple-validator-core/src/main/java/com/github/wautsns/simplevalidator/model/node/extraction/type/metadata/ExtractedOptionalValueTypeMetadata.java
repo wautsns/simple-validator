@@ -32,7 +32,7 @@ import java.util.Optional;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ExtractedOptionalValueTypeMetadata extends ConstrainedExtractedType.Metadata {
 
-    /** {@code ExtractedOptionalValueTypeMetadata} instance */
+    /** {@code ExtractedOptionalValueTypeMetadata} instance. */
     public static final ExtractedOptionalValueTypeMetadata INSTANCE = new ExtractedOptionalValueTypeMetadata();
 
     @Override

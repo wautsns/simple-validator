@@ -28,7 +28,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class VNullableNonPrimitiveCriterionFactory extends NonPrimitiveCriterionFactory<VNullable> {
 
-    /** {@code VNullableNonPrimitiveCriterionFactory} instance */
+    /** {@code VNullableNonPrimitiveCriterionFactory} instance. */
     public static final VNullableNonPrimitiveCriterionFactory INSTANCE = new VNullableNonPrimitiveCriterionFactory();
 
     @Override

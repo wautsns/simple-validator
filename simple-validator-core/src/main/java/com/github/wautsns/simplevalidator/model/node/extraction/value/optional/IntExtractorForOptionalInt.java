@@ -31,7 +31,7 @@ import java.util.OptionalInt;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class IntExtractorForOptionalInt implements IntExtractor<OptionalInt> {
 
-    /** {@code IntExtractorForOptionalInt} instance */
+    /** {@code IntExtractorForOptionalInt} instance. */
     public static final IntExtractorForOptionalInt INSTANCE = new IntExtractorForOptionalInt();
 
     @Override

@@ -31,7 +31,7 @@ import java.util.Collection;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class VSizeCollectionCriterionFactory implements TCriterionFactory<VSize, Collection<?>> {
 
-    /** {@code VSizeCollectionCriterionFactory} instance */
+    /** {@code VSizeCollectionCriterionFactory} instance. */
     public static final VSizeCollectionCriterionFactory INSTANCE = new VSizeCollectionCriterionFactory();
 
     @Override

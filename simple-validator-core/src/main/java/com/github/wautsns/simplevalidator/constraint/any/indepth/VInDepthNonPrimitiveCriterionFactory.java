@@ -34,7 +34,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class VInDepthNonPrimitiveCriterionFactory extends NonPrimitiveCriterionFactory<VInDepth> {
 
-    /** {@code VInDepthNonPrimitiveCriterionFactory} instance */
+    /** {@code VInDepthNonPrimitiveCriterionFactory} instance. */
     public static final VInDepthNonPrimitiveCriterionFactory INSTANCE = new VInDepthNonPrimitiveCriterionFactory();
 
     @Override

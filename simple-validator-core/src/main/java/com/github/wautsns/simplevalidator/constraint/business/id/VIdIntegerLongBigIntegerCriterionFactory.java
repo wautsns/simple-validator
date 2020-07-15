@@ -33,7 +33,7 @@ import java.util.Map;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class VIdIntegerLongBigIntegerCriterionFactory extends ComparableNumberCriterionFactory<VId> {
 
-    /** {@code VIdIntegerLongBigIntegerCriterionFactory} instance */
+    /** {@code VIdIntegerLongBigIntegerCriterionFactory} instance. */
     public static final VIdIntegerLongBigIntegerCriterionFactory INSTANCE = new VIdIntegerLongBigIntegerCriterionFactory();
 
     @Override
