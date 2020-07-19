@@ -47,7 +47,7 @@ public @interface VNotNull {
      *
      * @return message(template)
      */
-    String message() default "[`VNonNull`]";
+    String message() default "[`VNotNull`]";
 
     /**
      * Order of the constraint.

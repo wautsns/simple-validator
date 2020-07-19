@@ -72,7 +72,7 @@ public class ValidationFailureFormatter extends TemplateMessageFormatter {
         // reloadable resource formatting processor
         reloadableResourceTemplateMessageFormattingProcessor = new ReloadableResourceTemplateMessageFormattingProcessor(
                 RELOADED_RESOURCE_LD, RELOADED_RESOURCE_RD);
-        reloadableResourceTemplateMessageFormattingProcessor.loadResources(BUILT_IN_MESSAGES_BASE_NAME);
+        reloadableResourceTemplateMessageFormattingProcessor.loadMessageResources(BUILT_IN_MESSAGES_BASE_NAME);
         addProcessor(200, reloadableResourceTemplateMessageFormattingProcessor);
         // spel formatting processor
         addProcessor(300, new SpelTemplateMessageFormattingProcessor(SPEL_LD, SPEL_RD));
@@ -90,7 +90,7 @@ public class ValidationFailureFormatter extends TemplateMessageFormatter {
      * @return self reference
      */
     public ValidationFailureFormatter loadMessageResources(String[] messageResources) {
-        reloadableResourceTemplateMessageFormattingProcessor.loadResources(messageResources);
+        reloadableResourceTemplateMessageFormattingProcessor.loadMessageResources(messageResources);
         return this;
     }
 

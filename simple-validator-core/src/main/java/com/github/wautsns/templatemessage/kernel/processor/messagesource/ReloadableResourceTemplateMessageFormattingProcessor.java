@@ -19,6 +19,10 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 
+import java.util.Arrays;
+import java.util.LinkedHashSet;
+import java.util.Set;
+
 /**
  * Template message formatting processor for {@link ReloadableResourceBundleMessageSource reloadable resource}.
  *
@@ -60,8 +64,12 @@ public class ReloadableResourceTemplateMessageFormattingProcessor
      * @return self reference
      * @see ReloadableResourceBundleMessageSource#addBasenames(String...)
      */
-    public ReloadableResourceTemplateMessageFormattingProcessor loadResources(String... baseNames) {
-        getMessageSource().addBasenames(baseNames);
+    public ReloadableResourceTemplateMessageFormattingProcessor loadMessageResources(String... baseNames) {
+        Set<String> oldBaseNameSet = getMessageSource().getBasenameSet();
+        Set<String> newBaseNameSet = new LinkedHashSet<>(baseNames.length + oldBaseNameSet.size());
+        newBaseNameSet.addAll(Arrays.asList(baseNames));
+        newBaseNameSet.addAll(oldBaseNameSet);
+        getMessageSource().setBasenames(newBaseNameSet.toArray(new String[0]));
         return this;
     }
 
