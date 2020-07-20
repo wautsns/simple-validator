@@ -89,7 +89,7 @@ public class ValidationFailureFormatter extends TemplateMessageFormatter {
      * @param messageResources message resources.
      * @return self reference
      */
-    public ValidationFailureFormatter loadMessageResources(String[] messageResources) {
+    public ValidationFailureFormatter loadMessageResources(String... messageResources) {
         reloadableResourceTemplateMessageFormattingProcessor.loadMessageResources(messageResources);
         return this;
     }

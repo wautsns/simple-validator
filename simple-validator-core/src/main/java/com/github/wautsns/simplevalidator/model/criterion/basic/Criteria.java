@@ -59,6 +59,16 @@ public abstract class Criteria<C extends Criterion> implements Criterion {
                 Criteria<C> criteria = (Criteria<C>) criterion;
                 criterionList.remove(index);
                 criterionList.addAll(index, criteria.criterionList);
+            } else if (criterion instanceof PrimitiveCriterion
+                    && (criterion == BooleanCriterion.TRUTH
+                    || criterion == CharCriterion.TRUTH
+                    || criterion == ByteCriterion.TRUTH
+                    || criterion == ShortCriterion.TRUTH
+                    || criterion == IntCriterion.TRUTH
+                    || criterion == LongCriterion.TRUTH
+                    || criterion == FloatCriterion.TRUTH
+                    || criterion == DoubleCriterion.TRUTH)) {
+                criterionList.remove(index);
             } else {
                 index++;
             }

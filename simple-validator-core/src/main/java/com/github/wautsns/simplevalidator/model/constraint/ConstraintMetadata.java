@@ -111,7 +111,7 @@ public class ConstraintMetadata<A extends Annotation> {
 
     /** Constraint type -> {@code ConstraintMetadata} instance map. */
     @SuppressWarnings("rawtypes")
-    private static final Map<Class, ConstraintMetadata> INSTANCE_MAP = new ConcurrentHashMap<>();
+    private static final Map<Class, ConstraintMetadata> CACHE = new ConcurrentHashMap<>();
 
     /**
      * Get the {@code ConstraintMetadata} instance of the specified constraint type.
@@ -122,10 +122,10 @@ public class ConstraintMetadata<A extends Annotation> {
      */
     @SuppressWarnings("unchecked")
     public static <A extends Annotation> ConstraintMetadata<A> getInstance(Class<A> constraintType) {
-        ConstraintMetadata<A> metadata = INSTANCE_MAP.get(constraintType);
+        ConstraintMetadata<A> metadata = CACHE.get(constraintType);
         if (metadata != null) { return metadata; }
         metadata = new ConstraintMetadata<>(constraintType);
-        ConstraintMetadata<A> previousValue = INSTANCE_MAP.putIfAbsent(constraintType, metadata);
+        ConstraintMetadata<A> previousValue = CACHE.putIfAbsent(constraintType, metadata);
         return (previousValue == null) ? metadata : previousValue;
     }
 
