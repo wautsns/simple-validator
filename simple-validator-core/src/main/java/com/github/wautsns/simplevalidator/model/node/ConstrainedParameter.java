@@ -82,7 +82,7 @@ public class ConstrainedParameter extends ConstrainedTypeContainer {
         Class<?> clazz = executable.getDeclaringClass();
         StringBuilder name = new StringBuilder();
         name.append(clazz.getSimpleName());
-        name.append(executable.getName());
+        name.append('#').append(executable.getName());
         name.append(Arrays.stream(executable.getParameterTypes())
                 .map(Class::getSimpleName)
                 .collect(Collectors.joining(",", "(", ")")));

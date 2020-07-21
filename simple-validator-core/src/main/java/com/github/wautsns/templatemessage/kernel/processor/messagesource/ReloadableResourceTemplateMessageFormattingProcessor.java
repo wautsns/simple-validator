@@ -64,6 +64,7 @@ public class ReloadableResourceTemplateMessageFormattingProcessor
      * @return self reference
      */
     public ReloadableResourceTemplateMessageFormattingProcessor loadMessageResources(String... baseNames) {
+        if (baseNames == null || baseNames.length == 0) { return this; }
         Set<String> oldBaseNameSet = getMessageSource().getBasenameSet();
         Set<String> newBaseNameSet = new LinkedHashSet<>(baseNames.length + oldBaseNameSet.size());
         newBaseNameSet.addAll(Arrays.asList(baseNames));
