@@ -23,8 +23,9 @@ import com.github.wautsns.simplevalidator.model.failure.ValidationFailure;
 import com.github.wautsns.simplevalidator.model.node.ConstrainedNode;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.springframework.expression.Expression;
+import org.springframework.expression.spel.standard.SpelExpression;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
+import org.springframework.expression.spel.support.StandardEvaluationContext;
 
 /**
  * @author wautsns
@@ -43,13 +44,13 @@ public class VWithSpelAnyTypeCriterionFactory extends AnyTypeCriterionFactory<VW
 
     // #################### criterion ###################################################
 
+    private static final SpelExpressionParser PARSER = new SpelExpressionParser();
+    private static final StandardEvaluationContext CTX = new StandardEvaluationContext();
+
     protected static TCriterion<?> produce(VWithSpel constraint) {
         String expr = constraint.expr();
-        Expression expression = PARSER.parseExpression(expr);
-        return value -> Boolean.TRUE.equals(expression.getValue(value, boolean.class)) ? null
-                : new ValidationFailure(value);
+        SpelExpression spel = PARSER.parseRaw(expr);
+        return value -> Boolean.TRUE.equals(spel.getValue(value)) ? null : new ValidationFailure(value);
     }
-
-    private static final SpelExpressionParser PARSER = new SpelExpressionParser();
 
 }

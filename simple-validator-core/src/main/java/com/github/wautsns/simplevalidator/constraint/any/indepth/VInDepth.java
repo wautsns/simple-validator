@@ -49,7 +49,7 @@ public @interface VInDepth {
      */
     int order() default 0;
 
-    boolean dynamic() default true;
+    boolean dynamic() default false;
 
     // #################### extra #######################################################
 

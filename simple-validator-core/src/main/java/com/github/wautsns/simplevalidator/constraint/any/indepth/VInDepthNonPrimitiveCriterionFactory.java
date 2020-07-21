@@ -20,10 +20,14 @@ import com.github.wautsns.simplevalidator.model.criterion.basic.TCriteria;
 import com.github.wautsns.simplevalidator.model.criterion.basic.TCriterion;
 import com.github.wautsns.simplevalidator.model.criterion.factory.special.NonPrimitiveCriterionFactory;
 import com.github.wautsns.simplevalidator.model.criterion.util.CriterionUtils;
+import com.github.wautsns.simplevalidator.model.failure.ValidationFailure;
 import com.github.wautsns.simplevalidator.model.node.ConstrainedNode;
 import com.github.wautsns.simplevalidator.util.common.TypeUtils;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+
+import java.util.LinkedList;
+import java.util.function.UnaryOperator;
 
 /**
  * Non-primitive criterion factory for in-depth validation.
@@ -52,7 +56,22 @@ public class VInDepthNonPrimitiveCriterionFactory extends NonPrimitiveCriterionF
      * @return criterion
      */
     protected TCriterion<Object> produce(ConstrainedNode node, VInDepth constraint) {
-        return constraint.dynamic() ? CRITERION_FOR_DYNAMIC : produceForStatic(node);
+        return constraint.dynamic() ? produceForDynamic(node) : produceForStatic(node);
+    }
+
+    /**
+     * Produce criterion for dynamic in-depth.
+     *
+     * @param node constrained node
+     * @return criterion for dynamic in-depth
+     */
+    private static TCriterion<Object> produceForDynamic(ConstrainedNode node) {
+        UnaryOperator<ValidationFailure> failureEnhancer = initVInDepthFailureEnhancer(node);
+        return value -> {
+            ValidationFailure failure = Validator.validatePolitely(value);
+            if (failure == null) { return null; }
+            return failureEnhancer.apply(failure);
+        };
     }
 
     /**
@@ -64,10 +83,29 @@ public class VInDepthNonPrimitiveCriterionFactory extends NonPrimitiveCriterionF
     private static TCriterion<Object> produceForStatic(ConstrainedNode node) {
         Class<?> clazz = TypeUtils.getClass(node.getType());
         TCriterion<Object> criterion = CriterionUtils.forType(clazz);
-        return (criterion == TCriterion.TRUTH) ? null : criterion;
+        return (criterion == TCriterion.TRUTH)
+                ? TCriterion.TRUTH
+                : criterion.enhanceFailure(initVInDepthFailureEnhancer(node));
     }
 
-    /** Criterion for dynamic in-depth. */
-    private static final TCriterion<Object> CRITERION_FOR_DYNAMIC = Validator::validatePolitely;
+    /**
+     * Initialize VInDepth failure enhancer.
+     *
+     * @param node constrained node
+     * @return VInDepth failure enhancer
+     */
+    private static UnaryOperator<ValidationFailure> initVInDepthFailureEnhancer(ConstrainedNode node) {
+        LinkedList<String> nodeNames = node.getLocation().copyNodeNames();
+        return failure -> {
+            LinkedList<String> subNodeNames = failure
+                    .getValue(ValidationFailure.Variables.LOCATION)
+                    .copyNodeNames();
+            subNodeNames.removeFirst();
+            subNodeNames.addAll(0, nodeNames);
+            ConstrainedNode.Location subLocation = new ConstrainedNode.Location(subNodeNames);
+            failure.put(ValidationFailure.Variables.LOCATION, subLocation);
+            return failure;
+        };
+    }
 
 }

@@ -95,8 +95,8 @@ public class ValidationFailure extends TemplateMessage {
 
         /** Variable: value. */
         public static final Variable<Object> VALUE = new Variable<>("value");
-        /** Variable: target. */
-        public static final Variable<ConstrainedNode.Location> TARGET = new Variable<>("target");
+        /** Variable: location. */
+        public static final Variable<ConstrainedNode.Location> LOCATION = new Variable<>("location");
         /**
          * Variable: indicators.
          *

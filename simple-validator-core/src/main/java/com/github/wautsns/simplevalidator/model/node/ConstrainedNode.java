@@ -208,32 +208,50 @@ public abstract class ConstrainedNode {
     // #################### utils #######################################################
 
     /** Node location. */
-    @EqualsAndHashCode(of = "names")
+    @EqualsAndHashCode(of = "nodeNames")
     public static class Location implements Serializable {
 
         private static final long serialVersionUID = 6613571499661573545L;
 
         /** Node names. */
-        private final LinkedList<String> names = new LinkedList<>();
+        private final LinkedList<String> nodeNames = new LinkedList<>();
 
         /**
          * Construct a root location.
          *
-         * @param name root name
+         * @param nodeName node name
          */
-        public Location(String name) {
-            names.add(name);
+        public Location(String nodeName) {
+            nodeNames.add(nodeName);
         }
 
         /**
          * Construct a node location.
          *
          * @param parent parent node
-         * @param name node name
+         * @param nodeName node name
          */
-        public Location(ConstrainedNode parent, String name) {
-            names.addAll(parent.getLocation().names);
-            names.add(name);
+        public Location(ConstrainedNode parent, String nodeName) {
+            nodeNames.addAll(parent.getLocation().nodeNames);
+            nodeNames.add(nodeName);
+        }
+
+        /**
+         * Construct a node location.
+         *
+         * @param nodeNames node names
+         */
+        public Location(List<String> nodeNames) {
+            this.nodeNames.addAll(nodeNames);
+        }
+
+        /**
+         * Copy node names.
+         *
+         * @return node names
+         */
+        public LinkedList<String> copyNodeNames() {
+            return new LinkedList<>(nodeNames);
         }
 
         /**
@@ -242,7 +260,7 @@ public abstract class ConstrainedNode {
          * @return simple name of the location
          */
         public String getSimpleName() {
-            return names.getLast();
+            return nodeNames.getLast();
         }
 
         /**
@@ -252,7 +270,7 @@ public abstract class ConstrainedNode {
          */
         @Override
         public String toString() {
-            return String.join("", names);
+            return String.join("", nodeNames);
         }
 
     }

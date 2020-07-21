@@ -53,7 +53,7 @@ public @interface VRef {
 
     String property() default "";
 
-    boolean useRefTarget() default true;
+    boolean useRefLocation() default true;
 
     // #################### extra #######################################################
 

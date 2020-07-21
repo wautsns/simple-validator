@@ -329,7 +329,7 @@ public class Constraint<A extends Annotation> {
                 if (criterion == null) { return; }
                 VariableValueMap vvm = new VariableValueMap();
                 vvm.put(variableValueMap);
-                vvm.put(ValidationFailure.Variables.TARGET, node.getLocation());
+                vvm.put(ValidationFailure.Variables.LOCATION, node.getLocation());
                 criterion = criterion.enhanceFailure(failure -> failure.setMessageTemplate(message).put(vvm));
                 wip.add(criterion);
             } else if (metadata.isOnlyUsedToCombineOtherConstraints()) {

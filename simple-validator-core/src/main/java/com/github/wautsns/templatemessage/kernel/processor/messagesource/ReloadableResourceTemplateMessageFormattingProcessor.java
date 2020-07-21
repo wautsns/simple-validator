@@ -62,7 +62,6 @@ public class ReloadableResourceTemplateMessageFormattingProcessor
      *
      * @param baseNames base names
      * @return self reference
-     * @see ReloadableResourceBundleMessageSource#addBasenames(String...)
      */
     public ReloadableResourceTemplateMessageFormattingProcessor loadMessageResources(String... baseNames) {
         Set<String> oldBaseNameSet = getMessageSource().getBasenameSet();

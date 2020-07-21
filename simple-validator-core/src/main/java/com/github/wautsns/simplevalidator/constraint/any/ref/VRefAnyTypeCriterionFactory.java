@@ -58,7 +58,7 @@ public class VRefAnyTypeCriterionFactory extends AnyTypeCriterionFactory<VRef> {
         String property = constraint.property();
         if (property.isEmpty()) { property = node.getLocation().getSimpleName(); }
         ConstrainedNode ref = refClass.requireChild(property);
-        if (constraint.useRefTarget()) { return CriterionUtils.forNode(ref); }
+        if (constraint.useRefLocation()) { return CriterionUtils.forNode(ref); }
         return CriterionUtils.produce(initTmpConstrainedNode(node, ref));
     }
 

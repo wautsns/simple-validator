@@ -49,9 +49,8 @@ public class ValidationFailureFormatter extends TemplateMessageFormatter {
 
     /** Built-in messages base name. */
     private static final String BUILT_IN_MESSAGES_BASE_NAME = "simple-validator/messages/messages";
-    /** Variable: value. */
-    private static final String VARIABLE_VALUE_PLACEHOLDER =
-            VARIABLE_LD + ValidationFailure.Variables.VALUE.getName() + VARIABLE_RD;
+    /** Variable(value) placeholder. */
+    private static final String PLACEHOLDER_VARIABLE_VALUE = "$$" + ValidationFailure.Variables.VALUE + "$$";
 
     /** Reloadable resource template message formatting processor. */
     private final ReloadableResourceTemplateMessageFormattingProcessor reloadableResourceTemplateMessageFormattingProcessor;
@@ -61,21 +60,21 @@ public class ValidationFailureFormatter extends TemplateMessageFormatter {
      *
      * <pre>
      * default processors are as followers:
-     *   100: {@link VariableTemplateMessageFormattingProcessor}
-     *   200: {@link ReloadableResourceTemplateMessageFormattingProcessor}
-     *   300: {@link SpelTemplateMessageFormattingProcessor}
+     *    1000: {@link VariableTemplateMessageFormattingProcessor}
+     *    3000: {@link ReloadableResourceTemplateMessageFormattingProcessor}
+     *    5000: {@link SpelTemplateMessageFormattingProcessor}
      * </pre>
      */
     public ValidationFailureFormatter() {
         // variable formatting processor
-        addProcessor(100, new VariableTemplateMessageFormattingProcessor(VARIABLE_LD, VARIABLE_RD));
+        addProcessor(1000, new VariableTemplateMessageFormattingProcessor(VARIABLE_LD, VARIABLE_RD));
         // reloadable resource formatting processor
         reloadableResourceTemplateMessageFormattingProcessor = new ReloadableResourceTemplateMessageFormattingProcessor(
                 RELOADED_RESOURCE_LD, RELOADED_RESOURCE_RD);
         reloadableResourceTemplateMessageFormattingProcessor.loadMessageResources(BUILT_IN_MESSAGES_BASE_NAME);
-        addProcessor(200, reloadableResourceTemplateMessageFormattingProcessor);
+        addProcessor(3000, reloadableResourceTemplateMessageFormattingProcessor);
         // spel formatting processor
-        addProcessor(300, new SpelTemplateMessageFormattingProcessor(SPEL_LD, SPEL_RD));
+        addProcessor(5000, new SpelTemplateMessageFormattingProcessor(SPEL_LD, SPEL_RD));
     }
 
     @Override
@@ -86,23 +85,35 @@ public class ValidationFailureFormatter extends TemplateMessageFormatter {
     /**
      * Load message resources.
      *
-     * @param messageResources message resources.
+     * <pre>
+     * eg. The base name is "i18n/messages".
+     * - java
+     * - resources
+     *   - i18n
+     *     - messages_zh.properties
+     *     - messages_en.properties
+     * </pre>
+     *
+     * @param baseNames base names
      * @return self reference
      */
-    public ValidationFailureFormatter loadMessageResources(String... messageResources) {
-        reloadableResourceTemplateMessageFormattingProcessor.loadMessageResources(messageResources);
+    public ValidationFailureFormatter loadMessageResources(String... baseNames) {
+        reloadableResourceTemplateMessageFormattingProcessor.loadMessageResources(baseNames);
         return this;
     }
 
     @Override
     public String format(TemplateMessage templateMessage, Locale locale) {
         // Prevent spel expression injection.
-        Variable<Object> variable = templateMessage.getVariable(ValidationFailure.Variables.VALUE.getName());
-        Object value = templateMessage.getValue(variable);
-        templateMessage.remove(variable);
-        String wip = super.format(templateMessage, locale);
-        String valueInStringFormat = variable.getFormatter().format(value, locale);
-        return wip.replace(VARIABLE_VALUE_PLACEHOLDER, valueInStringFormat);
+        Variable<Object> valueVariable = templateMessage.getVariable(ValidationFailure.Variables.VALUE.getName());
+        Object value = templateMessage.getValue(valueVariable);
+        String valueInStringFormat = valueVariable.getFormatter().format(value, locale);
+        templateMessage.remove(valueVariable);
+        // Do format.
+        String result = super.format(templateMessage, locale).replace(PLACEHOLDER_VARIABLE_VALUE, valueInStringFormat);
+        // Put back variable of value.
+        templateMessage.put(valueVariable, value);
+        return result;
     }
 
 }
