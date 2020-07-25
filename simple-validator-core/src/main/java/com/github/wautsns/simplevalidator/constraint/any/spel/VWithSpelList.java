@@ -20,6 +20,7 @@ import com.github.wautsns.simplevalidator.constraint.AConstraintList;
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
+import java.lang.reflect.AnnotatedType;
 
 import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
 import static java.lang.annotation.ElementType.FIELD;
@@ -31,7 +32,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 /**
  * VWithSpel list.
  *
- * <p><strong>Do not use @Repeatable, it will cause unresolved problems.</strong>
+ * <p><strong>Do not use &#64;Repeatable, it cannot be found by {@link AnnotatedType#getDeclaredAnnotations()}.</strong>
  *
  * @author wautsns
  * @since Jul 15, 2020

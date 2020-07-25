@@ -2,7 +2,7 @@ package com.github.wautsns.simplevalidator.constraint.business.id;
 
 import com.github.wautsns.simplevalidator.constraint.AConstraint;
 import com.github.wautsns.simplevalidator.constraint.number.pository.VPositive;
-import com.github.wautsns.simplevalidator.model.criterion.factory.CriterionFactory;
+import com.github.wautsns.simplevalidator.kernal.criterion.factory.basic.CriterionFactory;
 import com.github.wautsns.templatemessage.variable.Variable;
 
 import java.lang.annotation.Documented;
@@ -20,6 +20,8 @@ import static java.lang.annotation.ElementType.TYPE_USE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
+ * VId.
+ *
  * @author wautsns
  * @since Mar 11, 2020
  */
@@ -50,7 +52,7 @@ public @interface VId {
 
     /** Built-in criterion factories. */
     List<CriterionFactory<VId, ?, ?>> CRITERION_FACTORIES = new LinkedList<>(Collections.singletonList(
-            VIdIntegerLongBigIntegerCriterionFactory.INSTANCE
+            VIdCriterionFactoryForIntegerLongBigInteger.INSTANCE
     ));
 
     // ==================== variables ===================================================

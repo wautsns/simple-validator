@@ -16,8 +16,8 @@
 package com.github.wautsns.simplevalidator;
 
 import com.github.wautsns.simplevalidator.exception.ValidationException;
-import com.github.wautsns.simplevalidator.model.criterion.util.CriterionUtils;
-import com.github.wautsns.simplevalidator.model.failure.ValidationFailure;
+import com.github.wautsns.simplevalidator.kernal.criterion.util.CriterionUtils;
+import com.github.wautsns.simplevalidator.kernal.failure.ValidationFailure;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -71,7 +71,7 @@ public class Validator {
      * @return validation failure, or {@code null} if the value passes the validation
      */
     public static <T> ValidationFailure validatePolitely(Class<? super T> type, T value) {
-        return CriterionUtils.execute(CriterionUtils.forType(type), value);
+        return CriterionUtils.execute(CriterionUtils.getForType(type), value);
     }
 
     /**

@@ -16,18 +16,20 @@
 package com.github.wautsns.simplevalidator;
 
 import com.github.wautsns.simplevalidator.exception.analysis.ConstraintAnalysisException;
-import com.github.wautsns.simplevalidator.model.constraint.ConstraintMetadata;
-import com.github.wautsns.simplevalidator.model.criterion.factory.CriterionFactory;
-import com.github.wautsns.simplevalidator.model.criterion.factory.typelike.text.TextLikeCriterionFactory;
-import com.github.wautsns.simplevalidator.model.criterion.factory.typelike.text.TextLikeUtility;
-import com.github.wautsns.simplevalidator.model.criterion.factory.typelike.time.TimeLikeCriterionFactory;
-import com.github.wautsns.simplevalidator.model.criterion.factory.typelike.time.TimeLikeUtility;
-import com.github.wautsns.simplevalidator.model.failure.ValidationFailureFormatter;
-import com.github.wautsns.simplevalidator.model.node.ConstrainedParameter;
-import com.github.wautsns.simplevalidator.model.node.ConstrainedTypeContainer;
-import com.github.wautsns.simplevalidator.model.node.extraction.type.ConstrainedExtractedType;
-import com.github.wautsns.simplevalidator.util.extractor.Extractor;
+import com.github.wautsns.simplevalidator.kernal.constraint.ConstraintMetadata;
+import com.github.wautsns.simplevalidator.kernal.criterion.factory.basic.CriterionFactory;
+import com.github.wautsns.simplevalidator.kernal.criterion.factory.typelike.text.CriterionFactoryForTextLike;
+import com.github.wautsns.simplevalidator.kernal.criterion.factory.typelike.text.TextLikeUtility;
+import com.github.wautsns.simplevalidator.kernal.criterion.factory.typelike.time.CriterionFactoryForTimeLike;
+import com.github.wautsns.simplevalidator.kernal.criterion.factory.typelike.time.TimeLikeUtility;
+import com.github.wautsns.simplevalidator.kernal.extractor.type.basic.AnnotatedTypeExtractor;
+import com.github.wautsns.simplevalidator.kernal.extractor.value.basic.ValueExtractor;
+import com.github.wautsns.simplevalidator.kernal.failure.ValidationFailureFormatter;
+import com.github.wautsns.simplevalidator.kernal.node.ConstrainedParameter;
+import com.github.wautsns.simplevalidator.kernal.node.ConstrainedTypeContainer;
 import com.github.wautsns.simplevalidator.util.valuehandle.NumericTextParser;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.experimental.UtilityClass;
 
 import java.lang.annotation.Annotation;
@@ -51,9 +53,23 @@ public class SimpleValidatorConfiguration {
     public static class ForConstraint {
 
         /**
+         * Add value extractor to make constraint support more types.
+         *
+         * <p>eg. I want to use &#64;VMin to validate value of type OptionalInt
+         *
+         * @param constraintType constraint type
+         * @param valueExtractor value extractor
+         */
+        public static void addValueExtractor(
+                Class<? extends Annotation> constraintType, ValueExtractor valueExtractor) {
+            ConstraintMetadata.getInstance(constraintType).getValueExtractors().add(valueExtractor);
+        }
+
+        /**
          * Add criterion factory.
          *
-         * <p>It is <strong>not recommended</strong> adding a criterion factory directly to the constraint annotation.
+         * <p>It is <strong>not recommended</strong> adding a criterion factory directly to the constraint annotation
+         * like {@code VDomain.CRITERION_FACTORIES.add(...)}.
          *
          * @param constraintType constraint class
          * @param criterionFactory criterion factory
@@ -70,17 +86,6 @@ public class SimpleValidatorConfiguration {
             metadata.getCriterionFactories().add(Objects.requireNonNull(criterionFactory));
         }
 
-        /**
-         * Add value extractor.
-         *
-         * @param constraintType constraint type
-         * @param extractor value extractor
-         */
-        public static void addExtractor(
-                Class<? extends Annotation> constraintType, Extractor extractor) {
-            ConstraintMetadata.getInstance(constraintType).getExtractors().add(extractor);
-        }
-
     }
 
     /** Configuration for the constrained node. */
@@ -91,11 +96,10 @@ public class SimpleValidatorConfiguration {
          * Add extracted type metadata.
          *
          * @param order order
-         * @param extractedTypeMetadata extracted type metadata
+         * @param annotatedTypeExtractor extracted type metadata
          */
-        public static void addExtractedTypeMetadata(
-                int order, ConstrainedExtractedType.Metadata extractedTypeMetadata) {
-            ConstrainedTypeContainer.addExtractedTypeMetadata(order, extractedTypeMetadata);
+        public static void addAnnotatedTypeExtractor(int order, AnnotatedTypeExtractor annotatedTypeExtractor) {
+            ConstrainedTypeContainer.addAnnotatedTypeExtractor(order, annotatedTypeExtractor);
         }
 
         /**
@@ -109,33 +113,33 @@ public class SimpleValidatorConfiguration {
 
     }
 
-    /** Configuration for the type like utility. */
+    /** Configuration for the type-like utility. */
     @UtilityClass
     public static class ForTypeLikeUtility {
 
         /**
-         * Add text like utility.
+         * Add text-like utility.
          *
-         * @param textLikeUtility text like utility
+         * @param textLikeUtility text-like utility
          */
         public static void addTextLikeUtility(TextLikeUtility<?> textLikeUtility) {
-            TextLikeCriterionFactory.DEFAULT_UTILITIES.add(textLikeUtility);
+            CriterionFactoryForTextLike.UTILITIES.add(textLikeUtility);
         }
 
         /**
-         * Add time like utility.
+         * Add time-like utility.
          *
-         * @param timeLikeUtility time like utility
+         * @param timeLikeUtility time-like utility
          */
         public static void addTimeLikeUtility(TimeLikeUtility<?> timeLikeUtility) {
-            TimeLikeCriterionFactory.DEFAULT_UTILITIES.add(timeLikeUtility);
+            CriterionFactoryForTimeLike.UTILITIES.add(timeLikeUtility);
         }
 
     }
 
-    /** Configuration for value handler. */
+    /** Configuration for value. */
     @UtilityClass
-    public static class ForValueHandler {
+    public static class ForValue {
 
         /**
          * Add numeric text parser.
@@ -159,25 +163,9 @@ public class SimpleValidatorConfiguration {
         public static final ValidationFailureFormatter FORMATTER = new ValidationFailureFormatter();
 
         /** Locale supplier. */
+        @Getter
+        @Setter
         private static Supplier<Locale> localeSupplier = Locale::getDefault;
-
-        /**
-         * Get locale supplier.
-         *
-         * @return locale supplier
-         */
-        public static Supplier<Locale> getLocaleSupplier() {
-            return localeSupplier;
-        }
-
-        /**
-         * Set locale supplier.
-         *
-         * @param localeSupplier locale supplier
-         */
-        public static void setLocaleSupplier(Supplier<Locale> localeSupplier) {
-            ForValidationFailure.localeSupplier = localeSupplier;
-        }
 
     }
 

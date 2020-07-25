@@ -1,9 +1,9 @@
 package com.github.wautsns.simplevalidator.constraint.time.future;
 
 import com.github.wautsns.simplevalidator.constraint.AConstraint;
-import com.github.wautsns.simplevalidator.model.criterion.factory.CriterionFactory;
-import com.github.wautsns.simplevalidator.model.criterion.factory.typelike.TypeLikeUtilityVariableCache;
-import com.github.wautsns.simplevalidator.model.criterion.factory.typelike.time.TimeLikeUtility;
+import com.github.wautsns.simplevalidator.kernal.criterion.factory.basic.CriterionFactory;
+import com.github.wautsns.simplevalidator.kernal.criterion.factory.typelike.TypeLikeUtilityVariableCache;
+import com.github.wautsns.simplevalidator.kernal.criterion.factory.typelike.time.TimeLikeUtility;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
@@ -63,7 +63,7 @@ public @interface VFuture {
 
     /** Built-in criterion factories. */
     List<CriterionFactory<VFuture, ?, ?>> CRITERION_FACTORIES = new LinkedList<>(Collections.singletonList(
-            VFutureTimeLikeCriterionFactory.INSTANCE
+            VFutureCriterionFactoryForTimeLike.INSTANCE
     ));
 
     // ==================== variables ===================================================

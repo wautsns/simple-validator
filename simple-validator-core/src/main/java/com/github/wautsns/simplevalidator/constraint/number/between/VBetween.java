@@ -33,6 +33,8 @@ import static java.lang.annotation.ElementType.TYPE_USE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
+ * VBetween.
+ *
  * @author wautsns
  * @since Mar 11, 2020
  */

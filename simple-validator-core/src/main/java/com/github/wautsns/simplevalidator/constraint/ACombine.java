@@ -42,7 +42,7 @@ public @interface ACombine {
      * Message for the constraint.
      *
      * @return message
-     * @see com.github.wautsns.simplevalidator.model.constraint.ConstraintMetadata.Attributes#MESSAGE
+     * @see com.github.wautsns.simplevalidator.kernal.constraint.ConstraintMetadata.Attributes#MESSAGE
      */
     String message() default "";
 

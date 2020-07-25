@@ -21,6 +21,9 @@ import lombok.experimental.Accessors;
 
 import java.util.LinkedList;
 import java.util.Locale;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 /**
  * Formatter for {@link Enum} value.
@@ -36,25 +39,39 @@ public class EnumFormatter implements Formatter<Enum> {
     /** Default {@code EnumFormatter}. */
     public static final EnumFormatter DEFAULT = new EnumFormatter();
 
+    private static final Map<Class<?>, String> STRING_FORMAT_PREFIX = new ConcurrentHashMap<>(32);
+
     /** String format of {@code null}, default is {@code "null"}. */
     private String stringFormatOfNull = "null";
-    /** Whether to display declaring class(es), default is {@code false}. */
-    private boolean displayDeclaringClass = false;
 
     @Override
     public String format(Enum value, Locale locale) {
-        if (value == null) { return stringFormatOfNull; }
-        if (!displayDeclaringClass) { return value.name(); }
-        Class<?> enumClass = value.getClass();
+        return (value == null) ? stringFormatOfNull : (getStringFormatPrefix(value.getClass()) + value.name());
+    }
+
+    /**
+     * Get string format prefix.
+     *
+     * @param enumClass enumeration class
+     * @return string format prefix of the specified enumeration class
+     */
+    private String getStringFormatPrefix(Class<?> enumClass) {
+        String prefix = STRING_FORMAT_PREFIX.get(enumClass);
+        if (prefix != null) { return prefix; }
         Class<?> declaringClass = enumClass.getDeclaringClass();
-        if (declaringClass == null) { return enumClass.getSimpleName() + "." + value.name(); }
-        LinkedList<String> declaringClasses = new LinkedList<>();
-        declaringClasses.add(enumClass.getSimpleName());
+        if (declaringClass == null) { return enumClass.getName() + "#"; }
+        LinkedList<Class<?>> declaringClasses = new LinkedList<>();
+        declaringClasses.add(enumClass);
         do {
-            declaringClasses.addFirst(declaringClass.getSimpleName());
+            declaringClasses.addFirst(declaringClass);
             declaringClass = declaringClass.getDeclaringClass();
         } while (declaringClass != null);
-        return String.join("$", declaringClasses) + "." + value.name();
+        String first = declaringClasses.removeFirst().getName();
+        prefix = declaringClasses.stream()
+                .map(Class::getSimpleName)
+                .collect(Collectors.joining("$", first + "$", "#"));
+        String previousValue = STRING_FORMAT_PREFIX.putIfAbsent(enumClass, prefix);
+        return (previousValue == null) ? prefix : previousValue;
     }
 
 }

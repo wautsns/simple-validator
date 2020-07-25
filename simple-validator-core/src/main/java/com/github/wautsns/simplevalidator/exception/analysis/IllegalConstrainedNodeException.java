@@ -12,7 +12,7 @@
  */
 package com.github.wautsns.simplevalidator.exception.analysis;
 
-import com.github.wautsns.simplevalidator.model.node.ConstrainedNode;
+import com.github.wautsns.simplevalidator.kernal.node.ConstrainedNode;
 
 import java.lang.annotation.Annotation;
 

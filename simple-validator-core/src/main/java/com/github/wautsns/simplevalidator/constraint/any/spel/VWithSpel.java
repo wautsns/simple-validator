@@ -16,7 +16,7 @@
 package com.github.wautsns.simplevalidator.constraint.any.spel;
 
 import com.github.wautsns.simplevalidator.constraint.AConstraint;
-import com.github.wautsns.simplevalidator.model.criterion.factory.CriterionFactory;
+import com.github.wautsns.simplevalidator.kernal.criterion.factory.basic.CriterionFactory;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
@@ -33,6 +33,8 @@ import static java.lang.annotation.ElementType.TYPE_USE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
+ * VWithSpel.
+ *
  * @author wautsns
  * @since Mar 15, 2020
  */
@@ -62,7 +64,7 @@ public @interface VWithSpel {
 
     /** Built-in criterion factories. */
     List<CriterionFactory<VWithSpel, ?, ?>> CRITERION_FACTORIES = new LinkedList<>(Collections.singletonList(
-            VWithSpelAnyTypeCriterionFactory.INSTANCE
+            VWithSpelCriterionFactoryForAnyType.INSTANCE
     ));
 
 }

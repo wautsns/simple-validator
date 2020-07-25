@@ -16,7 +16,7 @@
 package com.github.wautsns.simplevalidator.exception;
 
 import com.github.wautsns.simplevalidator.SimpleValidatorConfiguration;
-import com.github.wautsns.simplevalidator.model.failure.ValidationFailure;
+import com.github.wautsns.simplevalidator.kernal.failure.ValidationFailure;
 
 /**
  * Validation exception.

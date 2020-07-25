@@ -16,7 +16,7 @@
 package com.github.wautsns.simplevalidator.springbootstarter.handler.validation;
 
 import com.github.wautsns.simplevalidator.SimpleValidatorConfiguration;
-import com.github.wautsns.simplevalidator.model.constraint.ConstraintMetadata;
+import com.github.wautsns.simplevalidator.kernal.constraint.ConstraintMetadata;
 import org.springframework.aop.ClassFilter;
 import org.springframework.aop.MethodMatcher;
 import org.springframework.aop.Pointcut;
