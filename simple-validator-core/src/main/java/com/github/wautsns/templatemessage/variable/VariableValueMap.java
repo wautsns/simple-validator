@@ -104,7 +104,7 @@ public class VariableValueMap {
      * specified name
      */
     public <T> Variable<T> getVariable(String name) {
-        return (Variable<T>) dataMap.entrySet().stream()
+        return dataMap.entrySet().stream()
                 .filter(e -> e.getKey().getName().equals(name))
                 .findFirst()
                 .map(Map.Entry::getKey)

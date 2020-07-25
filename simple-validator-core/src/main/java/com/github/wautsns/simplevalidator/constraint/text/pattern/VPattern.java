@@ -13,7 +13,7 @@
 package com.github.wautsns.simplevalidator.constraint.text.pattern;
 
 import com.github.wautsns.simplevalidator.constraint.AConstraint;
-import com.github.wautsns.simplevalidator.model.criterion.factory.CriterionFactory;
+import com.github.wautsns.simplevalidator.kernal.criterion.factory.basic.CriterionFactory;
 import com.github.wautsns.templatemessage.variable.Variable;
 
 import java.lang.annotation.Documented;
@@ -60,7 +60,7 @@ public @interface VPattern {
 
     /** Built-in criterion factories. */
     List<CriterionFactory<VPattern, ?, ?>> CRITERION_FACTORIES = new LinkedList<>(Collections.singletonList(
-            VPatternTextLikeCriterionFactory.INSTANCE
+            VPatternTextLikeCriterionFactoryForCharSequence.INSTANCE
     ));
 
     // ==================== variables ===================================================

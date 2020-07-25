@@ -97,113 +97,113 @@ public class ReflectionUtils {
     }
 
     /**
-     * Get value of field from target value.
+     * Get value of field from source.
      *
-     * @param target target value
+     * @param source source
      * @param field field
      * @param <T> type of value
      * @return value
      */
     @SneakyThrows
     @SuppressWarnings("unchecked")
-    public static <T> T getValue(Object target, Field field) {
-        return (T) field.get(target);
+    public static <T> T getValue(Object source, Field field) {
+        return (T) field.get(source);
     }
 
     /**
-     * Get {@code boolean} value of field from target value.
+     * Get {@code boolean} value of field from source.
      *
-     * @param target target value
+     * @param source source
      * @param field field
      * @return {@code boolean} value
      */
     @SneakyThrows
-    public static boolean getBoolean(Object target, Field field) {
-        return field.getBoolean(target);
+    public static boolean getBoolean(Object source, Field field) {
+        return field.getBoolean(source);
     }
 
     /**
-     * Get {@code char} value of field from target value.
+     * Get {@code char} value of field from source.
      *
-     * @param target target value
+     * @param source source
      * @param field field
      * @return {@code char} value
      */
     @SneakyThrows
-    public static char getChar(Object target, Field field) {
-        return field.getChar(target);
+    public static char getChar(Object source, Field field) {
+        return field.getChar(source);
     }
 
     /**
-     * Get {@code byte} value of field from target value.
+     * Get {@code byte} value of field from source.
      *
-     * @param target target value
+     * @param source source
      * @param field field
      * @return {@code byte} value
      */
     @SneakyThrows
-    public static byte getByte(Object target, Field field) {
-        return field.getByte(target);
+    public static byte getByte(Object source, Field field) {
+        return field.getByte(source);
     }
 
     /**
-     * Get {@code short} value of field from target value.
+     * Get {@code short} value of field from source.
      *
-     * @param target target value
+     * @param source source
      * @param field field
      * @return {@code short} value
      */
     @SneakyThrows
-    public static short getShort(Object target, Field field) {
-        return field.getShort(target);
+    public static short getShort(Object source, Field field) {
+        return field.getShort(source);
     }
 
     /**
-     * Get {@code int} value of field from target value.
+     * Get {@code int} value of field from source.
      *
-     * @param target target value
+     * @param source source
      * @param field field
      * @return {@code int} value
      */
     @SneakyThrows
-    public static int getInt(Object target, Field field) {
-        return field.getInt(target);
+    public static int getInt(Object source, Field field) {
+        return field.getInt(source);
     }
 
     /**
-     * Get {@code long} value of field from target value.
+     * Get {@code long} value of field from source.
      *
-     * @param target target value
+     * @param source source
      * @param field field
      * @return {@code long} value
      */
     @SneakyThrows
-    public static long getLong(Object target, Field field) {
-        return field.getLong(target);
+    public static long getLong(Object source, Field field) {
+        return field.getLong(source);
     }
 
     /**
-     * Get {@code float} value of field from target value.
+     * Get {@code float} value of field from source.
      *
-     * @param target target value
+     * @param source source
      * @param field field
      * @return {@code float} value
      */
     @SneakyThrows
-    public static float getFloat(Object target, Field field) {
-        return field.getFloat(target);
+    public static float getFloat(Object source, Field field) {
+        return field.getFloat(source);
     }
 
     /**
-     * Get {@code double} value of field from target value.
+     * Get {@code double} value of field from source.
      *
-     * @param target target value
+     * @param source source
      * @param field field
      * @return {@code double} value
      */
     @SneakyThrows
-    public static double getDouble(Object target, Field field) {
-        return field.getDouble(target);
+    public static double getDouble(Object source, Field field) {
+        return field.getDouble(source);
     }
 
     // #################### methods #####################################################
@@ -242,19 +242,19 @@ public class ReflectionUtils {
     /**
      * Invoke the no-arg method.
      *
-     * @param target target value
+     * @param source source
      * @param method method
      * @param <T> type of return value of the method
      * @return return value of the method
      */
-    public static <T> T invoke(Object target, Method method) {
-        return invoke(target, method, EMPTY_OBJECT_ARRAY);
+    public static <T> T invoke(Object source, Method method) {
+        return invoke(source, method, EMPTY_OBJECT_ARRAY);
     }
 
     /**
      * Invoke the method with specified args.
      *
-     * @param target target value
+     * @param source source
      * @param method method
      * @param args method arguments
      * @param <T> type of return value of the method
@@ -262,8 +262,8 @@ public class ReflectionUtils {
      */
     @SneakyThrows
     @SuppressWarnings("unchecked")
-    public static <T> T invoke(Object target, Method method, Object... args) {
-        return (T) method.invoke(target, args);
+    public static <T> T invoke(Object source, Method method, Object... args) {
+        return (T) method.invoke(source, args);
     }
 
     /**

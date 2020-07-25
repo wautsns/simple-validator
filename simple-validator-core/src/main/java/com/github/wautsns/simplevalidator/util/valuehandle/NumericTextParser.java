@@ -62,9 +62,20 @@ public class NumericTextParser {
      * @param <T> type of numeric value
      */
     @SuppressWarnings({ "rawtypes", "unchecked" })
-    public static <T extends Number & Comparable<T>> void addParser(
-            Class<T> type, Function<String, T> parser) {
+    public static <T extends Number & Comparable<T>> void addParser(Class<T> type, Function<String, T> parser) {
         NUMERIC_TEXT_PARSER_MAP.put(type, (Function) parser);
+    }
+
+    /**
+     * Get parser for the specified type.
+     *
+     * @param type type of number
+     * @param <T> type of number
+     * @return parser for the specified type
+     */
+    @SuppressWarnings("unchecked")
+    public static <T extends Number & Comparable<T>> Function<String, T> getParser(Class<T> type) {
+        return (Function<String, T>) NUMERIC_TEXT_PARSER_MAP.get(type);
     }
 
     // #################### internal utils ################################################

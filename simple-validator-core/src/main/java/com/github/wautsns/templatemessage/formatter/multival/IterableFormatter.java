@@ -34,7 +34,7 @@ import java.util.Locale;
 @Accessors(chain = true)
 public class IterableFormatter<E> implements Formatter<Iterable<E>> {
 
-    /** Default {@code IterableFormatter}, e.g. [1, 2, 3]. */
+    /** Default {@code IterableFormatter}. */
     public static final Formatter<Iterable<Object>> DEFAULT = new IterableFormatter<>();
 
     /** String format of {@code null}, default is {@code "null"}. */

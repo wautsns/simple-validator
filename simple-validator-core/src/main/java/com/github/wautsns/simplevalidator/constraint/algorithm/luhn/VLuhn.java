@@ -1,8 +1,8 @@
 package com.github.wautsns.simplevalidator.constraint.algorithm.luhn;
 
 import com.github.wautsns.simplevalidator.constraint.AConstraint;
-import com.github.wautsns.simplevalidator.model.constraint.ConstraintMetadata;
-import com.github.wautsns.simplevalidator.model.criterion.factory.CriterionFactory;
+import com.github.wautsns.simplevalidator.kernal.constraint.ConstraintMetadata;
+import com.github.wautsns.simplevalidator.kernal.criterion.factory.basic.CriterionFactory;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
@@ -19,7 +19,7 @@ import static java.lang.annotation.ElementType.TYPE_USE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
- * Validate value by the algorithm: luhn.
+ * VLuhn.
  *
  * @author wautsns
  * @since Mar 19, 2020
@@ -50,7 +50,7 @@ public @interface VLuhn {
 
     /** Built-in criterion factories. */
     List<CriterionFactory<VLuhn, ?, ?>> CRITERION_FACTORIES = new LinkedList<>(Collections.singletonList(
-            VLuhnCharSequenceCriterionFactory.INSTANCE
+            VLuhnCriterionFactoryForCharSequence.INSTANCE
     ));
 
 }

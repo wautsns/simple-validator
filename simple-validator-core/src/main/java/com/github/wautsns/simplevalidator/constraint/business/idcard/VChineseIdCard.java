@@ -1,8 +1,8 @@
 package com.github.wautsns.simplevalidator.constraint.business.idcard;
 
 import com.github.wautsns.simplevalidator.constraint.AConstraint;
-import com.github.wautsns.simplevalidator.model.criterion.factory.CriterionFactory;
-import com.github.wautsns.simplevalidator.model.failure.Formatters;
+import com.github.wautsns.simplevalidator.kernal.criterion.factory.basic.CriterionFactory;
+import com.github.wautsns.simplevalidator.kernal.failure.Formatters;
 import com.github.wautsns.templatemessage.variable.Variable;
 
 import java.lang.annotation.Documented;
@@ -20,6 +20,8 @@ import static java.lang.annotation.ElementType.TYPE_USE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
+ * VChineseIdCard.
+ *
  * @author wautsns
  * @since Mar 11, 2020
  */
@@ -59,7 +61,7 @@ public @interface VChineseIdCard {
 
     /** Built-in criterion factories. */
     List<CriterionFactory<VChineseIdCard, ?, ?>> CRITERION_FACTORIES = new LinkedList<>(Collections.singletonList(
-            VChineseIdCardCharSequenceCriterionFactory.INSTANCE
+            VChineseIdCardCriterionFactoryForCharSequence.INSTANCE
     ));
 
     // ==================== variables ===================================================

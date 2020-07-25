@@ -14,11 +14,11 @@ package com.github.wautsns.simplevalidator.constraint.number.domain;
 
 import com.github.wautsns.simplevalidator.constraint.AConstraint;
 import com.github.wautsns.simplevalidator.constraint.AVariableAlias;
-import com.github.wautsns.simplevalidator.model.criterion.factory.CriterionFactory;
-import com.github.wautsns.simplevalidator.model.node.extraction.value.optional.DoubleExtractorForOptionalDouble;
-import com.github.wautsns.simplevalidator.model.node.extraction.value.optional.IntExtractorForOptionalInt;
-import com.github.wautsns.simplevalidator.model.node.extraction.value.optional.LongExtractorForOptionalLong;
-import com.github.wautsns.simplevalidator.util.extractor.Extractor;
+import com.github.wautsns.simplevalidator.kernal.criterion.factory.basic.CriterionFactory;
+import com.github.wautsns.simplevalidator.kernal.extractor.value.basic.ValueExtractor;
+import com.github.wautsns.simplevalidator.kernal.extractor.value.builtin.doublevlaue.DoubleValueExtractorForOptionalDouble;
+import com.github.wautsns.simplevalidator.kernal.extractor.value.builtin.intvalue.IntValueExtractorForOptionalInt;
+import com.github.wautsns.simplevalidator.kernal.extractor.value.builtin.longvalue.LongValueExtractorForOptionalLong;
 import com.github.wautsns.templatemessage.formatter.multival.ArrayFormatter;
 import com.github.wautsns.templatemessage.variable.Variable;
 
@@ -37,6 +37,8 @@ import static java.lang.annotation.ElementType.TYPE_USE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
+ * VDomain.
+ *
  * @author wautsns
  * @since Mar 11, 2020
  */
@@ -66,21 +68,21 @@ public @interface VDomain {
 
     /** Built-in criterion factories. */
     List<CriterionFactory<VDomain, ?, ?>> CRITERION_FACTORIES = new LinkedList<>(Arrays.asList(
-            VDomainComparableNumberCriterionFactory.INSTANCE,
-            VDomainNumericTextCriterionFactory.INSTANCE,
-            VDomainIntCriterionFactory.INSTANCE,
-            VDomainLongCriterionFactory.INSTANCE,
-            VDomainDoubleCriterionFactory.INSTANCE,
-            VDomainByteCriterionFactory.INSTANCE,
-            VDomainShortCriterionFactory.INSTANCE,
-            VDomainFloatCriterionFactory.INSTANCE
+            VDomainCriterionFactoryForComparableNumber.INSTANCE,
+            VDomainCriterionFactoryForNumericText.INSTANCE,
+            VDomainCriterionFactoryForInt.INSTANCE,
+            VDomainCriterionFactoryForLong.INSTANCE,
+            VDomainCriterionFactoryForDouble.INSTANCE,
+            VDomainCriterionFactoryForByte.INSTANCE,
+            VDomainCriterionFactoryForShort.INSTANCE,
+            VDomainCriterionFactoryForFloat.INSTANCE
     ));
 
     /** Built-in value extractors. */
-    List<Extractor> VALUE_EXTRACTORS = new LinkedList<>(Arrays.asList(
-            IntExtractorForOptionalInt.INSTANCE,
-            LongExtractorForOptionalLong.INSTANCE,
-            DoubleExtractorForOptionalDouble.INSTANCE
+    List<ValueExtractor> VALUE_EXTRACTORS = new LinkedList<>(Arrays.asList(
+            IntValueExtractorForOptionalInt.INSTANCE,
+            LongValueExtractorForOptionalLong.INSTANCE,
+            DoubleValueExtractorForOptionalDouble.INSTANCE
     ));
 
     // ==================== variables ===================================================

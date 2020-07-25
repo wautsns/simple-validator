@@ -1,0 +1,64 @@
+/*
+ * Copyright 2020 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.github.wautsns.simplevalidator.kernal.criterion.factory.typelike.text.utility;
+
+import com.github.wautsns.simplevalidator.kernal.criterion.factory.typelike.text.TextLikeUtility;
+import com.github.wautsns.simplevalidator.util.common.TypeUtils;
+import com.github.wautsns.templatemessage.formatter.Formatter;
+
+import java.lang.reflect.Type;
+
+/**
+ * Text like utility for {@code CharSequence} value.
+ *
+ * @author wautsns
+ * @since Mar 11, 2020
+ */
+public class TextUtilityForCharSequence extends TextLikeUtility<CharSequence> {
+
+    /** Default {@code TextUtilityForCharSequence}. */
+    public static final TextUtilityForCharSequence DEFAULT = new TextUtilityForCharSequence(null);
+
+    /**
+     * Construct a text-like utility for {@code CharSequence} value.
+     *
+     * @param formatter formatter
+     */
+    public TextUtilityForCharSequence(Formatter<? super CharSequence> formatter) {
+        super(formatter);
+    }
+
+    @Override
+    public boolean applyTo(Type type) {
+        return TypeUtils.isAssignableTo(type, CharSequence.class);
+    }
+
+    @Override
+    public int length(CharSequence text) {
+        return text.length();
+    }
+
+    @Override
+    public char charAt(CharSequence text, int index) {
+        return text.charAt(index);
+    }
+
+    @Override
+    public CharSequence toCharSequence(CharSequence text) {
+        return text;
+    }
+
+}

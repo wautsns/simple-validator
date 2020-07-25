@@ -16,7 +16,7 @@
 package com.github.wautsns.simplevalidator.constraint.multival.size;
 
 import com.github.wautsns.simplevalidator.constraint.AConstraint;
-import com.github.wautsns.simplevalidator.model.criterion.factory.CriterionFactory;
+import com.github.wautsns.simplevalidator.kernal.criterion.factory.basic.CriterionFactory;
 import com.github.wautsns.templatemessage.variable.Variable;
 
 import java.lang.annotation.Documented;
@@ -34,6 +34,8 @@ import static java.lang.annotation.ElementType.TYPE_USE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
+ * VSize.
+ *
  * @author wautsns
  * @since Mar 11, 2020
  */
@@ -65,10 +67,10 @@ public @interface VSize {
 
     /** Built-in criterion factories. */
     List<CriterionFactory<VSize, ?, ?>> CRITERION_FACTORIES = new LinkedList<>(Arrays.asList(
-            VSizeCollectionCriterionFactory.INSTANCE,
-            VSizeCharSequenceCriterionFactory.INSTANCE,
-            VSizeMapCriterionFactory.INSTANCE,
-            VSizeArrayCriterionFactory.INSTANCE
+            VSizeCriterionFactoryForCollection.INSTANCE,
+            VSizeCriterionFactoryForCharSequence.INSTANCE,
+            VSizeCriterionFactoryForMap.INSTANCE,
+            VSizeCriterionFactoryForArray.INSTANCE
     ));
 
     // ==================== variables ===================================================

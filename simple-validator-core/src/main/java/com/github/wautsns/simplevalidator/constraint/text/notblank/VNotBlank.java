@@ -13,7 +13,7 @@
 package com.github.wautsns.simplevalidator.constraint.text.notblank;
 
 import com.github.wautsns.simplevalidator.constraint.AConstraint;
-import com.github.wautsns.simplevalidator.model.criterion.factory.CriterionFactory;
+import com.github.wautsns.simplevalidator.kernal.criterion.factory.basic.CriterionFactory;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
@@ -57,7 +57,7 @@ public @interface VNotBlank {
 
     /** Built-in criterion factories. */
     List<CriterionFactory<VNotBlank, ?, ?>> CRITERION_FACTORIES = new LinkedList<>(Collections.singletonList(
-            VNotBlankTextLikeCriterionFactory.INSTANCE
+            VNotBlankTextLikeCriterionFactoryForCharSequence.INSTANCE
     ));
 
 }

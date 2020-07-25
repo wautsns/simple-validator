@@ -60,8 +60,20 @@ public class ReloadableResourceTemplateMessageFormattingProcessor
     /**
      * Load resources.
      *
+     * <p>For the same message property key, the one loaded later will overwrite the one loaded first.
+     *
+     * <pre>
+     * The base name is "i18n/messages".
+     * - java
+     * - resources
+     *   - i18n
+     *     - messages_zh.properties
+     *     - messages_en.properties
+     * </pre>
+     *
      * @param baseNames base names
      * @return self reference
+     * @see ReloadableResourceBundleMessageSource#setBasenames(String...)
      */
     public ReloadableResourceTemplateMessageFormattingProcessor loadMessageResources(String... baseNames) {
         if (baseNames == null || baseNames.length == 0) { return this; }

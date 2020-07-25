@@ -38,7 +38,7 @@ public interface CodableEnum<T> {
      * @param code code
      * @return {@code true} if the specified code is code of the enumeration, otherwise {@code false}
      */
-    default boolean equalsToCode(T code) {
+    default boolean equalToCode(T code) {
         return Objects.deepEquals(getCode(), code);
     }
 

@@ -16,7 +16,7 @@
 package com.github.wautsns.simplevalidator.constraint.any.nullable;
 
 import com.github.wautsns.simplevalidator.constraint.AConstraint;
-import com.github.wautsns.simplevalidator.model.criterion.factory.CriterionFactory;
+import com.github.wautsns.simplevalidator.kernal.criterion.factory.basic.CriterionFactory;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
@@ -33,6 +33,8 @@ import static java.lang.annotation.ElementType.TYPE_USE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
+ * VNullable.
+ *
  * @author wautsns
  * @since Mar 11, 2020
  */
@@ -46,7 +48,7 @@ public @interface VNullable {
 
     /** Built-in criterion factories. */
     List<CriterionFactory<VNullable, ?, ?>> CRITERION_FACTORIES = new LinkedList<>(Collections.singletonList(
-            VNullableNonPrimitiveCriterionFactory.INSTANCE
+            VNullableCriterionFactoryForAnyNonPrimitive.INSTANCE
     ));
 
 }
